@@ -125,7 +125,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
               </div>
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Data Source</p>
-                <p className="text-xl font-bold text-slate-800">GitHub API</p>
+                <a href="https://poc-in-github.motikan2010.net" target="_blank" rel="noopener noreferrer" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors">poc-in-github.motikan2010.net</a>
               </div>
             </div>
           </div>
