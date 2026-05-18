@@ -46,6 +46,12 @@
       "regex": "^/api/pocs(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/pocs(?:/)?$"
+    },
+    {
+      "page": "/icon.svg",
+      "regex": "^/icon\\.svg(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/icon\\.svg(?:/)?$"
     }
   ],
   "dataRoutes": [],
