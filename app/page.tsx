@@ -22,8 +22,8 @@ export default async function Page() {
   return (
     <main>
       {errorMsgContent ? (
-        <div className="flex h-screen items-center justify-center bg-slate-50">
-          <div className="bg-red-50 p-6 rounded-2xl border border-red-200 text-center max-w-lg">
+        <div className="flex h-screen items-center justify-center bg-base">
+          <div className="bg-surface p-6 rounded-lg border border-[#4d4d4d] text-center max-w-lg">
             <h2 className="text-xl font-bold text-red-700 mb-2">Connection Error</h2>
             <p className="text-red-600">{errorMsgContent}</p>
           </div>

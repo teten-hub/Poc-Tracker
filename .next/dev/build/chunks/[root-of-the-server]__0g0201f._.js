@@ -19,9 +19,12 @@ module.exports = mod;
 }),
 "[project]/postcss.config.cjs [postcss] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-const e = new Error("Could not parse module '[project]/postcss.config.cjs'\n\nfailed to convert rope into string\n\nCaused by:\n- invalid utf-8 sequence of 1 bytes from index 0");
-e.code = 'MODULE_UNPARSABLE';
-throw e;
+module.exports = {
+    plugins: {
+        "@tailwindcss/postcss": {},
+        autoprefixer: {}
+    }
+};
 }),
 "[turbopack-node]/transforms/transforms.ts [postcss] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
