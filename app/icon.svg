@@ -1,0 +1,13 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle (Primary Blue) -->
+  <circle cx="256" cy="256" r="256" fill="#539df5" />
+  
+  <!-- Radar Wave 1 -->
+  <path d="M128 160 A 180 180 0 0 1 384 160" fill="none" stroke="#000000" stroke-width="40" stroke-linecap="round" />
+  
+  <!-- Radar Wave 2 -->
+  <path d="M176 230 A 110 110 0 0 1 336 230" fill="none" stroke="#000000" stroke-width="40" stroke-linecap="round" />
+  
+  <!-- Center Dot -->
+  <circle cx="256" cy="310" r="40" fill="#000000" />
+</svg>
