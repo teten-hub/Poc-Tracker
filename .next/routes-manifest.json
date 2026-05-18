@@ -40,6 +40,12 @@
       "regex": "^/_not\\-found(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/api/pocs",
+      "regex": "^/api/pocs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/pocs(?:/)?$"
     }
   ],
   "dataRoutes": [],
