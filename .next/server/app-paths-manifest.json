@@ -1,7 +1,11 @@
 {
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/api/analyze-ip/route": "app/api/analyze-ip/route.js",
+  "/api/hibp/route": "app/api/hibp/route.js",
   "/api/pocs/route": "app/api/pocs/route.js",
+  "/hibp/page": "app/hibp/page.js",
   "/icon.svg/route": "app/icon.svg/route.js",
+  "/ip-analyzer/page": "app/ip-analyzer/page.js",
   "/page": "app/page.js"
 }

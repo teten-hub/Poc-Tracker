@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+import Sidebar from '@/components/Sidebar';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-  title: 'PoC Tracker',
-  description: 'Threat Intelligence PoC Dashboard',
+  title: 'SOC-Core Platform',
+  description: 'SOC Intelligence and Analysis Platform',
 };
 
 export default function RootLayout({
@@ -17,7 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-base text-text-base antialiased`}>{children}</body>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-base text-text-base antialiased`}>
+        <Sidebar />
+        <div className="flex-1 w-full min-h-screen pt-16 md:pt-0 md:pl-64">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

@@ -6,4 +6,6 @@ export interface PocData {
   stargazers_count: number;
   html_url: string;
   created_at: string;
+  cvss_score?: number | null;
+  severity?: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'UNKNOWN';
 }

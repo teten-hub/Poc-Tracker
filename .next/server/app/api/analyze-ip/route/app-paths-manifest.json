@@ -1,0 +1,3 @@
+{
+  "/api/analyze-ip/route": "app/api/analyze-ip/route.js"
+}

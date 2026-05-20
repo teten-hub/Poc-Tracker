@@ -42,16 +42,40 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/api/analyze-ip",
+      "regex": "^/api/analyze\\-ip(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/analyze\\-ip(?:/)?$"
+    },
+    {
+      "page": "/api/hibp",
+      "regex": "^/api/hibp(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/hibp(?:/)?$"
+    },
+    {
       "page": "/api/pocs",
       "regex": "^/api/pocs(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/pocs(?:/)?$"
     },
     {
+      "page": "/hibp",
+      "regex": "^/hibp(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/hibp(?:/)?$"
+    },
+    {
       "page": "/icon.svg",
       "regex": "^/icon\\.svg(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/icon\\.svg(?:/)?$"
+    },
+    {
+      "page": "/ip-analyzer",
+      "regex": "^/ip\\-analyzer(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/ip\\-analyzer(?:/)?$"
     }
   ],
   "dataRoutes": [],

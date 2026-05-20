@@ -1,7 +1,11 @@
 {
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
+  "/api/analyze-ip/route": "/api/analyze-ip",
+  "/api/hibp/route": "/api/hibp",
   "/api/pocs/route": "/api/pocs",
+  "/hibp/page": "/hibp",
   "/icon.svg/route": "/icon.svg",
+  "/ip-analyzer/page": "/ip-analyzer",
   "/page": "/"
 }

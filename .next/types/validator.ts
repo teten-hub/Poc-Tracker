@@ -47,10 +47,46 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 }
 
 
+// Validate ../../app/hibp/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/hibp">> = Specific
+  const handler = {} as typeof import("../../app/hibp/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/ip-analyzer/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/ip-analyzer">> = Specific
+  const handler = {} as typeof import("../../app/ip-analyzer/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
   const handler = {} as typeof import("../../app/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/analyze-ip/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/analyze-ip">> = Specific
+  const handler = {} as typeof import("../../app/api/analyze-ip/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/hibp/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/hibp">> = Specific
+  const handler = {} as typeof import("../../app/api/hibp/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

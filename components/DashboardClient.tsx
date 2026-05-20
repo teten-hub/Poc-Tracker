@@ -35,6 +35,10 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
         const dateA = new Date(a.created_at).getTime();
         const dateB = new Date(b.created_at).getTime();
         return sortBy.order === 'desc' ? dateB - dateA : dateA - dateB;
+      } else if (sortBy.field === 'score') {
+        const scoreA = a.cvss_score ?? -1;
+        const scoreB = b.cvss_score ?? -1;
+        return sortBy.order === 'desc' ? scoreB - scoreA : scoreA - scoreB;
       }
       return 0;
     });
@@ -57,35 +61,12 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
 
   return (
     <div className="min-h-screen bg-base text-text-base font-sans pb-12">
-      
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-base/90 backdrop-blur-xl border-b border-[#4d4d4d]">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-full transition-transform hover:scale-105">
-              <Radar className="text-black w-6 h-6" />
-            </div>
-            <h1 className="text-xl font-semibold tracking-tight text-text-base">
-              PoC Tracker
-            </h1>
-          </div>
-          
-          <div className="flex items-center gap-2.5 text-xs font-medium text-text-base bg-surface py-1.5 px-4 rounded-pill border border-[#4d4d4d]">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-pill bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-pill h-2 w-2 bg-emerald-500"></span>
-            </span>
-            SYSTEM ACTIVE
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-6 mt-10">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 mt-8 md:mt-10">
         
         {/* Title Area */}
         <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-text-base">Vulnerability Intelligence</h2>
+            <h2 className="text-3xl font-semibold tracking-tight text-text-base">POC TRACKER</h2>
             <p className="mt-2 text-text-muted text-sm md:text-base font-medium">Real-time aggregation of Proof of Concepts from global repositories.</p>
           </div>
         </div>
@@ -147,7 +128,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
             />
           </div>
 
-          <div className="flex bg-base p-1 rounded-full shrink-0 items-center gap-1">
+          <div className="flex bg-base p-1 rounded-full shrink-0 items-center gap-1 overflow-x-auto">
             <button
               onClick={() => handleSort('date')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium transition-all ${
@@ -157,19 +138,31 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
               }`}
             >
               <Clock className={`w-4 h-4 ${sortBy.field === 'date' ? 'text-primary' : ''}`} />
-              {sortBy.field === 'date' && sortBy.order === 'asc' ? 'Oldest' : 'Latest'}
+              {sortBy.field === 'date' && sortBy.order === 'asc' ? 'Oldest Release' : 'Latest Release'}
+            </button>
+            <div className="w-px h-6 bg-[#4d4d4d] mx-1"></div>
+            <button
+              onClick={() => handleSort('score')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium transition-all whitespace-nowrap ${
+                sortBy.field === 'score' 
+                  ? 'bg-surface text-text-base border border-[#4d4d4d]' 
+                  : 'text-text-muted hover:text-text-base hover:bg-[#4d4d4d]'
+              }`}
+            >
+              <ShieldAlert className={`w-4 h-4 ${sortBy.field === 'score' ? 'text-text-negative' : ''}`} />
+              {sortBy.field === 'score' && sortBy.order === 'asc' ? 'Lowest CVSS' : 'Highest CVSS'}
             </button>
             <div className="w-px h-6 bg-[#4d4d4d] mx-1"></div>
             <button
               onClick={() => handleSort('stars')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium transition-all whitespace-nowrap ${
                 sortBy.field === 'stars' 
                   ? 'bg-surface text-text-base border border-[#4d4d4d]' 
                   : 'text-text-muted hover:text-text-base hover:bg-[#4d4d4d]'
               }`}
             >
               <Star className={`w-4 h-4 ${sortBy.field === 'stars' ? 'text-primary fill-primary' : ''}`} />
-              {sortBy.field === 'stars' && sortBy.order === 'asc' ? 'Lowest' : 'Highest'}
+              {sortBy.field === 'stars' && sortBy.order === 'asc' ? 'Least Trending' : 'Most Trending'}
             </button>
           </div>
         </div>
@@ -204,6 +197,17 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
                         {isViral && <AlertTriangle className="w-3 h-3 mr-1.5 inline" />}
                         {poc.cve_id || "UNKNOWN-CVE"}
                       </span>
+
+                      {poc.severity && poc.severity !== 'UNKNOWN' && (
+                        <div className={`flex items-center px-3 py-1 rounded-sm border text-xs font-bold tracking-wider ${
+                          poc.severity === 'CRITICAL' ? 'border-red-500 text-red-500 bg-red-500/10' :
+                          poc.severity === 'HIGH' ? 'border-orange-500 text-orange-500 bg-orange-500/10' :
+                          poc.severity === 'MEDIUM' ? 'border-yellow-500 text-yellow-500 bg-yellow-500/10' :
+                          'border-emerald-500 text-emerald-500 bg-emerald-500/10'
+                        }`}>
+                          {poc.severity} {poc.cvss_score !== null ? `(${poc.cvss_score})` : ''}
+                        </div>
+                      )}
                       
                       <div className="flex items-center text-text-base text-sm font-medium truncate bg-base px-3 py-1 rounded-sm border border-[#4d4d4d]">
                         <GitBranch className="w-4 h-4 mr-2 text-text-muted" />

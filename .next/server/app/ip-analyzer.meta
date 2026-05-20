@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/ip-analyzer/layout,_N_T_/ip-analyzer/page,_N_T_/ip-analyzer"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/ip-analyzer/__PAGE__",
+    "/ip-analyzer",
+    "/_index",
+    "/_head"
+  ]
+}
