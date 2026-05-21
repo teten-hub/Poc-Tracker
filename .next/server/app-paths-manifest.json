@@ -4,8 +4,10 @@
   "/api/analyze-ip/route": "app/api/analyze-ip/route.js",
   "/api/hibp/route": "app/api/hibp/route.js",
   "/api/pocs/route": "app/api/pocs/route.js",
+  "/api/ransomware/route": "app/api/ransomware/route.js",
   "/hibp/page": "app/hibp/page.js",
   "/icon.svg/route": "app/icon.svg/route.js",
   "/ip-analyzer/page": "app/ip-analyzer/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/ransomware/page": "app/ransomware/page.js"
 }

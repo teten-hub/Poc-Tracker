@@ -1,7 +1,218 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Search, Loader2, UserX, Key, CheckCircle2, AlertTriangle, Lock, ShieldAlert, Calendar, Globe } from 'lucide-react';
+import { 
+  Search, Loader2, UserX, Key, CheckCircle2, AlertTriangle, Lock, ShieldAlert, 
+  Calendar, Globe, ChevronDown, ChevronUp, Database, Tag, Building2, 
+  ShieldCheck, ShieldX, ExternalLink, Hash, FileWarning, BarChart3,
+  Users, TrendingUp, Clipboard
+} from 'lucide-react';
+
+interface BreachDetail {
+  Name: string;
+  Title: string;
+  Domain: string;
+  BreachDate: string;
+  Description: string;
+  DataClasses: string[];
+  PwnCount: number | string;
+  Industry: string;
+  Logo: string | null;
+  PasswordRisk: string;
+  References: string | null;
+  Searchable: boolean;
+  Verified: boolean;
+}
+
+function getRiskColor(risk: string) {
+  const r = risk?.toLowerCase();
+  if (r === 'high' || r === 'critical') return 'text-red-400 bg-red-500/15 border-red-500/30';
+  if (r === 'medium') return 'text-amber-400 bg-amber-500/15 border-amber-500/30';
+  if (r === 'low') return 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30';
+  return 'text-gray-400 bg-gray-500/15 border-gray-500/30';
+}
+
+function getPasswordRiskColor(risk: string) {
+  const r = risk?.toLowerCase();
+  if (r === 'plaintext' || r === 'easy' || r === 'easytocrack') return 'text-red-400';
+  if (r === 'unknown') return 'text-gray-400';
+  if (r === 'strong' || r === 'hardtocrack') return 'text-emerald-400';
+  return 'text-amber-400';
+}
+
+function formatNumber(n: number | string) {
+  if (typeof n === 'number') return n.toLocaleString();
+  const parsed = parseInt(String(n), 10);
+  if (isNaN(parsed)) return String(n);
+  return parsed.toLocaleString();
+}
+
+function formatDate(dateStr: string) {
+  if (!dateStr || dateStr === 'Unknown') return 'Unknown';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  } catch {
+    return dateStr;
+  }
+}
+
+// Data class tag color mapping
+function getDataClassStyle(cls: string) {
+  const c = cls.toLowerCase();
+  if (c.includes('password')) return 'bg-red-500/20 text-red-300 border-red-500/30';
+  if (c.includes('email')) return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+  if (c.includes('name') || c.includes('username')) return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+  if (c.includes('phone') || c.includes('address')) return 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+  if (c.includes('ip') || c.includes('geo') || c.includes('location')) return 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30';
+  if (c.includes('credit') || c.includes('financial') || c.includes('payment')) return 'bg-rose-500/20 text-rose-300 border-rose-500/30';
+  return 'bg-[#2a2a2a] text-gray-300 border-[#4d4d4d]';
+}
+
+function BreachCard({ breach, index }: { breach: BreachDetail; index: number }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div 
+      className="bg-surface border border-[#4d4d4d] rounded-lg overflow-hidden hover:border-red-500/40 transition-all duration-300 group"
+      style={{ animationDelay: `${index * 60}ms` }}
+    >
+      {/* Card Header — always visible */}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left p-5 flex items-start gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg"
+      >
+        {/* Icon / Logo */}
+        <div className="shrink-0 w-11 h-11 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
+          {breach.Logo ? (
+            <img src={breach.Logo} alt="" className="w-7 h-7 rounded object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          ) : (
+            <ShieldAlert className="w-5 h-5 text-red-500" />
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h4 className="text-base font-bold text-text-base truncate">{breach.Title}</h4>
+            {breach.Verified && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-red-500/15 text-red-400 rounded border border-red-500/20">
+                <ShieldCheck className="w-3 h-3" /> Verified
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3 mt-1.5 text-xs text-text-muted flex-wrap">
+            {breach.Domain && breach.Domain !== 'Unknown' && (
+              <span className="flex items-center gap-1">
+                <Globe className="w-3 h-3" /> {breach.Domain}
+              </span>
+            )}
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3 h-3" /> {formatDate(breach.BreachDate)}
+            </span>
+            {breach.PwnCount && breach.PwnCount !== 0 && (
+              <span className="flex items-center gap-1">
+                <Users className="w-3 h-3" /> {formatNumber(breach.PwnCount)} records
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Expand toggle */}
+        <div className="shrink-0 mt-1">
+          {expanded ? (
+            <ChevronUp className="w-5 h-5 text-text-muted" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-text-muted" />
+          )}
+        </div>
+      </button>
+
+      {/* Expanded detail section */}
+      {expanded && (
+        <div className="px-5 pb-5 border-t border-[#4d4d4d] pt-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+          
+          {/* Meta chips row */}
+          <div className="flex flex-wrap gap-2">
+            {breach.Industry && breach.Industry !== 'Unknown' && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-[#1f1f1f] border border-[#4d4d4d] text-text-base">
+                <Building2 className="w-3.5 h-3.5 text-text-muted" /> {breach.Industry}
+              </span>
+            )}
+            {breach.PasswordRisk && breach.PasswordRisk !== 'Unknown' && (
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-[#1f1f1f] border border-[#4d4d4d] ${getPasswordRiskColor(breach.PasswordRisk)}`}>
+                <Key className="w-3.5 h-3.5" /> Password: {breach.PasswordRisk}
+              </span>
+            )}
+            {breach.Searchable && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-[#1f1f1f] border border-[#4d4d4d] text-text-muted">
+                <Search className="w-3.5 h-3.5" /> Searchable
+              </span>
+            )}
+          </div>
+
+          {/* Description */}
+          {breach.Description && breach.Description !== 'No description available.' && (
+            <div className="text-sm text-text-muted leading-relaxed bg-[#1a1a1a] rounded-lg p-4 border border-[#333]">
+              <p dangerouslySetInnerHTML={{ __html: breach.Description }} />
+            </div>
+          )}
+
+          {/* Exposed Data Classes */}
+          {breach.DataClasses && breach.DataClasses.length > 0 && breach.DataClasses[0] !== 'Unknown' && (
+            <div>
+              <h5 className="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 flex items-center gap-1.5">
+                <Tag className="w-3.5 h-3.5" /> Exposed Data Types
+              </h5>
+              <div className="flex flex-wrap gap-1.5">
+                {breach.DataClasses.map((cls, i) => (
+                  <span 
+                    key={i} 
+                    className={`inline-block px-2.5 py-1 text-xs font-semibold rounded-md border ${getDataClassStyle(cls)}`}
+                  >
+                    {cls}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Stats row */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {breach.PwnCount && breach.PwnCount !== 0 && (
+              <div className="bg-[#1f1f1f] rounded-lg p-3 border border-[#4d4d4d]">
+                <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted block mb-1">Exposed Records</span>
+                <span className="text-lg font-mono font-bold text-red-400">{formatNumber(breach.PwnCount)}</span>
+              </div>
+            )}
+            <div className="bg-[#1f1f1f] rounded-lg p-3 border border-[#4d4d4d]">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted block mb-1">Breach Date</span>
+              <span className="text-sm font-bold text-text-base">{formatDate(breach.BreachDate)}</span>
+            </div>
+            <div className="bg-[#1f1f1f] rounded-lg p-3 border border-[#4d4d4d]">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted block mb-1">Domain</span>
+              <span className="text-sm font-bold text-text-base">{breach.Domain || 'N/A'}</span>
+            </div>
+          </div>
+
+          {/* Reference link */}
+          {breach.References && breach.References !== 'null' && (
+            <a 
+              href={breach.References} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors bg-primary/5 hover:bg-primary/10 px-3 py-2 rounded-lg border border-primary/20"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              View Breach Source / Reference
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function HibpClient() {
   const [activeTab, setActiveTab] = useState<'account' | 'password'>('account');
@@ -42,6 +253,16 @@ export default function HibpClient() {
       setIsAnalyzing(false);
     }
   };
+
+  // Compute summary stats
+  const totalRecords = results?.breaches?.reduce((sum: number, b: BreachDetail) => {
+    const count = typeof b.PwnCount === 'number' ? b.PwnCount : parseInt(String(b.PwnCount), 10) || 0;
+    return sum + count;
+  }, 0) || 0;
+
+  const uniqueIndustries = results?.breaches 
+    ? [...new Set(results.breaches.map((b: BreachDetail) => b.Industry).filter((i: string) => i && i !== 'Unknown'))]
+    : [];
 
   return (
     <div className="min-h-screen bg-base text-text-base font-sans pb-12">
@@ -153,7 +374,7 @@ export default function HibpClient() {
               </div>
             </div>
 
-            {/* Detailed Results (Password) */}
+            {/* === PASSWORD RESULTS === */}
             {results.type === 'password' && results.breached && (
               <div className="bg-surface p-6 rounded-lg border border-[#4d4d4d] shadow-md">
                 <div className="flex items-center gap-3 mb-4">
@@ -175,34 +396,113 @@ export default function HibpClient() {
               </div>
             )}
 
-            {/* Detailed Results (Account / Email) */}
+            {/* === ACCOUNT / EMAIL RESULTS === */}
             {results.type === 'account' && results.breached && (
-              <div className="bg-surface p-6 rounded-lg border border-[#4d4d4d] shadow-md">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
-                  <h3 className="text-lg font-bold flex items-center gap-2">
-                    <AlertTriangle className="w-5 h-5 text-red-500" /> 
-                    Found in {results.breaches.length} Data Breaches
-                  </h3>
-                  <a href="https://xposedornot.com/" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:underline flex items-center gap-1 bg-[#1f1f1f] px-3 py-1.5 rounded-full border border-[#4d4d4d]">
-                    Powered by XposedOrNot <Globe className="w-3 h-3" />
-                  </a>
-                </div>
-                
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                  {results.breaches.map((breach: any) => (
-                    <div key={breach.Name} className="flex items-center gap-2 bg-[#1f1f1f] border border-[#4d4d4d] p-3 rounded-md hover:border-red-500/50 transition-colors group overflow-hidden">
-                      <ShieldAlert className="w-4 h-4 text-red-500/70 group-hover:text-red-500 shrink-0" />
-                      <span className="text-sm font-bold text-text-base truncate" title={breach.Title}>
-                        {breach.Title}
-                      </span>
+              <>
+                {/* Summary Stats Row */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="bg-surface rounded-lg p-4 border border-[#4d4d4d] text-center">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <ShieldAlert className="w-4 h-4 text-red-500" />
+                      <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted">Breaches</span>
                     </div>
-                  ))}
+                    <span className="text-2xl font-mono font-bold text-red-400">{results.breaches.length}</span>
+                  </div>
+                  <div className="bg-surface rounded-lg p-4 border border-[#4d4d4d] text-center">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <Database className="w-4 h-4 text-amber-500" />
+                      <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted">Total Records</span>
+                    </div>
+                    <span className="text-2xl font-mono font-bold text-amber-400">{formatNumber(totalRecords)}</span>
+                  </div>
+                  <div className="bg-surface rounded-lg p-4 border border-[#4d4d4d] text-center">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <Building2 className="w-4 h-4 text-blue-500" />
+                      <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted">Industries</span>
+                    </div>
+                    <span className="text-2xl font-mono font-bold text-blue-400">{uniqueIndustries.length}</span>
+                  </div>
+                  <div className="bg-surface rounded-lg p-4 border border-[#4d4d4d] text-center">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <Clipboard className="w-4 h-4 text-purple-500" />
+                      <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted">Pastes</span>
+                    </div>
+                    <span className="text-2xl font-mono font-bold text-purple-400">
+                      {results.pastes?.details?.length || 0}
+                    </span>
+                  </div>
                 </div>
-                
-                <p className="mt-6 text-xs text-text-muted leading-relaxed border-t border-[#4d4d4d] pt-4">
-                  <strong>Security Advice:</strong> If your email was found in these breaches, change your passwords immediately, especially if you reused the same password across multiple sites. Consider using a password manager and enabling Two-Factor Authentication (2FA) wherever possible.
-                </p>
-              </div>
+
+                {/* Exposed Data Summary — from metrics */}
+                {results.metrics?.xposedDataSummary && Object.keys(results.metrics.xposedDataSummary).length > 0 && (
+                  <div className="bg-surface p-5 rounded-lg border border-[#4d4d4d]">
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-text-muted mb-3 flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4 text-primary" /> Exposed Data Summary
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {Object.entries(results.metrics.xposedDataSummary).map(([key, count]: [string, any]) => (
+                        <span 
+                          key={key} 
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full border ${getDataClassStyle(key)}`}
+                        >
+                          {key}
+                          {count > 1 && (
+                            <span className="ml-1 bg-black/30 rounded-full px-1.5 py-0.5 text-[10px] font-mono">{count}×</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Breach List */}
+                <div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+                    <h3 className="text-lg font-bold flex items-center gap-2">
+                      <AlertTriangle className="w-5 h-5 text-red-500" /> 
+                      Found in {results.breaches.length} Data Breach{results.breaches.length !== 1 ? 'es' : ''}
+                    </h3>
+                    <a href="https://xposedornot.com/" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:underline flex items-center gap-1 bg-[#1f1f1f] px-3 py-1.5 rounded-full border border-[#4d4d4d]">
+                      Powered by XposedOrNot <Globe className="w-3 h-3" />
+                    </a>
+                  </div>
+
+                  <div className="space-y-3">
+                    {results.breaches.map((breach: BreachDetail, index: number) => (
+                      <BreachCard key={breach.Name + index} breach={breach} index={index} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Pastes Section */}
+                {results.pastes?.details && results.pastes.details.length > 0 && (
+                  <div className="bg-surface p-5 rounded-lg border border-[#4d4d4d]">
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-text-muted mb-4 flex items-center gap-2">
+                      <FileWarning className="w-4 h-4 text-amber-500" /> Found in {results.pastes.details.length} Paste{results.pastes.details.length !== 1 ? 's' : ''}
+                    </h3>
+                    <div className="space-y-2">
+                      {results.pastes.details.map((paste: any, i: number) => (
+                        <div key={i} className="flex items-center justify-between bg-[#1f1f1f] p-3 rounded-md border border-[#4d4d4d] gap-3">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <Hash className="w-4 h-4 text-amber-500 shrink-0" />
+                            <span className="text-sm font-medium text-text-base truncate">
+                              {paste.source || paste.id || `Paste #${i + 1}`}
+                            </span>
+                          </div>
+                          <span className="text-xs text-text-muted shrink-0">
+                            {paste.date || paste.timestamp || ''}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Security Advice */}
+                <div className="p-4 bg-[#1a1a1a] rounded-lg border border-[#333] text-xs text-text-muted leading-relaxed">
+                  <strong className="text-text-base">🔐 Security Advice:</strong> If your email was found in these breaches, change your passwords immediately, especially if you reused the same password across multiple sites. Consider using a password manager and enabling Two-Factor Authentication (2FA) wherever possible.
+                </div>
+              </>
             )}
 
           </div>

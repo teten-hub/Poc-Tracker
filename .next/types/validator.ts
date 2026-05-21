@@ -74,6 +74,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/ransomware/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/ransomware">> = Specific
+  const handler = {} as typeof import("../../app/ransomware/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/analyze-ip/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/analyze-ip">> = Specific
@@ -96,6 +105,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/pocs">> = Specific
   const handler = {} as typeof import("../../app/api/pocs/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/ransomware/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/ransomware">> = Specific
+  const handler = {} as typeof import("../../app/api/ransomware/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

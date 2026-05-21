@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/ransomware/layout,_N_T_/ransomware/page,_N_T_/ransomware"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/ransomware/__PAGE__",
+    "/ransomware",
+    "/_index",
+    "/_head"
+  ]
+}

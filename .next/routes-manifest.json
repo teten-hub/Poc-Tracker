@@ -60,6 +60,12 @@
       "namedRegex": "^/api/pocs(?:/)?$"
     },
     {
+      "page": "/api/ransomware",
+      "regex": "^/api/ransomware(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/ransomware(?:/)?$"
+    },
+    {
       "page": "/hibp",
       "regex": "^/hibp(?:/)?$",
       "routeKeys": {},
@@ -76,6 +82,12 @@
       "regex": "^/ip\\-analyzer(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/ip\\-analyzer(?:/)?$"
+    },
+    {
+      "page": "/ransomware",
+      "regex": "^/ransomware(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/ransomware(?:/)?$"
     }
   ],
   "dataRoutes": [],

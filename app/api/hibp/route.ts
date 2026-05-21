@@ -15,14 +15,14 @@ export async function GET(request: Request) {
     }
 
     if (type === 'account') {
-      // Using XposedOrNot free API for email breach checks
-      const url = `https://api.xposedornot.com/v1/check-email/${encodeURIComponent(query)}`;
+      // Using XposedOrNot breach-analytics API for detailed breach info
+      const url = `https://api.xposedornot.com/v1/breach-analytics?email=${encodeURIComponent(query)}`;
       
       const res = await fetch(url, { next: { revalidate: 3600 } });
       
       if (res.status === 404) {
         // 404 means the account was not found in any breaches (Clean)
-        return NextResponse.json({ success: true, breached: false, breaches: [] });
+        return NextResponse.json({ success: true, breached: false, breaches: [], metrics: null, pastes: null });
       }
       
       if (!res.ok) {
@@ -33,25 +33,51 @@ export async function GET(request: Request) {
       }
 
       const data = await res.json();
-      const breachNames = data.breaches && data.breaches[0] ? data.breaches[0] : [];
       
-      // Map names into a format the frontend expects
-      const formattedBreaches = breachNames.map((name: string) => ({
-        Name: name,
-        Title: name,
-        Domain: 'Unknown',
-        BreachDate: 'Unknown',
-        Description: 'Details available on xposedornot.com',
-        DataClasses: ['Exposed Data'],
-        PwnCount: 'Unknown'
+      // Extract detailed breach data from ExposedBreaches
+      const exposedBreaches = data.ExposedBreaches?.breaches_details || [];
+      const breachMetrics = data.BreachMetrics || null;
+      const pastesSummary = data.PastesSummary || null;
+      const exposedPastes = data.ExposedPastes?.pastes_details || [];
+      
+      // Map into rich format the frontend expects
+      const formattedBreaches = exposedBreaches.map((breach: any) => ({
+        Name: breach.breach || breach.breachID || 'Unknown',
+        Title: breach.breach || breach.breachID || 'Unknown',
+        Domain: breach.domain || 'Unknown',
+        BreachDate: breach.xposed_date || breach.breachDate || 'Unknown',
+        Description: breach.details || breach.description || 'No description available.',
+        DataClasses: breach.xposed_data ? breach.xposed_data.split(';').map((s: string) => s.trim()).filter(Boolean) : ['Unknown'],
+        PwnCount: breach.xposed_records || breach.pwnCount || 0,
+        Industry: breach.industry || 'Unknown',
+        Logo: breach.logo || null,
+        PasswordRisk: breach.password_risk || 'Unknown',
+        References: breach.references || null,
+        Searchable: breach.searchable === 'Yes',
+        Verified: breach.verified === 'Yes',
       }));
 
-      // In a more complex app, we could fetch /v1/breaches to map full details,
-      // but providing the names gives immediate value!
+      // Parse metrics for summary display
+      let parsedMetrics = null;
+      if (breachMetrics) {
+        parsedMetrics = {
+          industry: breachMetrics.industry || [],
+          passwordStrength: breachMetrics.passwords_strength || breachMetrics.passwordStrength || [],
+          risk: breachMetrics.risk || [],
+          yearlyBreaches: breachMetrics.yearwise_details || breachMetrics.yearlyBreaches || [],
+          xposedDataSummary: breachMetrics.xposed_data || {},
+        };
+      }
+
       return NextResponse.json({ 
         success: true, 
         breached: formattedBreaches.length > 0, 
-        breaches: formattedBreaches 
+        breaches: formattedBreaches,
+        metrics: parsedMetrics,
+        pastes: {
+          summary: pastesSummary,
+          details: exposedPastes,
+        },
       });
       
     } else if (type === 'password') {

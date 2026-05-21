@@ -41,7 +41,8 @@ export async function GET(request: Request) {
           throw new Error(`VirusTotal responded with status: ${res.status}`);
         }
         const data = await res.json();
-        const stats = data?.data?.attributes?.last_analysis_stats || {};
+        const attrs = data?.data?.attributes || {};
+        const stats = attrs.last_analysis_stats || {};
         const malicious = stats.malicious || 0;
         const suspicious = stats.suspicious || 0;
         const undetected = stats.undetected || 0;
@@ -56,8 +57,13 @@ export async function GET(request: Request) {
           suspicious,
           undetected,
           engineCount: engineCount || 86, // Fallback to common engine size if 0
-          country: data?.data?.attributes?.country || null,
-          as_owner: data?.data?.attributes?.as_owner || null
+          country: attrs.country || null,
+          as_owner: attrs.as_owner || null,
+          asn: attrs.asn || null,
+          network: attrs.network || null,
+          regional_internet_registry: attrs.regional_internet_registry || null,
+          reputation: attrs.reputation || 0,
+          last_analysis_date: attrs.last_analysis_date || null
         };
       })(),
 
@@ -95,10 +101,21 @@ export async function GET(request: Request) {
           }
         });
 
+        // Map up to top 5 pulses for frontend details
+        const pulsesDetails = pulses.slice(0, 5).map((p: any) => ({
+          id: p.id,
+          name: p.name || 'Unnamed Pulse',
+          description: p.description || 'No description provided.',
+          created: p.created || null,
+          adversary: p.adversary || null,
+          tags: p.tags || []
+        }));
+
         return {
           configured: true,
           success: true,
           pulses: count,
+          pulses_details: pulsesDetails,
           malware_family: Array.from(malwareFamilies).slice(0, 5) // Return up to top 5 families
         };
       })(),
@@ -130,7 +147,10 @@ export async function GET(request: Request) {
           isp: info.isp || null,
           country: info.countryCode || null,
           city: info.city || null,
-          domain: info.domain || null
+          domain: info.domain || null,
+          usage_type: info.usageType || 'Unknown',
+          num_distinct_users: info.numDistinctUsers || 0,
+          last_reported_at: info.lastReportedAt || null
         };
       })(),
 
