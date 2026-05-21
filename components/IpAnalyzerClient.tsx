@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { 
   Search, Loader2, Shield, AlertTriangle, AlertCircle, CheckCircle2, 
   Lock, Sparkles, Network, Calendar, HelpCircle, User, Activity, 
@@ -38,18 +39,15 @@ function formatUnixDate(timestamp: number | null) {
 }
 
 export default function IpAnalyzerClient() {
+  const searchParams = useSearchParams();
   const [ipAddress, setIpAddress] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleAnalyze = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!ipAddress) return;
-
-    // Basic IP validation
+  const runAnalysis = useCallback(async (ip: string) => {
     const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (!ipRegex.test(ipAddress)) {
+    if (!ipRegex.test(ip)) {
       setError('Please enter a valid IPv4 address.');
       return;
     }
@@ -59,7 +57,7 @@ export default function IpAnalyzerClient() {
     setResults(null);
 
     try {
-      const res = await fetch(`/api/analyze-ip?ip=${encodeURIComponent(ipAddress)}`);
+      const res = await fetch(`/api/analyze-ip?ip=${encodeURIComponent(ip)}`);
       const data = await res.json();
 
       if (!res.ok || !data.success) {
@@ -74,6 +72,21 @@ export default function IpAnalyzerClient() {
     } finally {
       setIsAnalyzing(false);
     }
+  }, []);
+
+  // Auto-analyze if ?ip= query param is present (e.g. from Tor Exit Nodes dashboard)
+  useEffect(() => {
+    const ipParam = searchParams.get('ip');
+    if (ipParam) {
+      setIpAddress(ipParam);
+      runAnalysis(ipParam);
+    }
+  }, [searchParams, runAnalysis]);
+
+  const handleAnalyze = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ipAddress) return;
+    runAnalysis(ipAddress);
   };
 
   const getAlertLevel = () => {

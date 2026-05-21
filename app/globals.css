@@ -11,6 +11,11 @@
 
   --radius-pill: 9999px;
   --radius-circle: 50%;
+
+  /* Fonts as per DESIGN.md Section 3 */
+  --font-sans: "SpotifyMixUI", "CircularSp-Arab", "CircularSp-Hebr", "CircularSp-Cyrl", "CircularSp-Grek", "CircularSp-Deva", var(--font-inter), "Helvetica Neue", helvetica, arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "MS Gothic", sans-serif;
+  --font-title: "SpotifyMixUITitle", "CircularSp-Arab", "CircularSp-Hebr", "CircularSp-Cyrl", "CircularSp-Grek", "CircularSp-Deva", var(--font-inter), "Helvetica Neue", helvetica, arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "MS Gothic", sans-serif;
+  --font-body: "SpotifyMixUI", "CircularSp-Arab", "CircularSp-Hebr", "CircularSp-Cyrl", "CircularSp-Grek", "CircularSp-Deva", var(--font-inter), "Helvetica Neue", helvetica, arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "MS Gothic", sans-serif;
 }
 
 /* Custom Scrollbar */
@@ -28,3 +33,119 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #7c7c7c;
 }
+
+/* Typography utilities as per DESIGN.md Section 3 */
+@utility text-section-title {
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@utility text-feature-heading {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.30;
+  letter-spacing: normal;
+}
+
+@utility text-body-bold {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@utility text-body-normal {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@utility text-button-uppercase {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.00;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+@utility text-button-normal {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.14px;
+}
+
+@utility text-nav-link-bold {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@utility text-nav-link-normal {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@utility text-caption-bold {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.52;
+  letter-spacing: normal;
+}
+
+@utility text-caption-normal {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@utility text-small-bold {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.50;
+  letter-spacing: normal;
+}
+
+@utility text-small-normal {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@utility text-badge-custom {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-transform: capitalize;
+}
+
+@utility text-micro-normal {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: normal;
+}
+

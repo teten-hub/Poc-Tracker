@@ -1,0 +1,3 @@
+{
+  "/api/tor-ips/route": "app/api/tor-ips/route.js"
+}

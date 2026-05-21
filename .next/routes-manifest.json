@@ -66,6 +66,12 @@
       "namedRegex": "^/api/ransomware(?:/)?$"
     },
     {
+      "page": "/api/tor-ips",
+      "regex": "^/api/tor\\-ips(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/tor\\-ips(?:/)?$"
+    },
+    {
       "page": "/hibp",
       "regex": "^/hibp(?:/)?$",
       "routeKeys": {},
@@ -88,6 +94,12 @@
       "regex": "^/ransomware(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/ransomware(?:/)?$"
+    },
+    {
+      "page": "/tor-ips",
+      "regex": "^/tor\\-ips(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tor\\-ips(?:/)?$"
     }
   ],
   "dataRoutes": [],

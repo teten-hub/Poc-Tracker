@@ -5,9 +5,11 @@
   "/api/hibp/route": "/api/hibp",
   "/api/pocs/route": "/api/pocs",
   "/api/ransomware/route": "/api/ransomware",
+  "/api/tor-ips/route": "/api/tor-ips",
   "/hibp/page": "/hibp",
   "/icon.svg/route": "/icon.svg",
   "/ip-analyzer/page": "/ip-analyzer",
   "/page": "/",
-  "/ransomware/page": "/ransomware"
+  "/ransomware/page": "/ransomware",
+  "/tor-ips/page": "/tor-ips"
 }

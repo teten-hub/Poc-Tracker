@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Radar, Search, Shield, Menu, X, UserX, ChevronLeft, ChevronRight, Skull } from 'lucide-react';
+import TorIcon from './TorIcon';
 
 interface SidebarProps {
   isMobileOpen: boolean;
@@ -153,6 +154,24 @@ export default function Sidebar({
             ) : (
               <span className="absolute left-full ml-3 px-2 py-1 bg-surface border border-[#4d4d4d] text-text-base text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 whitespace-nowrap shadow-md">
                 Ransomware Tracker
+              </span>
+            )}
+          </Link>
+          <Link 
+            href="/tor-ips" 
+            onClick={closeSidebar} 
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors relative group ${
+              pathname === '/tor-ips' 
+                ? 'bg-[#4d4d4d] text-primary' 
+                : 'text-text-muted hover:bg-[#4d4d4d] hover:text-text-base'
+            } ${isDesktopCollapsed ? 'justify-center' : ''}`}
+          >
+            <TorIcon className="w-5 h-5 shrink-0" />
+            {!isDesktopCollapsed ? (
+              <span className="font-medium text-sm truncate animate-in fade-in duration-200">Tor Exit Nodes</span>
+            ) : (
+              <span className="absolute left-full ml-3 px-2 py-1 bg-surface border border-[#4d4d4d] text-text-base text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 whitespace-nowrap shadow-md">
+                Tor Exit Nodes
               </span>
             )}
           </Link>
