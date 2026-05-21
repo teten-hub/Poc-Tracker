@@ -97,7 +97,7 @@ export default function IpAnalyzerClient() {
 
     // Check VirusTotal
     if (results.vt?.success && results.vt?.configured) {
-      if (results.vt.malicious > 2) {
+      if (results.vt.malicious > 5) {
         isMalicious = true;
       } else if (results.vt.malicious > 0 || results.vt.suspicious > 0) {
         isSuspicious = true;
