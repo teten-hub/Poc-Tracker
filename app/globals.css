@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-base: #121212;
-  --color-surface: #181818;
-  --color-surface-elevated: #252525;
-  --color-primary: #539df5; /* Announcement Blue from Spotify Palette */
-  --color-text-base: #ffffff;
-  --color-text-muted: #b3b3b3;
-  --color-text-negative: #f3727f;
+  --color-base: #f9fafb;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #f3f4f6;
+  --color-primary: #3b82f6; 
+  --color-text-base: #111827;
+  --color-text-muted: #6b7280;
+  --color-text-negative: #ef4444;
 
   --radius-pill: 9999px;
   --radius-circle: 50%;
@@ -26,12 +26,20 @@
   background: var(--color-base);
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #4f4f4f;
+  background-color: #c4c4c4;
   border-radius: 10px;
   border: 3px solid var(--color-base);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #7c7c7c;
+  background-color: #a3a3a3;
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Typography utilities as per DESIGN.md Section 3 */
@@ -148,4 +156,3 @@
   line-height: normal;
   letter-spacing: normal;
 }
-

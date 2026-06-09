@@ -78,16 +78,22 @@
       "namedRegex": "^/hibp(?:/)?$"
     },
     {
-      "page": "/icon.svg",
-      "regex": "^/icon\\.svg(?:/)?$",
+      "page": "/icon.png",
+      "regex": "^/icon\\.png(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/icon\\.svg(?:/)?$"
+      "namedRegex": "^/icon\\.png(?:/)?$"
     },
     {
       "page": "/ip-analyzer",
       "regex": "^/ip\\-analyzer(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/ip\\-analyzer(?:/)?$"
+    },
+    {
+      "page": "/pocs",
+      "regex": "^/pocs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/pocs(?:/)?$"
     },
     {
       "page": "/ransomware",

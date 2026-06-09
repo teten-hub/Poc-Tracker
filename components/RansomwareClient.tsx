@@ -219,7 +219,7 @@ export default function RansomwareClient() {
 
   /* ─── RENDER ─────────────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background pt-20 md:pt-6 pb-10 px-4 md:px-8">
+    <div className="min-h-screen bg-base pt-20 md:pt-6 pb-10 px-4 md:px-8">
       {/* Page Title */}
       <div className="max-w-7xl mx-auto mb-6">
         <div className="flex items-center gap-3 mb-1">
@@ -248,7 +248,7 @@ export default function RansomwareClient() {
       {/* ─── Search Bar ────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto mb-6">
         <form onSubmit={handleSearch} className="relative">
-          <div className="flex items-center bg-surface border border-[#4d4d4d] rounded-xl overflow-hidden focus-within:border-red-500/50 transition-colors">
+          <div className="flex items-center bg-surface border border-gray-200 rounded-xl overflow-hidden focus-within:border-red-500/50 transition-colors">
             <div className="pl-4 text-text-muted">
               <Search className="w-5 h-5" />
             </div>
@@ -271,7 +271,7 @@ export default function RansomwareClient() {
             <button
               type="submit"
               disabled={isSearching || searchQuery.length < 2}
-              className="px-5 py-3.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 border-l border-[#4d4d4d] transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-3.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 border-l border-gray-200 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
             </button>
@@ -282,8 +282,8 @@ export default function RansomwareClient() {
       {/* ─── Search Results (overlays main content) ────────────── */}
       {showSearch && searchResults && (
         <div className="max-w-7xl mx-auto mb-6">
-          <div className="bg-surface border border-[#4d4d4d] rounded-xl overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-3 border-b border-[#4d4d4d]">
+          <div className="bg-surface border border-gray-200 rounded-xl overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">
               <div className="flex items-center gap-2">
                 <Search className="w-4 h-4 text-red-400" />
                 <span className="text-sm font-medium text-text-base">
@@ -306,7 +306,7 @@ export default function RansomwareClient() {
                 </h4>
                 <div className="space-y-2 max-h-80 overflow-y-auto pr-2">
                   {searchResults.posts.map((p, i) => (
-                    <div key={i} className="flex items-center justify-between px-3 py-2.5 bg-background rounded-lg border border-[#333] hover:border-[#555] transition-colors">
+                    <div key={i} className="flex items-center justify-between px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
                       <div className="flex items-center gap-3 min-w-0">
                         <span className={`text-xs px-2 py-0.5 rounded-full border font-medium whitespace-nowrap ${getGroupColor(p.group)}`}>
                           {p.group}
@@ -322,7 +322,7 @@ export default function RansomwareClient() {
 
             {/* Search: Groups */}
             {searchResults.groups && searchResults.groups.length > 0 && (
-              <div className="p-4 border-t border-[#4d4d4d]">
+              <div className="p-4 border-t border-gray-200">
                 <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
                   <Users className="w-3.5 h-3.5" /> Groups ({searchResults.groups.length})
                 </h4>
@@ -331,7 +331,7 @@ export default function RansomwareClient() {
                     <button
                       key={i}
                       onClick={() => { openGroupDetail(g.name || g); setShowSearch(false); }}
-                      className="px-3 py-1.5 bg-background border border-[#4d4d4d] rounded-lg text-sm text-text-base hover:border-violet-500/50 hover:text-violet-400 transition-colors"
+                      className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-text-base hover:border-violet-500/50 hover:text-violet-400 transition-colors"
                     >
                       {g.name || g}
                     </button>
@@ -382,7 +382,7 @@ export default function RansomwareClient() {
       {!isLoading && !error && (
         <div className="max-w-7xl mx-auto">
           {/* Tab Navigation */}
-          <div className="flex items-center gap-1 bg-surface border border-[#4d4d4d] rounded-xl p-1 mb-6">
+          <div className="flex items-center gap-1 bg-surface border border-gray-200 rounded-xl p-1 mb-6">
             <TabButton active={activeTab === 'victims'} onClick={() => setActiveTab('victims')} icon={<Crosshair className="w-4 h-4" />} label="Recent Victims" count={recentVictims.length} />
             <TabButton active={activeTab === 'trending'} onClick={() => setActiveTab('trending')} icon={<TrendingUp className="w-4 h-4" />} label="Trending Groups" count={hotGroups.length} />
             <TabButton active={activeTab === 'groups'} onClick={() => setActiveTab('groups')} icon={<Users className="w-4 h-4" />} label="Groups Directory" />
@@ -488,13 +488,13 @@ function TabButton({ active, onClick, icon, label, count }: { active: boolean; o
       className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
         active
           ? 'bg-red-500/10 text-red-400 border border-red-500/20 shadow-sm'
-          : 'text-text-muted hover:text-text-base hover:bg-[#1f1f1f]'
+          : 'text-text-muted hover:text-text-base hover:bg-gray-100'
       }`}
     >
       {icon}
       <span className="hidden sm:inline">{label}</span>
       {count !== undefined && (
-        <span className={`text-xs px-1.5 py-0.5 rounded-full ${active ? 'bg-red-500/20 text-red-300' : 'bg-[#333] text-text-muted'}`}>
+        <span className={`text-xs px-1.5 py-0.5 rounded-full ${active ? 'bg-red-500/20 text-red-500' : 'bg-gray-200 text-text-muted'}`}>
           {count}
         </span>
       )}
@@ -504,7 +504,7 @@ function TabButton({ active, onClick, icon, label, count }: { active: boolean; o
 
 function VictimCard({ victim, onGroupClick }: { victim: Victim; onGroupClick: (g: string) => void }) {
   return (
-    <div className="group flex items-center gap-4 bg-surface border border-[#4d4d4d] rounded-xl px-4 py-3.5 hover:border-red-500/30 transition-all duration-200">
+    <div className="group flex items-center gap-4 bg-surface border border-gray-200 rounded-xl px-4 py-3.5 hover:border-red-500/30 transition-all duration-200">
       {/* Threat icon */}
       <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
         <Crosshair className="w-4 h-4 text-red-400" />
@@ -549,10 +549,10 @@ function TrendingGroupRow({ rank, group, maxCount, onClick }: { rank: number; gr
     2: 'text-slate-300 bg-slate-400/10 border-slate-400/30',
     3: 'text-orange-400 bg-orange-500/10 border-orange-500/30',
   };
-  const rankStyle = medalColors[rank] || 'text-text-muted bg-[#1f1f1f] border-[#4d4d4d]';
+  const rankStyle = medalColors[rank] || 'text-text-muted bg-gray-100 border-gray-200';
 
   return (
-    <button onClick={onClick} className="w-full flex items-center gap-4 bg-surface border border-[#4d4d4d] rounded-xl px-4 py-3.5 hover:border-violet-500/30 transition-all duration-200 text-left group">
+    <button onClick={onClick} className="w-full flex items-center gap-4 bg-surface border border-gray-200 rounded-xl px-4 py-3.5 hover:border-violet-500/30 transition-all duration-200 text-left group">
       {/* Rank */}
       <div className={`flex-shrink-0 w-8 h-8 rounded-lg border flex items-center justify-center text-sm font-bold ${rankStyle}`}>
         {rank}
@@ -570,7 +570,7 @@ function TrendingGroupRow({ rank, group, maxCount, onClick }: { rank: number; gr
 
       {/* Activity Bar */}
       <div className="hidden sm:flex flex-col items-end gap-1 w-48">
-        <div className="w-full h-2 bg-[#1f1f1f] rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
           <div className="h-full bg-gradient-to-r from-red-500 to-amber-500 rounded-full transition-all duration-500" style={{ width: `${barWidth}%` }} />
         </div>
         <span className="text-xs text-text-muted">{group.count} victims</span>
@@ -604,7 +604,7 @@ function GroupsGrid({ groups, onGroupClick }: { groups: any[]; onGroupClick: (na
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           placeholder="Filter groups..."
-          className="w-full bg-surface border border-[#4d4d4d] rounded-lg text-sm text-text-base placeholder-text-muted pl-10 pr-4 py-2.5 outline-none focus:border-violet-500/50 transition-colors"
+          className="w-full bg-surface border border-gray-200 rounded-lg text-sm text-text-base placeholder-text-muted pl-10 pr-4 py-2.5 outline-none focus:border-violet-500/50 transition-colors"
         />
       </div>
 
@@ -614,7 +614,7 @@ function GroupsGrid({ groups, onGroupClick }: { groups: any[]; onGroupClick: (na
           <button
             key={i}
             onClick={() => onGroupClick(g.name)}
-            className="px-3 py-3 bg-surface border border-[#4d4d4d] rounded-xl text-left hover:border-violet-500/30 hover:bg-violet-500/5 transition-all duration-200 group"
+            className="px-3 py-3 bg-surface border border-gray-200 rounded-xl text-left hover:border-violet-500/30 hover:bg-violet-500/5 transition-all duration-200 group"
           >
             <div className="flex items-center gap-2 mb-1">
               <Skull className="w-3.5 h-3.5 text-text-muted group-hover:text-violet-400 transition-colors" />
@@ -646,9 +646,9 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
       {/* Panel */}
-      <div className="relative w-full max-w-2xl max-h-[85vh] bg-surface border border-[#4d4d4d] rounded-2xl overflow-hidden flex flex-col shadow-2xl">
+      <div className="relative w-full max-w-2xl max-h-[85vh] bg-surface border border-gray-200 rounded-2xl overflow-hidden flex flex-col shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#4d4d4d] bg-gradient-to-r from-red-500/5 to-violet-500/5">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-red-500/5 to-violet-500/5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
               <Skull className="w-5 h-5 text-red-400" />
@@ -658,7 +658,7 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
               <p className="text-xs text-text-muted">Ransomware Group Intelligence</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-text-muted hover:text-text-base hover:bg-[#1f1f1f] rounded-lg transition-colors">
+          <button onClick={onClose} className="p-2 text-text-muted hover:text-text-base hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -699,7 +699,7 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
                   </h4>
                   <div className="space-y-2">
                     {group.locations.map((loc, i) => (
-                      <div key={i} className="flex items-center gap-3 px-3 py-2.5 bg-background rounded-lg border border-[#333]">
+                      <div key={i} className="flex items-center gap-3 px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200">
                         <div className={`w-2 h-2 rounded-full flex-shrink-0 ${loc.available ? 'bg-emerald-500' : 'bg-red-500'}`} />
                         <div className="flex-1 min-w-0">
                           <div className="text-sm text-text-base font-mono truncate">{loc.slug}</div>
@@ -722,7 +722,7 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
                   </h4>
                   <div className="space-y-2">
                     {displayedPosts.map((p, i) => (
-                      <div key={i} className="flex items-center justify-between px-3 py-2.5 bg-background rounded-lg border border-[#333]">
+                      <div key={i} className="flex items-center justify-between px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200">
                         <div className="flex items-center gap-2 min-w-0">
                           <Crosshair className="w-3 h-3 text-red-400 flex-shrink-0" />
                           <span className="text-sm text-text-base truncate">{p.title}</span>

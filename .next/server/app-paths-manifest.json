@@ -7,9 +7,10 @@
   "/api/ransomware/route": "app/api/ransomware/route.js",
   "/api/tor-ips/route": "app/api/tor-ips/route.js",
   "/hibp/page": "app/hibp/page.js",
-  "/icon.svg/route": "app/icon.svg/route.js",
+  "/icon.png/route": "app/icon.png/route.js",
   "/ip-analyzer/page": "app/ip-analyzer/page.js",
   "/page": "app/page.js",
+  "/pocs/page": "app/pocs/page.js",
   "/ransomware/page": "app/ransomware/page.js",
   "/tor-ips/page": "app/tor-ips/page.js"
 }

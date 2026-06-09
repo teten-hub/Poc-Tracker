@@ -7,9 +7,10 @@
   "/api/ransomware/route": "/api/ransomware",
   "/api/tor-ips/route": "/api/tor-ips",
   "/hibp/page": "/hibp",
-  "/icon.svg/route": "/icon.svg",
+  "/icon.png/route": "/icon.png",
   "/ip-analyzer/page": "/ip-analyzer",
   "/page": "/",
+  "/pocs/page": "/pocs",
   "/ransomware/page": "/ransomware",
   "/tor-ips/page": "/tor-ips"
 }

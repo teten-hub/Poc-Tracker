@@ -26,18 +26,18 @@ interface BreachDetail {
 
 function getRiskColor(risk: string) {
   const r = risk?.toLowerCase();
-  if (r === 'high' || r === 'critical') return 'text-red-400 bg-red-500/15 border-red-500/30';
-  if (r === 'medium') return 'text-amber-400 bg-amber-500/15 border-amber-500/30';
-  if (r === 'low') return 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30';
-  return 'text-gray-400 bg-gray-500/15 border-gray-500/30';
+  if (r === 'high' || r === 'critical') return 'text-red-600 bg-red-50 border-red-200';
+  if (r === 'medium') return 'text-amber-600 bg-amber-50 border-amber-200';
+  if (r === 'low') return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+  return 'text-gray-500 bg-gray-50 border-gray-200';
 }
 
 function getPasswordRiskColor(risk: string) {
   const r = risk?.toLowerCase();
-  if (r === 'plaintext' || r === 'easy' || r === 'easytocrack') return 'text-red-400';
-  if (r === 'unknown') return 'text-gray-400';
-  if (r === 'strong' || r === 'hardtocrack') return 'text-emerald-400';
-  return 'text-amber-400';
+  if (r === 'plaintext' || r === 'easy' || r === 'easytocrack') return 'text-red-600';
+  if (r === 'unknown') return 'text-gray-500';
+  if (r === 'strong' || r === 'hardtocrack') return 'text-emerald-600';
+  return 'text-amber-600';
 }
 
 function formatNumber(n: number | string) {
@@ -61,13 +61,13 @@ function formatDate(dateStr: string) {
 // Data class tag color mapping
 function getDataClassStyle(cls: string) {
   const c = cls.toLowerCase();
-  if (c.includes('password')) return 'bg-red-500/20 text-red-300 border-red-500/30';
-  if (c.includes('email')) return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
-  if (c.includes('name') || c.includes('username')) return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
-  if (c.includes('phone') || c.includes('address')) return 'bg-amber-500/20 text-amber-300 border-amber-500/30';
-  if (c.includes('ip') || c.includes('geo') || c.includes('location')) return 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30';
-  if (c.includes('credit') || c.includes('financial') || c.includes('payment')) return 'bg-rose-500/20 text-rose-300 border-rose-500/30';
-  return 'bg-[#2a2a2a] text-gray-300 border-[#4d4d4d]';
+  if (c.includes('password')) return 'bg-red-50 text-red-600 border-red-200';
+  if (c.includes('email')) return 'bg-blue-50 text-blue-600 border-blue-200';
+  if (c.includes('name') || c.includes('username')) return 'bg-purple-50 text-purple-600 border-purple-200';
+  if (c.includes('phone') || c.includes('address')) return 'bg-amber-50 text-amber-600 border-amber-200';
+  if (c.includes('ip') || c.includes('geo') || c.includes('location')) return 'bg-cyan-50 text-cyan-600 border-cyan-200';
+  if (c.includes('credit') || c.includes('financial') || c.includes('payment')) return 'bg-rose-50 text-rose-600 border-rose-200';
+  return 'bg-gray-100 text-gray-600 border-gray-200';
 }
 
 function BreachCard({ breach, index }: { breach: BreachDetail; index: number }) {
@@ -75,7 +75,7 @@ function BreachCard({ breach, index }: { breach: BreachDetail; index: number }) 
 
   return (
     <div 
-      className="bg-surface border border-[#4d4d4d] rounded-lg overflow-hidden hover:border-red-500/40 transition-all duration-300 group"
+      className="bg-surface border border-gray-200 rounded-lg overflow-hidden hover:border-red-500/40 transition-all duration-300 group"
       style={{ animationDelay: `${index * 60}ms` }}
     >
       {/* Card Header — always visible */}
@@ -131,22 +131,22 @@ function BreachCard({ breach, index }: { breach: BreachDetail; index: number }) 
 
       {/* Expanded detail section */}
       {expanded && (
-        <div className="px-5 pb-5 border-t border-[#4d4d4d] pt-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="px-5 pb-5 border-t border-gray-200 pt-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
           
           {/* Meta chips row */}
           <div className="flex flex-wrap gap-2">
             {breach.Industry && breach.Industry !== 'Unknown' && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-[#1f1f1f] border border-[#4d4d4d] text-text-base">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-gray-100 border border-gray-200 text-text-base">
                 <Building2 className="w-3.5 h-3.5 text-text-muted" /> {breach.Industry}
               </span>
             )}
             {breach.PasswordRisk && breach.PasswordRisk !== 'Unknown' && (
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-[#1f1f1f] border border-[#4d4d4d] ${getPasswordRiskColor(breach.PasswordRisk)}`}>
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-gray-100 border border-gray-200 ${getPasswordRiskColor(breach.PasswordRisk)}`}>
                 <Key className="w-3.5 h-3.5" /> Password: {breach.PasswordRisk}
               </span>
             )}
             {breach.Searchable && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-[#1f1f1f] border border-[#4d4d4d] text-text-muted">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-gray-100 border border-gray-200 text-text-muted">
                 <Search className="w-3.5 h-3.5" /> Searchable
               </span>
             )}
@@ -154,7 +154,7 @@ function BreachCard({ breach, index }: { breach: BreachDetail; index: number }) 
 
           {/* Description */}
           {breach.Description && breach.Description !== 'No description available.' && (
-            <div className="text-sm text-text-muted leading-relaxed bg-[#1a1a1a] rounded-lg p-4 border border-[#333]">
+            <div className="text-sm text-gray-600 leading-relaxed bg-gray-50 rounded-lg p-4 border border-gray-200">
               <p dangerouslySetInnerHTML={{ __html: breach.Description }} />
             </div>
           )}
@@ -181,16 +181,16 @@ function BreachCard({ breach, index }: { breach: BreachDetail; index: number }) 
           {/* Stats row */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {breach.PwnCount && breach.PwnCount !== 0 && (
-              <div className="bg-[#1f1f1f] rounded-lg p-3 border border-[#4d4d4d]">
+              <div className="bg-gray-100 rounded-lg p-3 border border-gray-200">
                 <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted block mb-1">Exposed Records</span>
                 <span className="text-lg font-mono font-bold text-red-400">{formatNumber(breach.PwnCount)}</span>
               </div>
             )}
-            <div className="bg-[#1f1f1f] rounded-lg p-3 border border-[#4d4d4d]">
+            <div className="bg-gray-100 rounded-lg p-3 border border-gray-200">
               <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted block mb-1">Breach Date</span>
               <span className="text-sm font-bold text-text-base">{formatDate(breach.BreachDate)}</span>
             </div>
-            <div className="bg-[#1f1f1f] rounded-lg p-3 border border-[#4d4d4d]">
+            <div className="bg-gray-100 rounded-lg p-3 border border-gray-200">
               <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted block mb-1">Domain</span>
               <span className="text-sm font-bold text-text-base">{breach.Domain || 'N/A'}</span>
             </div>
@@ -283,13 +283,13 @@ export default function HibpClient() {
         <div className="mb-8">
           
           {/* Tabs */}
-          <div className="flex gap-2 mb-6 border-b border-[#4d4d4d] pb-4">
+          <div className="flex gap-2 mb-6 border-b border-gray-200 pb-4">
             <button
               onClick={() => handleTabChange('account')}
               className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm transition-colors ${
                 activeTab === 'account' 
-                  ? 'bg-[#1f1f1f] text-primary border border-primary/30' 
-                  : 'text-text-muted hover:bg-[#1f1f1f] hover:text-white border border-transparent'
+                  ? 'bg-gray-100 text-primary border border-primary/30' 
+                  : 'text-text-muted hover:bg-gray-100 hover:text-gray-900 border border-transparent'
               }`}
             >
               <UserX className="w-4 h-4" />
@@ -299,8 +299,8 @@ export default function HibpClient() {
               onClick={() => handleTabChange('password')}
               className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm transition-colors ${
                 activeTab === 'password' 
-                  ? 'bg-[#1f1f1f] text-primary border border-primary/30' 
-                  : 'text-text-muted hover:bg-[#1f1f1f] hover:text-white border border-transparent'
+                  ? 'bg-gray-100 text-primary border border-primary/30' 
+                  : 'text-text-muted hover:bg-gray-100 hover:text-gray-900 border border-transparent'
               }`}
             >
               <Key className="w-4 h-4" />
@@ -310,7 +310,7 @@ export default function HibpClient() {
 
           {/* Form */}
           <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-1 items-center bg-[#1f1f1f] rounded-full shadow-[inset_0_0_0_1px_rgb(124,124,124)] focus-within:shadow-[inset_0_0_0_1px_white] px-5 py-3.5 transition-shadow">
+            <div className="flex flex-1 items-center bg-white rounded-full border border-gray-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 px-5 py-3.5 transition-all shadow-sm">
               <Search className="h-5 w-5 text-text-muted shrink-0 mr-3" />
               <input
                 type={activeTab === 'password' ? 'password' : 'text'}
@@ -323,7 +323,7 @@ export default function HibpClient() {
             <button
               type="submit"
               disabled={isAnalyzing || !query}
-              className="px-8 py-3.5 bg-primary text-black font-bold rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center min-w-[140px] tracking-wide uppercase"
+              className="px-8 py-3.5 bg-primary text-white font-bold rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center min-w-[140px] tracking-wide uppercase"
             >
               {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Check Data'}
             </button>
@@ -376,7 +376,7 @@ export default function HibpClient() {
 
             {/* === PASSWORD RESULTS === */}
             {results.type === 'password' && results.breached && (
-              <div className="bg-surface p-6 rounded-lg border border-[#4d4d4d] shadow-md">
+              <div className="bg-surface p-6 rounded-lg border border-gray-200 shadow-md">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-500">
                     <AlertTriangle className="w-5 h-5" />
@@ -386,9 +386,9 @@ export default function HibpClient() {
                     <p className="text-sm text-text-muted">This password was found in a massive database of breached passwords.</p>
                   </div>
                 </div>
-                <div className="mt-4 p-4 bg-[#1f1f1f] rounded border border-[#4d4d4d] flex items-center justify-between">
+                <div className="mt-4 p-4 bg-gray-100 rounded border border-gray-200 flex items-center justify-between">
                   <span className="text-text-muted font-medium">Seen in breaches:</span>
-                  <span className="text-2xl font-mono font-bold text-red-500">{results.count.toLocaleString()} times</span>
+                  <span className="text-2xl font-mono font-bold text-red-600">{results.count.toLocaleString()} times</span>
                 </div>
                 <p className="mt-4 text-xs text-text-muted leading-relaxed">
                   <strong>Advice:</strong> You should change this password immediately wherever you use it. Do not use this password for any new accounts.
@@ -401,33 +401,33 @@ export default function HibpClient() {
               <>
                 {/* Summary Stats Row */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="bg-surface rounded-lg p-4 border border-[#4d4d4d] text-center">
+                  <div className="bg-surface rounded-lg p-4 border border-gray-200 text-center">
                     <div className="flex items-center justify-center gap-2 mb-2">
                       <ShieldAlert className="w-4 h-4 text-red-500" />
                       <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted">Breaches</span>
                     </div>
-                    <span className="text-2xl font-mono font-bold text-red-400">{results.breaches.length}</span>
+                    <span className="text-2xl font-mono font-bold text-red-600">{results.breaches.length}</span>
                   </div>
-                  <div className="bg-surface rounded-lg p-4 border border-[#4d4d4d] text-center">
+                  <div className="bg-surface rounded-lg p-4 border border-gray-200 text-center">
                     <div className="flex items-center justify-center gap-2 mb-2">
                       <Database className="w-4 h-4 text-amber-500" />
                       <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted">Total Records</span>
                     </div>
-                    <span className="text-2xl font-mono font-bold text-amber-400">{formatNumber(totalRecords)}</span>
+                    <span className="text-2xl font-mono font-bold text-amber-600">{formatNumber(totalRecords)}</span>
                   </div>
-                  <div className="bg-surface rounded-lg p-4 border border-[#4d4d4d] text-center">
+                  <div className="bg-surface rounded-lg p-4 border border-gray-200 text-center">
                     <div className="flex items-center justify-center gap-2 mb-2">
                       <Building2 className="w-4 h-4 text-blue-500" />
                       <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted">Industries</span>
                     </div>
-                    <span className="text-2xl font-mono font-bold text-blue-400">{uniqueIndustries.length}</span>
+                    <span className="text-2xl font-mono font-bold text-blue-600">{uniqueIndustries.length}</span>
                   </div>
-                  <div className="bg-surface rounded-lg p-4 border border-[#4d4d4d] text-center">
+                  <div className="bg-surface rounded-lg p-4 border border-gray-200 text-center">
                     <div className="flex items-center justify-center gap-2 mb-2">
                       <Clipboard className="w-4 h-4 text-purple-500" />
                       <span className="text-[10px] uppercase tracking-wider font-bold text-text-muted">Pastes</span>
                     </div>
-                    <span className="text-2xl font-mono font-bold text-purple-400">
+                    <span className="text-2xl font-mono font-bold text-purple-600">
                       {results.pastes?.details?.length || 0}
                     </span>
                   </div>
@@ -435,7 +435,7 @@ export default function HibpClient() {
 
                 {/* Exposed Data Summary — from metrics */}
                 {results.metrics?.xposedDataSummary && Object.keys(results.metrics.xposedDataSummary).length > 0 && (
-                  <div className="bg-surface p-5 rounded-lg border border-[#4d4d4d]">
+                  <div className="bg-surface p-5 rounded-lg border border-gray-200">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-text-muted mb-3 flex items-center gap-2">
                       <BarChart3 className="w-4 h-4 text-primary" /> Exposed Data Summary
                     </h3>
@@ -462,7 +462,7 @@ export default function HibpClient() {
                       <AlertTriangle className="w-5 h-5 text-red-500" /> 
                       Found in {results.breaches.length} Data Breach{results.breaches.length !== 1 ? 'es' : ''}
                     </h3>
-                    <a href="https://xposedornot.com/" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:underline flex items-center gap-1 bg-[#1f1f1f] px-3 py-1.5 rounded-full border border-[#4d4d4d]">
+                    <a href="https://xposedornot.com/" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:underline flex items-center gap-1 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
                       Powered by XposedOrNot <Globe className="w-3 h-3" />
                     </a>
                   </div>
@@ -476,13 +476,13 @@ export default function HibpClient() {
 
                 {/* Pastes Section */}
                 {results.pastes?.details && results.pastes.details.length > 0 && (
-                  <div className="bg-surface p-5 rounded-lg border border-[#4d4d4d]">
+                  <div className="bg-surface p-5 rounded-lg border border-gray-200">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-text-muted mb-4 flex items-center gap-2">
                       <FileWarning className="w-4 h-4 text-amber-500" /> Found in {results.pastes.details.length} Paste{results.pastes.details.length !== 1 ? 's' : ''}
                     </h3>
                     <div className="space-y-2">
                       {results.pastes.details.map((paste: any, i: number) => (
-                        <div key={i} className="flex items-center justify-between bg-[#1f1f1f] p-3 rounded-md border border-[#4d4d4d] gap-3">
+                        <div key={i} className="flex items-center justify-between bg-gray-100 p-3 rounded-md border border-gray-200 gap-3">
                           <div className="flex items-center gap-2 min-w-0">
                             <Hash className="w-4 h-4 text-amber-500 shrink-0" />
                             <span className="text-sm font-medium text-text-base truncate">
@@ -499,7 +499,7 @@ export default function HibpClient() {
                 )}
 
                 {/* Security Advice */}
-                <div className="p-4 bg-[#1a1a1a] rounded-lg border border-[#333] text-xs text-text-muted leading-relaxed">
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200 text-xs text-gray-600 leading-relaxed">
                   <strong className="text-text-base">🔐 Security Advice:</strong> If your email was found in these breaches, change your passwords immediately, especially if you reused the same password across multiple sites. Consider using a password manager and enabling Two-Factor Authentication (2FA) wherever possible.
                 </div>
               </>

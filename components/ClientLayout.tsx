@@ -41,20 +41,16 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         }`}
       >
         {/* Universal Top Bar with Hamburger for Desktop Collapse */}
-        <div className="hidden md:flex items-center h-16 bg-surface border-b border-[#4d4d4d] px-6 sticky top-0 z-30 shadow-sm gap-4">
+        <div className="hidden md:flex items-center h-16 bg-surface border-b border-gray-200 px-6 sticky top-0 z-30 shadow-sm gap-4">
           {isDesktopCollapsed && (
             <button 
               onClick={toggleDesktopCollapse}
-              className="p-2 -ml-2 text-text-muted hover:text-text-base hover:bg-[#1f1f1f] rounded-lg transition-all flex items-center gap-2 group border border-transparent hover:border-[#4d4d4d]"
+              className="p-2 -ml-2 text-text-muted hover:text-text-base hover:bg-gray-100 rounded-lg transition-all flex items-center gap-2 group border border-transparent hover:border-gray-200"
               title="Expand Sidebar"
             >
               <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
             </button>
           )}
-          
-          <span className="text-xs font-mono text-text-muted bg-[#1f1f1f] px-3 py-1.5 rounded-full border border-[#4d4d4d] tracking-wide uppercase">
-            SOC-Core Workspace / ThreatIntel
-          </span>
         </div>
 
         {/* Content Wrapper */}

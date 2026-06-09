@@ -99,11 +99,11 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/icon.svg": {
+    "/icon.png": {
       "initialHeaders": {
         "cache-control": "public, max-age=0, must-revalidate",
-        "content-type": "image/svg+xml",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/icon.svg/layout,_N_T_/icon.svg/route,_N_T_/icon.svg"
+        "content-type": "image/png",
+        "x-next-cache-tags": "_N_T_/layout,_N_T_/icon.png/layout,_N_T_/icon.png/route,_N_T_/icon.png"
       },
       "experimentalBypassFor": [
         {
@@ -117,7 +117,7 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/icon.svg",
+      "srcRoute": "/icon.png",
       "dataRoute": null,
       "allowHeader": [
         "host",
@@ -143,6 +143,31 @@
       "initialRevalidateSeconds": false,
       "srcRoute": "/ip-analyzer",
       "dataRoute": "/ip-analyzer.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/pocs": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": 300,
+      "initialExpireSeconds": 31536000,
+      "srcRoute": "/pocs",
+      "dataRoute": "/pocs.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -205,8 +230,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "e35edfa205e93172c75e07aa79b0c104",
-    "previewModeSigningKey": "860aafd8a11789aee2dca95c793c20671b3f84842e58040fbb56afa4f770df87",
-    "previewModeEncryptionKey": "42e7591fca4035d309081bb019178726823e69438b00d70780a24fea37dd0d4d"
+    "previewModeId": "9ac3b871904a9512dfe21b94480d75a7",
+    "previewModeSigningKey": "ec96b93f612d2d9d38dbdb3885af794bfeb4df475565d6eab61a2b6b9c6f2d72",
+    "previewModeEncryptionKey": "bc4eb2e83cde44c356155fe814023603844d8fa518cc66c222df384b4eb73903"
   }
 }

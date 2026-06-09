@@ -62,9 +62,9 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
 
         {/* Top Metric Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-          <div className="bg-surface p-5 rounded-lg hover:bg-surface-elevated hover:shadow-[0_8px_8px_rgba(0,0,0,0.3)] transition-colors relative overflow-hidden group">
+          <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-all relative overflow-hidden group">
             <div className="flex items-center gap-4 relative z-10">
-              <div className="p-3 bg-[#4d4d4d] text-text-base rounded-lg">
+              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-lg">
                 <TorIcon className="w-6 h-6 text-primary" />
               </div>
               <div>
@@ -74,9 +74,9 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
             </div>
           </div>
 
-          <div className="bg-surface p-5 rounded-lg hover:bg-surface-elevated hover:shadow-[0_8px_8px_rgba(0,0,0,0.3)] transition-colors relative overflow-hidden group">
+          <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-all relative overflow-hidden group">
             <div className="flex items-center gap-4 relative z-10">
-              <div className="p-3 bg-[#4d4d4d] text-text-base rounded-lg">
+              <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
                 <Activity className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
@@ -89,7 +89,7 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
 
         {/* Search Bar */}
         <div className="mb-8">
-          <div className="flex items-center bg-[#1f1f1f] rounded-full shadow-[inset_0_0_0_1px_rgb(124,124,124)] focus-within:shadow-[inset_0_0_0_1px_white] px-4 py-3 transition-shadow">
+          <div className="flex items-center bg-white rounded-full border border-gray-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 px-4 py-3 transition-all shadow-sm">
             <Search className="h-5 w-5 text-text-muted shrink-0 mr-3" />
             <input
               type="text"
@@ -125,8 +125,8 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
         {/* List Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {ips.length === 0 && !isSearching && !error ? (
-            <div className="col-span-full text-center py-20 bg-surface rounded-xl border border-[#4d4d4d]">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-pill bg-base mb-5 border border-[#4d4d4d]">
+            <div className="col-span-full text-center py-20 bg-surface rounded-xl border border-gray-200">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-pill bg-base mb-5 border border-gray-200">
                 <ShieldAlert className="h-10 w-10 text-text-muted" />
               </div>
               <h3 className="text-xl font-semibold text-text-base">No IPs found</h3>
@@ -136,17 +136,17 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
             ips.map((ip, index) => (
               <div 
                 key={`${ip}-${index}`}
-                className="bg-surface p-4 rounded-lg hover:bg-surface-elevated hover:shadow-[0_8px_8px_rgba(0,0,0,0.3)] transition-colors border border-transparent hover:border-[#4d4d4d] flex items-center justify-between group"
+                className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all hover:border-gray-300 flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-[#1f1f1f] flex items-center justify-center group-hover:bg-[#4d4d4d] transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
                     <Crosshair className="w-4 h-4 text-text-muted group-hover:text-primary transition-colors" />
                   </div>
                   <span className="font-mono text-sm font-medium text-text-base">{ip}</span>
                 </div>
                 <Link 
                   href={`/ip-analyzer?ip=${ip}`}
-                  className="px-3 py-1.5 bg-[#1f1f1f] text-xs font-semibold text-text-base rounded-pill border border-[#4d4d4d] hover:bg-primary hover:text-black hover:border-primary transition-colors opacity-0 group-hover:opacity-100 uppercase tracking-wide"
+                  className="px-3 py-1.5 bg-gray-100 text-xs font-semibold text-text-base rounded-pill border border-gray-200 hover:bg-primary hover:text-white hover:border-primary transition-colors opacity-0 group-hover:opacity-100 uppercase tracking-wide"
                 >
                   Analyze
                 </Link>
