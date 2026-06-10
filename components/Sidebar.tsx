@@ -3,21 +3,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Radar, Search, Shield, Menu, X, UserX, ChevronLeft, ChevronRight, Skull } from 'lucide-react';
+import { Radar, Search, Shield, Menu, X, UserX, ChevronLeft, ChevronRight, Skull, Rss } from 'lucide-react';
 import TorIcon from './TorIcon';
 
 interface SidebarProps {
   isMobileOpen: boolean;
   setIsMobileOpen: (open: boolean) => void;
-  isDesktopCollapsed: boolean;
-  toggleDesktopCollapse: () => void;
 }
 
 export default function Sidebar({
   isMobileOpen,
-  setIsMobileOpen,
-  isDesktopCollapsed,
-  toggleDesktopCollapse
+  setIsMobileOpen
 }: SidebarProps) {
   const pathname = usePathname();
   const closeSidebar = () => setIsMobileOpen(false);
@@ -29,6 +25,7 @@ export default function Sidebar({
     { href: '/hibp', label: 'Have I Been Pwned', icon: UserX, matchPaths: ['/hibp'] },
     { href: '/ransomware', label: 'Ransomware Tracker', icon: Skull, matchPaths: ['/ransomware'] },
     { href: '/tor-ips', label: 'Tor Exit Nodes', icon: null, isTor: true, matchPaths: ['/tor-ips'] },
+    { href: '/tweetfeed', label: 'TweetFeed IOC', icon: Rss, matchPaths: ['/tweetfeed'] },
   ];
 
   const isActive = (item: typeof navItems[0]) =>
@@ -57,38 +54,23 @@ export default function Sidebar({
 
       {/* Sidebar Content */}
       <div 
-        className={`h-screen bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0 z-50 transition-all duration-300 md:translate-x-0 ${
+        className={`h-screen bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0 z-50 transition-all duration-300 md:translate-x-0 group ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } ${
-          isDesktopCollapsed ? 'w-20' : 'w-64'
-        }`}
+        } w-64 md:w-20 md:hover:w-64`}
       >
         {/* Header */}
-        <div className={`h-20 flex items-center px-4 ${isDesktopCollapsed ? 'justify-center' : 'justify-between'}`}>
-          <Link href="/" className="flex items-center gap-3 overflow-hidden hover:opacity-80 transition-opacity">
+        <div className="h-20 flex items-center px-4 justify-between md:justify-center md:group-hover:justify-between overflow-hidden">
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <Image src="/logo.png" alt="SOC-Core" width={32} height={32} className="rounded-lg shrink-0" />
-            {!isDesktopCollapsed && (
-              <h1 className="text-lg font-bold tracking-tight text-gray-900 truncate animate-in fade-in duration-200">
-                SOC-Core
-              </h1>
-            )}
+            <h1 className="text-lg font-bold tracking-tight text-gray-900 truncate md:w-0 md:opacity-0 md:group-hover:w-auto md:group-hover:opacity-100 transition-all duration-300">
+              SOC-Core
+            </h1>
           </Link>
           
           {/* Mobile close button */}
           <button onClick={closeSidebar} className="md:hidden p-1.5 text-gray-400 hover:text-gray-900 transition-colors">
             <X className="w-5 h-5" />
           </button>
-
-          {/* Desktop collapse button */}
-          {!isDesktopCollapsed && (
-            <button 
-              onClick={toggleDesktopCollapse} 
-              className="hidden md:flex items-center justify-center w-6 h-6 bg-gray-100 rounded text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-all"
-              title="Collapse Sidebar"
-            >
-              <ChevronLeft className="w-4 h-4 ml-[-1px]" />
-            </button>
-          )}
         </div>
         
         {/* Nav Links */}
@@ -100,51 +82,34 @@ export default function Sidebar({
                 key={item.href}
                 href={item.href} 
                 onClick={closeSidebar} 
-                className={`flex items-center px-3 py-3 rounded-xl transition-all relative group ${
+                className={`flex items-center px-3 py-3 rounded-xl transition-all relative group/link gap-4 md:justify-center md:group-hover:justify-start ${
                   active
                     ? 'bg-blue-50 text-blue-700 font-semibold border border-blue-200' 
                     : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
-                } ${isDesktopCollapsed ? 'justify-center' : 'gap-4'}`}
+                }`}
+                title={item.label}
               >
                 {item.isTor ? (
-                  <TorIcon className={`w-5 h-5 shrink-0 ${active ? 'text-blue-700' : 'text-gray-400 group-hover:text-gray-700 fill-current'}`} />
+                  <TorIcon className={`w-5 h-5 shrink-0 ${active ? 'text-blue-700' : 'text-gray-400 group-hover/link:text-gray-700 fill-current'}`} />
                 ) : (
-                  <item.icon className={`w-5 h-5 shrink-0 ${active ? 'text-blue-700' : 'text-gray-400 group-hover:text-gray-700'}`} />
+                  <item.icon className={`w-5 h-5 shrink-0 ${active ? 'text-blue-700' : 'text-gray-400 group-hover/link:text-gray-700'}`} />
                 )}
-                {!isDesktopCollapsed ? (
-                  <span className="text-sm truncate animate-in fade-in duration-200">{item.label}</span>
-                ) : (
-                  <span className="absolute left-full ml-4 px-3 py-2 bg-white border border-gray-200 text-gray-900 text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 whitespace-nowrap shadow-lg">
-                    {item.label}
-                  </span>
-                )}
+                <span className="text-sm truncate md:w-0 md:opacity-0 md:group-hover:w-auto md:group-hover:opacity-100 transition-all duration-300">{item.label}</span>
               </Link>
             );
           })}
         </nav>
         
         {/* Footer / Status Area */}
-        <div className={`p-4 mt-auto flex flex-col gap-2 ${isDesktopCollapsed ? 'items-center justify-center' : ''}`}>
-          <div className="flex items-center gap-4 relative group">
-            {!isDesktopCollapsed ? (
-               <div className="flex items-center gap-3 px-3 py-3 w-full text-gray-500 hover:text-gray-700 transition-colors cursor-default rounded-xl hover:bg-gray-50">
-                 <span className="relative flex h-2.5 w-2.5 shrink-0">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                 </span>
-                 <span className="text-sm">System Online</span>
-               </div>
-            ) : (
-               <div className="flex items-center justify-center w-full py-3">
-                 <span className="relative flex h-2.5 w-2.5 shrink-0">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                 </span>
-                 <span className="absolute left-full ml-4 px-3 py-2 bg-white border border-gray-200 text-gray-900 text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 whitespace-nowrap shadow-lg">
-                   System Online
-                 </span>
-               </div>
-            )}
+        <div className="p-4 mt-auto flex flex-col gap-2 md:items-center md:group-hover:items-stretch overflow-hidden">
+          <div className="flex items-center w-full relative">
+             <div className="flex items-center gap-3 md:justify-center md:group-hover:justify-start px-3 py-3 w-full text-gray-500 hover:text-gray-700 transition-colors cursor-default rounded-xl hover:bg-gray-50" title="System Online">
+               <span className="relative flex h-2.5 w-2.5 shrink-0">
+                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+               </span>
+               <span className="text-sm truncate md:w-0 md:opacity-0 md:group-hover:w-auto md:group-hover:opacity-100 transition-all duration-300">System Online</span>
+             </div>
           </div>
         </div>
       </div>

@@ -6,11 +6,13 @@
   "/api/pocs/route": "app/api/pocs/route.js",
   "/api/ransomware/route": "app/api/ransomware/route.js",
   "/api/tor-ips/route": "app/api/tor-ips/route.js",
+  "/api/tweetfeed/route": "app/api/tweetfeed/route.js",
   "/hibp/page": "app/hibp/page.js",
   "/icon.png/route": "app/icon.png/route.js",
   "/ip-analyzer/page": "app/ip-analyzer/page.js",
   "/page": "app/page.js",
   "/pocs/page": "app/pocs/page.js",
   "/ransomware/page": "app/ransomware/page.js",
-  "/tor-ips/page": "app/tor-ips/page.js"
+  "/tor-ips/page": "app/tor-ips/page.js",
+  "/tweetfeed/page": "app/tweetfeed/page.js"
 }

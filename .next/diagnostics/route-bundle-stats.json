@@ -1,11 +1,25 @@
 [
   {
-    "route": "/ransomware",
-    "firstLoadUncompressedJsBytes": 572493,
+    "route": "/tweetfeed",
+    "firstLoadUncompressedJsBytes": 577670,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\02f_u3vlyhatd.js",
+      ".next\\static\\chunks\\09j13312yj.pn.js",
       ".next\\static\\chunks\\0a0o4dde.oa2w.js",
-      ".next\\static\\chunks\\035w6p1jmm1uj.js",
+      ".next\\static\\chunks\\081f8b8h8y9cl.js",
+      ".next\\static\\chunks\\09z4pfp.1wrsi.js",
+      ".next\\static\\chunks\\073081qv4uyn8.js",
+      ".next\\static\\chunks\\10u3y4bw1ayzs.js",
+      ".next\\static\\chunks\\0c7h~x4_chf35.js",
+      ".next\\static\\chunks\\turbopack-083loxsar5dms.js"
+    ]
+  },
+  {
+    "route": "/ransomware",
+    "firstLoadUncompressedJsBytes": 571250,
+    "firstLoadChunkPaths": [
+      ".next\\static\\chunks\\09j13312yj.pn.js",
+      ".next\\static\\chunks\\0a0o4dde.oa2w.js",
+      ".next\\static\\chunks\\0y4md3r.qh~qu.js",
       ".next\\static\\chunks\\09z4pfp.1wrsi.js",
       ".next\\static\\chunks\\073081qv4uyn8.js",
       ".next\\static\\chunks\\10u3y4bw1ayzs.js",
@@ -15,11 +29,11 @@
   },
   {
     "route": "/ip-analyzer",
-    "firstLoadUncompressedJsBytes": 568752,
+    "firstLoadUncompressedJsBytes": 567480,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\02f_u3vlyhatd.js",
+      ".next\\static\\chunks\\09j13312yj.pn.js",
       ".next\\static\\chunks\\0a0o4dde.oa2w.js",
-      ".next\\static\\chunks\\0ff_jly9l3e0j.js",
+      ".next\\static\\chunks\\0j2ms48~vo-7o.js",
       ".next\\static\\chunks\\09z4pfp.1wrsi.js",
       ".next\\static\\chunks\\073081qv4uyn8.js",
       ".next\\static\\chunks\\10u3y4bw1ayzs.js",
@@ -29,11 +43,11 @@
   },
   {
     "route": "/hibp",
-    "firstLoadUncompressedJsBytes": 568366,
+    "firstLoadUncompressedJsBytes": 567075,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\02f_u3vlyhatd.js",
+      ".next\\static\\chunks\\09j13312yj.pn.js",
       ".next\\static\\chunks\\0a0o4dde.oa2w.js",
-      ".next\\static\\chunks\\0-pun1ac8y7z2.js",
+      ".next\\static\\chunks\\13lnlgbxokakm.js",
       ".next\\static\\chunks\\09z4pfp.1wrsi.js",
       ".next\\static\\chunks\\073081qv4uyn8.js",
       ".next\\static\\chunks\\10u3y4bw1ayzs.js",
@@ -43,11 +57,11 @@
   },
   {
     "route": "/",
-    "firstLoadUncompressedJsBytes": 560962,
+    "firstLoadUncompressedJsBytes": 559592,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\02f_u3vlyhatd.js",
+      ".next\\static\\chunks\\09j13312yj.pn.js",
       ".next\\static\\chunks\\0a0o4dde.oa2w.js",
-      ".next\\static\\chunks\\09xc4owrllime.js",
+      ".next\\static\\chunks\\0w2i4hcd09f0h.js",
       ".next\\static\\chunks\\09z4pfp.1wrsi.js",
       ".next\\static\\chunks\\073081qv4uyn8.js",
       ".next\\static\\chunks\\10u3y4bw1ayzs.js",
@@ -57,11 +71,11 @@
   },
   {
     "route": "/pocs",
-    "firstLoadUncompressedJsBytes": 559106,
+    "firstLoadUncompressedJsBytes": 557736,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\02f_u3vlyhatd.js",
+      ".next\\static\\chunks\\09j13312yj.pn.js",
       ".next\\static\\chunks\\0a0o4dde.oa2w.js",
-      ".next\\static\\chunks\\03t9fiu1-q3v1.js",
+      ".next\\static\\chunks\\0ftem-il33l9k.js",
       ".next\\static\\chunks\\09z4pfp.1wrsi.js",
       ".next\\static\\chunks\\073081qv4uyn8.js",
       ".next\\static\\chunks\\10u3y4bw1ayzs.js",
@@ -71,11 +85,11 @@
   },
   {
     "route": "/tor-ips",
-    "firstLoadUncompressedJsBytes": 553335,
+    "firstLoadUncompressedJsBytes": 551965,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\02f_u3vlyhatd.js",
+      ".next\\static\\chunks\\09j13312yj.pn.js",
       ".next\\static\\chunks\\0a0o4dde.oa2w.js",
-      ".next\\static\\chunks\\0jx1r~43b-dh6.js",
+      ".next\\static\\chunks\\0gntqpzr2qaw_.js",
       ".next\\static\\chunks\\09z4pfp.1wrsi.js",
       ".next\\static\\chunks\\073081qv4uyn8.js",
       ".next\\static\\chunks\\10u3y4bw1ayzs.js",
@@ -85,9 +99,9 @@
   },
   {
     "route": "/_not-found",
-    "firstLoadUncompressedJsBytes": 545661,
+    "firstLoadUncompressedJsBytes": 544291,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\02f_u3vlyhatd.js",
+      ".next\\static\\chunks\\09j13312yj.pn.js",
       ".next\\static\\chunks\\0a0o4dde.oa2w.js",
       ".next\\static\\chunks\\09z4pfp.1wrsi.js",
       ".next\\static\\chunks\\073081qv4uyn8.js",

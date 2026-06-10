@@ -72,6 +72,12 @@
       "namedRegex": "^/api/tor\\-ips(?:/)?$"
     },
     {
+      "page": "/api/tweetfeed",
+      "regex": "^/api/tweetfeed(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/tweetfeed(?:/)?$"
+    },
+    {
       "page": "/hibp",
       "regex": "^/hibp(?:/)?$",
       "routeKeys": {},
@@ -106,6 +112,12 @@
       "regex": "^/tor\\-ips(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/tor\\-ips(?:/)?$"
+    },
+    {
+      "page": "/tweetfeed",
+      "regex": "^/tweetfeed(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tweetfeed(?:/)?$"
     }
   ],
   "dataRoutes": [],

@@ -6,11 +6,13 @@
   "/api/pocs/route": "/api/pocs",
   "/api/ransomware/route": "/api/ransomware",
   "/api/tor-ips/route": "/api/tor-ips",
+  "/api/tweetfeed/route": "/api/tweetfeed",
   "/hibp/page": "/hibp",
   "/icon.png/route": "/icon.png",
   "/ip-analyzer/page": "/ip-analyzer",
   "/page": "/",
   "/pocs/page": "/pocs",
   "/ransomware/page": "/ransomware",
-  "/tor-ips/page": "/tor-ips"
+  "/tor-ips/page": "/tor-ips",
+  "/tweetfeed/page": "/tweetfeed"
 }

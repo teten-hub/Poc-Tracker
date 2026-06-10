@@ -101,6 +101,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/tweetfeed/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/tweetfeed">> = Specific
+  const handler = {} as typeof import("../../app/tweetfeed/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/analyze-ip/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/analyze-ip">> = Specific
@@ -141,6 +150,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/tor-ips">> = Specific
   const handler = {} as typeof import("../../app/api/tor-ips/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/tweetfeed/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/tweetfeed">> = Specific
+  const handler = {} as typeof import("../../app/api/tweetfeed/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
