@@ -25,11 +25,11 @@ type IOCTypeFilter = 'all' | 'url' | 'domain' | 'ip' | 'sha256' | 'md5';
 
 /* ─── Constants ───────────────────────────────────────────────── */
 const IOC_TYPE_CONFIG: Record<string, { label: string; color: string; bgColor: string; icon: React.ReactNode; rawColor: string }> = {
-  url:    { label: 'URL',    color: 'text-blue-500',    bgColor: 'bg-blue-500/10 border-blue-500/20',    icon: <Link2 className="w-4 h-4" />, rawColor: '#3b82f6' },
-  domain: { label: 'Domain', color: 'text-indigo-600',    bgColor: 'bg-indigo-500/10 border-indigo-500/20',    icon: <Globe className="w-4 h-4" />, rawColor: '#4f46e5' },
-  ip:     { label: 'IP',     color: 'text-green-500',     bgColor: 'bg-green-500/10 border-green-500/20', icon: <Target className="w-4 h-4" />, rawColor: '#22c55e' },
-  sha256: { label: 'SHA256', color: 'text-yellow-500',   bgColor: 'bg-yellow-500/10 border-yellow-500/20',  icon: <FileText className="w-4 h-4" />, rawColor: '#eab308' },
-  md5:    { label: 'MD5',    color: 'text-orange-500',  bgColor: 'bg-orange-500/10 border-orange-500/20', icon: <Hash className="w-4 h-4" />, rawColor: '#f97316' },
+  url:    { label: 'URL',    color: 'text-[#3d82f6]',    bgColor: 'bg-[#3d82f6]/10 border-[#3d82f6]/20',    icon: <Link2 className="w-4 h-4" />, rawColor: '#3d82f6' },
+  domain: { label: 'Domain', color: 'text-[#292929]',    bgColor: 'bg-[#292929]/10 border-[#292929]/20',    icon: <Globe className="w-4 h-4" />, rawColor: '#292929' },
+  ip:     { label: 'IP',     color: 'text-[#2f9e44]',     bgColor: 'bg-[#2f9e44]/10 border-[#2f9e44]/20', icon: <Target className="w-4 h-4" />, rawColor: '#2f9e44' },
+  sha256: { label: 'SHA256', color: 'text-[#ffeb6d]',   bgColor: 'bg-[#ffeb6d]/10 border-[#ffeb6d]/20',  icon: <FileText className="w-4 h-4" />, rawColor: '#ffeb6d' },
+  md5:    { label: 'MD5',    color: 'text-[#d64545]',  bgColor: 'bg-[#d64545]/10 border-[#d64545]/20', icon: <Hash className="w-4 h-4" />, rawColor: '#d64545' },
 };
 
 const TAG_COLORS = [
@@ -247,18 +247,11 @@ export default function TweetFeedClient() {
     <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
-        {/* Top Header Row (Wazuh style tabs area) */}
-        <div className="flex items-center justify-between border-b border-gray-200 mb-4 bg-white px-6 rounded-t-md">
-          <div className="flex">
-            <button className="px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
-              <Rss className="w-4 h-4" />
-              TweetFeed
-            </button>
-            <Link href="/" className="px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
-              Home Dashboard
-            </Link>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+        {/* Page Title Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+             <Rss className="w-6 h-6 text-tertiary" />
+             <h1 className="text-3xl font-semibold text-text-base tracking-tight">OSINT Threat Feed</h1>
           </div>
         </div>
 
@@ -344,7 +337,7 @@ export default function TweetFeedClient() {
                           currentPct = end;
                           return `${cfg.rawColor} ${start}% ${end}%`;
                         });
-                        const conicString = gradients.length > 0 ? `conic-gradient(${gradients.join(', ')})` : 'conic-gradient(#e5e7eb 0% 100%)';
+                        const conicString = gradients.length > 0 ? `conic-gradient(${gradients.join(', ')})` : 'conic-gradient(#b7c6d7 0% 100%)';
                         
                         return (
                           <div className="relative w-36 h-36 rounded-full flex items-center justify-center" style={{ background: conicString }}>
@@ -419,7 +412,7 @@ export default function TweetFeedClient() {
                                 <span className="text-sm font-bold text-gray-800">{count}</span>
                               </div>
                               <div className="w-full h-3 bg-gray-100 rounded-sm overflow-hidden flex">
-                                <div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${barW}%` }} />
+                                <div className="h-full bg-[#3d82f6] transition-all duration-500" style={{ width: `${barW}%` }} />
                               </div>
                             </div>
                           );
@@ -804,7 +797,7 @@ function HourlyChart({ hourCounts }: { hourCounts: Record<number, number> }) {
           return (
             <div key={h} className="flex-1 flex flex-col items-center justify-end group relative h-full">
               <div
-                className="w-full bg-blue-500 border border-blue-600 transition-all duration-300 hover:bg-blue-400"
+                className="w-full bg-[#3d82f6] transition-all duration-300 hover:bg-[#3d82f6]/80"
                 style={{ height: `${height}%` }}
               />
               {/* Tooltip */}
@@ -842,7 +835,7 @@ function DailyChart({ dayCounts }: { dayCounts: Record<string, number> }) {
           return (
             <div key={day} className="flex-1 flex flex-col items-center justify-end group relative h-full">
               <div
-                className="w-full bg-blue-500 border border-blue-600 transition-all duration-300 hover:bg-blue-400"
+                className="w-full bg-[#3d82f6] transition-all duration-300 hover:bg-[#3d82f6]/80"
                 style={{ height: `${height}%` }}
               />
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white border border-gray-200 text-gray-800 text-[10px] font-medium rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
@@ -861,7 +854,14 @@ function ResearchersGrid({ researchers, onUserClick }: {
   onUserClick: (u: string) => void;
 }) {
   const [filter, setFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+
   const filtered = researchers.filter((r) => r.user.toLowerCase().includes(filter.toLowerCase()));
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter]);
 
   return (
     <div>
@@ -891,7 +891,7 @@ function ResearchersGrid({ researchers, onUserClick }: {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {filtered.map((r) => (
+            {filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((r) => (
               <tr key={r.user} className="hover:bg-gray-50 transition-colors">
                 <td className="px-4 py-3">
                   <button onClick={() => onUserClick(r.user)} className="flex items-center gap-2 group text-left">
@@ -923,6 +923,33 @@ function ResearchersGrid({ researchers, onUserClick }: {
           </div>
         )}
       </div>
+
+      {Math.ceil(filtered.length / itemsPerPage) > 1 && (
+        <div className="flex justify-between items-center mt-4 border-t border-gray-100 pt-4">
+          <div className="text-xs text-gray-500 font-medium">
+            Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length}
+          </div>
+          <div className="flex gap-1">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+            >
+              Previous
+            </button>
+            <div className="px-3 py-1.5 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200 rounded">
+              {currentPage}
+            </div>
+            <button
+              onClick={() => setCurrentPage(p => Math.min(Math.ceil(filtered.length / itemsPerPage), p + 1))}
+              disabled={currentPage === Math.ceil(filtered.length / itemsPerPage)}
+              className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

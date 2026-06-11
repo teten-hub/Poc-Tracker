@@ -19,9 +19,12 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
   const [matchedCount, setMatchedCount] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
 
   // Debounced search
   useEffect(() => {
+    setCurrentPage(1);
     const timer = setTimeout(() => {
       handleSearch(searchTerm);
     }, 500);
@@ -52,18 +55,11 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
     <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
-        {/* Top Header Row (Wazuh style tabs area) */}
-        <div className="flex items-center justify-between border-b border-gray-200 mb-4 bg-white px-6 rounded-t-md">
-          <div className="flex">
-            <button className="px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
-              <TorIcon className="w-4 h-4 fill-current" />
-              Tor Exit Nodes
-            </button>
-            <Link href="/" className="px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
-              Home Dashboard
-            </Link>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+        {/* Page Title Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+             <TorIcon className="w-6 h-6 fill-current text-tertiary" />
+             <h1 className="text-3xl font-semibold text-text-base tracking-tight">Tor Exit Node Directory</h1>
           </div>
         </div>
 
@@ -141,10 +137,10 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {ips.map((ip, index) => (
+                  {ips.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((ip, index) => (
                     <tr key={`${ip}-${index}`} className="hover:bg-gray-50 transition-colors group">
                       <td className="px-5 py-3 text-center text-xs text-gray-400">
-                        {index + 1}
+                        {((currentPage - 1) * itemsPerPage) + index + 1}
                       </td>
                       <td className="px-5 py-3 font-mono text-gray-800 font-medium">
                         {ip}
@@ -168,6 +164,34 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
               </table>
             )}
           </div>
+          
+          {/* Pagination Footer */}
+          {Math.ceil(ips.length / itemsPerPage) > 1 && (
+            <div className="px-5 py-3 border-t border-gray-200 flex justify-between items-center bg-gray-50">
+              <div className="text-xs text-gray-500 font-medium">
+                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, ips.length)} of {ips.length}
+              </div>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                >
+                  Previous
+                </button>
+                <div className="px-3 py-1.5 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200 rounded">
+                  {currentPage}
+                </div>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(ips.length / itemsPerPage)))}
+                  disabled={currentPage === Math.ceil(ips.length / itemsPerPage)}
+                  className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
       </main>

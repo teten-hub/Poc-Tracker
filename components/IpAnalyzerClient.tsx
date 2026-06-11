@@ -6,7 +6,7 @@ import {
   Search, Loader2, Shield, AlertTriangle, AlertCircle, CheckCircle2, 
   Lock, Sparkles, Network, Calendar, HelpCircle, User, Activity, 
   FileText, ExternalLink, Globe, HardDrive, ShieldAlert, BadgeInfo,
-  MoreVertical
+  MoreVertical, Crosshair
 } from 'lucide-react';
 
 interface PulseDetail {
@@ -86,8 +86,10 @@ export default function IpAnalyzerClient() {
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!ipAddress) return;
-    runAnalysis(ipAddress);
+    const trimmedIp = ipAddress.trim();
+    if (!trimmedIp) return;
+    setIpAddress(trimmedIp);
+    runAnalysis(trimmedIp);
   };
 
   const getAlertLevel = () => {
@@ -149,15 +151,11 @@ export default function IpAnalyzerClient() {
     <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
         
-        {/* Top Header Row (Wazuh style tabs area) */}
-        <div className="flex items-center justify-between border-b border-gray-200 mb-4 bg-white px-6 rounded-t-md">
-          <div className="flex">
-            <button className="px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
-              <Search className="w-4 h-4" />
-              IP Analyzer
-            </button>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+        {/* Page Title Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+             <Crosshair className="w-6 h-6 text-tertiary" />
+             <h1 className="text-3xl font-semibold text-text-base tracking-tight">IP Threat Analyzer</h1>
           </div>
         </div>
 
@@ -253,7 +251,7 @@ export default function IpAnalyzerClient() {
                           const malPct = total > 0 ? (malicious / total) * 100 : 0;
                           const susPct = total > 0 ? (suspicious / total) * 100 : 0;
                           
-                          const conic = `conic-gradient(#ef4444 0% ${malPct}%, #f97316 ${malPct}% ${malPct + susPct}%, #10b981 ${malPct + susPct}% 100%)`;
+                          const conic = `conic-gradient(#d64545 0% ${malPct}%, #ffeb6d ${malPct}% ${malPct + susPct}%, #2f9e44 ${malPct + susPct}% 100%)`;
 
                           return (
                             <>
@@ -266,15 +264,15 @@ export default function IpAnalyzerClient() {
                               
                               <div className="flex flex-col gap-3 text-[12px] text-gray-600">
                                 <div className="flex items-center justify-between gap-4">
-                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-red-500"></div> Malicious</div>
+                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#d64545]"></div> Malicious</div>
                                   <span className="font-bold text-gray-800">{malicious}</span>
                                 </div>
                                 <div className="flex items-center justify-between gap-4">
-                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-orange-500"></div> Suspicious</div>
+                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#ffeb6d]"></div> Suspicious</div>
                                   <span className="font-bold text-gray-800">{suspicious}</span>
                                 </div>
                                 <div className="flex items-center justify-between gap-4">
-                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-green-500"></div> Clean/Unrated</div>
+                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#2f9e44]"></div> Clean/Unrated</div>
                                   <span className="font-bold text-gray-800">{clean}</span>
                                 </div>
                               </div>
@@ -347,8 +345,8 @@ export default function IpAnalyzerClient() {
                       <div className="flex items-center justify-center gap-8 py-4">
                         {(() => {
                           const score = parseInt(results.abuseipdb.confidence_score) || 0;
-                          const color = score > 40 ? '#ef4444' : score > 10 ? '#f97316' : '#10b981';
-                          const conic = `conic-gradient(${color} 0% ${score}%, #e5e7eb ${score}% 100%)`;
+                          const color = score > 40 ? '#d64545' : score > 10 ? '#ffeb6d' : '#2f9e44';
+                          const conic = `conic-gradient(${color} 0% ${score}%, #b7c6d7 ${score}% 100%)`;
                           return (
                             <>
                               <div className="relative w-32 h-32 rounded-full flex items-center justify-center" style={{ background: conic }}>

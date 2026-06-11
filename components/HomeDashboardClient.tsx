@@ -15,27 +15,7 @@ export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardCl
   const router = useRouter();
   const [ipAddress, setIpAddress] = useState('');
   const [tweetFeedData, setTweetFeedData] = useState<any[]>([]);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Initialize Dark Mode based on local storage or system preference
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const isDark = localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      setIsDarkMode(isDark);
-      if (isDark) document.documentElement.classList.add('dark');
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    if (!isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  };
+  // Removed dark mode logic to adhere to DESIGN.md
 
   useEffect(() => {
     const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -132,11 +112,15 @@ export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardCl
   const pctHigh = totalPocs > 0 ? (countHigh / totalPocs) * 100 : 0;
   const pctMedium = totalPocs > 0 ? (countMedium / totalPocs) * 100 : 0;
 
-  const donutTrackBg = isDarkMode ? '#292929' : '#b7c6d7';
+  const donutTrackBg = '#b7c6d7';
   const conicGradient = `conic-gradient(#d64545 0% ${pctCritical}%, #ffeb6d ${pctCritical}% ${pctCritical + pctHigh}%, #3d82f6 ${pctCritical + pctHigh}% ${pctCritical + pctHigh + pctMedium}%, ${donutTrackBg} ${pctCritical + pctHigh + pctMedium}% 100%)`;
 
-  const topRepos = [...latestPocs].sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 5);
-  const maxStars = topRepos.length > 0 ? Math.max(...topRepos.map(r => r.stargazers_count), 1) : 1;
+  // For Chart 3: Top High Risk Vulnerabilities
+  const highRiskPocs = [...latestPocs]
+    .filter(p => p.cvss_score && p.cvss_score >= 7.0)
+    .sort((a, b) => (b.cvss_score || 0) - (a.cvss_score || 0))
+    .slice(0, 5);
+  
   const trendingPocsCount = latestPocs.filter(p => p.stargazers_count >= 10).length;
 
   // TweetFeed Calculations
@@ -154,34 +138,26 @@ export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardCl
   const pctSha256 = totalIocs > 0 ? (typeCounts.sha256 / totalIocs) * 100 : 0;
   const pctMd5 = totalIocs > 0 ? (typeCounts.md5 / totalIocs) * 100 : 0;
 
-  // Colors: url (blue #3d82f6), domain (purple #8b5cf6), ip (green #22c55e), sha256 (yellow #ffeb6d), md5 (orange #f97316)
+  // Colors based on DESIGN.md: url (Tertiary #3d82f6), domain (Secondary #292929), ip (Success #2f9e44), sha256 (Primary #ffeb6d), md5 (Error #d64545)
   let iocGradients = [];
   let curPct = 0;
   if (pctUrl > 0) { iocGradients.push(`#3d82f6 ${curPct}% ${curPct + pctUrl}%`); curPct += pctUrl; }
-  if (pctDomain > 0) { iocGradients.push(`#8b5cf6 ${curPct}% ${curPct + pctDomain}%`); curPct += pctDomain; }
-  if (pctIp > 0) { iocGradients.push(`#22c55e ${curPct}% ${curPct + pctIp}%`); curPct += pctIp; }
+  if (pctDomain > 0) { iocGradients.push(`#292929 ${curPct}% ${curPct + pctDomain}%`); curPct += pctDomain; }
+  if (pctIp > 0) { iocGradients.push(`#2f9e44 ${curPct}% ${curPct + pctIp}%`); curPct += pctIp; }
   if (pctSha256 > 0) { iocGradients.push(`#ffeb6d ${curPct}% ${curPct + pctSha256}%`); curPct += pctSha256; }
-  if (pctMd5 > 0) { iocGradients.push(`#f97316 ${curPct}% ${curPct + pctMd5}%`); curPct += pctMd5; }
+  if (pctMd5 > 0) { iocGradients.push(`#d64545 ${curPct}% ${curPct + pctMd5}%`); curPct += pctMd5; }
   const iocConicGradient = iocGradients.length > 0 ? `conic-gradient(${iocGradients.join(', ')})` : `conic-gradient(${donutTrackBg} 0% 100%)`;
 
   return (
     <div className="min-h-screen bg-[#f5f6f8] dark:bg-[#121212] text-gray-900 dark:text-gray-100 font-sans pb-12 transition-colors duration-300">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
-        {/* Page Header */}
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-[28px] font-medium text-[#292929] dark:text-white tracking-tight">Main Dashboard</h1>
-            <p className="text-[16px] text-[#292929] dark:text-gray-400 mt-1 font-light">Overview of tracked exploits, IPs, and global security intelligence.</p>
+        {/* Page Title Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+             <Activity className="w-6 h-6 text-tertiary" />
+             <h1 className="text-3xl font-semibold text-text-base tracking-tight">Global Threat Overview</h1>
           </div>
-          {/* Dark Mode Toggle */}
-          <button 
-            onClick={toggleDarkMode}
-            className="p-2.5 rounded-md bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-gray-800 shadow-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-            title="Toggle Dark Mode"
-          >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
         </div>
 
         {/* Global Overview Stats Strip - Flatter UI */}
@@ -278,11 +254,11 @@ export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardCl
                   <span className="font-bold">{typeCounts.url}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#8b5cf6]"></div> Domain</span>
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#292929]"></div> Domain</span>
                   <span className="font-bold">{typeCounts.domain}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#22c55e]"></div> IP</span>
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#2f9e44]"></div> IP</span>
                   <span className="font-bold">{typeCounts.ip}</span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -290,36 +266,38 @@ export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardCl
                   <span className="font-bold">{typeCounts.sha256}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#f97316]"></div> MD5</span>
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#d64545]"></div> MD5</span>
                   <span className="font-bold">{typeCounts.md5}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Chart 3: Top Repositories Bar Chart */}
+          {/* Chart 3: Top High Risk Vulnerabilities Bar Chart */}
           <div className="bg-white dark:bg-[#1e1e1e] rounded-md border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col transition-colors">
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-800">
-              <h3 className="text-[13px] font-medium text-gray-800 dark:text-gray-200">Top 5 Trending Exploits (Stars)</h3>
+              <h3 className="text-[13px] font-medium text-gray-800 dark:text-gray-200">Top 5 High Risk Vulnerabilities (CVSS)</h3>
             </div>
             <div className="p-5 flex-1 flex flex-col justify-center gap-4">
-              {topRepos.map((repo, i) => {
-                const barWidth = Math.max((repo.stargazers_count / maxStars) * 100, 2);
+              {highRiskPocs.map((poc, i) => {
+                const barWidth = Math.max(((poc.cvss_score || 0) / 10) * 100, 2);
                 return (
                   <div key={i} className="flex flex-col gap-1.5 group">
                     <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
-                      <span className="font-medium truncate max-w-[250px]" title={repo.repo_name}>
-                        {repo.repo_name ? (repo.repo_name.split('/')[1] || repo.repo_name) : 'Unknown'}
+                      <span className="font-medium truncate max-w-[250px]" title={poc.cve_id || poc.repo_name}>
+                        {poc.cve_id || (poc.repo_name ? poc.repo_name.split('/')[1] : 'Unknown')}
                       </span>
-                      <span className="font-mono text-gray-400 dark:text-gray-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1"><Star className="w-3 h-3" /> {repo.stargazers_count}</span>
+                      <span className="font-mono text-gray-400 dark:text-gray-500 group-hover:text-red-500 transition-colors flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3 text-[#d64545]" /> {poc.cvss_score?.toFixed(1)}
+                      </span>
                     </div>
                     <div className="w-full h-2.5 bg-[#f5f5f5] dark:bg-[#292929] rounded-sm overflow-hidden flex transition-colors">
-                      <div className="h-full bg-[#3d82f6] dark:bg-blue-500 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                      <div className="h-full bg-[#d64545] transition-all duration-500" style={{ width: `${barWidth}%` }} />
                     </div>
                   </div>
                 );
               })}
-              {topRepos.length === 0 && (
+              {highRiskPocs.length === 0 && (
                 <div className="text-center text-gray-400 dark:text-gray-600 text-xs py-10">No data available.</div>
               )}
             </div>

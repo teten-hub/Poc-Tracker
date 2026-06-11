@@ -268,16 +268,17 @@ export default function HibpClient() {
     <div className="min-h-screen bg-base text-text-base pb-12">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 mt-8 md:mt-12">
         
-        {/* Title Area */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-medium tracking-tight text-text-base flex items-center gap-3">
-            <UserX className="w-8 h-8 text-tertiary" />
-            Have I Been Pwned
-          </h2>
-          <p className="mt-2 text-text-muted text-sm md:text-base">
-            Check if your email, phone number, or password has been compromised in a data breach.
-          </p>
+        {/* Page Title Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+             <UserX className="w-6 h-6 text-tertiary" />
+             <h1 className="text-3xl font-semibold text-text-base tracking-tight">Data Breach Intelligence (HIBP)</h1>
+          </div>
         </div>
+        
+        <p className="mb-6 text-text-muted text-sm md:text-base px-2">
+          Check if your email, phone number, or password has been compromised in a data breach.
+        </p>
 
         {/* Search Container */}
         <div className="mb-8">

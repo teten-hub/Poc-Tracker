@@ -72,18 +72,11 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
     <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
-        {/* Top Header Row (Wazuh style tabs area) */}
-        <div className="flex items-center justify-between border-b border-gray-200 mb-4 bg-white px-6 rounded-t-md">
-          <div className="flex">
-            <button className="px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
-              <Radar className="w-4 h-4" />
-              PoC Tracker
-            </button>
-            <Link href="/" className="px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
-              Home Dashboard
-            </Link>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+        {/* Page Title Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+             <Radar className="w-6 h-6 text-tertiary" />
+             <h1 className="text-3xl font-semibold text-text-base tracking-tight">Proof of Concept (PoC) Tracker</h1>
           </div>
         </div>
 
