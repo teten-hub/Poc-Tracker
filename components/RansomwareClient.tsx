@@ -5,8 +5,10 @@ import {
   Skull, Loader2, Search, TrendingUp, Users, Shield,
   Globe, Calendar, ChevronRight, AlertTriangle, Activity,
   Server, ExternalLink, Eye, Clock, BarChart3, Crosshair,
-  X, ChevronDown, ChevronUp, Lock, Radio
+  X, ChevronDown, ChevronUp, Lock, Radio, FileText,
+  MoreVertical
 } from 'lucide-react';
+import Link from 'next/link';
 
 /* ─── Utility ─────────────────────────────────────────────────── */
 function timeAgo(dateStr: string | null): string {
@@ -38,22 +40,17 @@ function formatDate(dateStr: string | null): string {
 
 // Assign a consistent color to group names
 const GROUP_COLORS = [
-  'bg-red-500/20 text-red-400 border-red-500/30',
-  'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  'bg-lime-500/20 text-lime-400 border-lime-500/30',
-  'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-  'bg-teal-500/20 text-teal-400 border-teal-500/30',
-  'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-  'bg-sky-500/20 text-sky-400 border-sky-500/30',
-  'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
-  'bg-violet-500/20 text-violet-400 border-violet-500/30',
-  'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  'bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30',
-  'bg-pink-500/20 text-pink-400 border-pink-500/30',
-  'bg-rose-500/20 text-rose-400 border-rose-500/30',
+  'bg-red-50 text-red-600 border-red-200',
+  'bg-orange-50 text-orange-600 border-orange-200',
+  'bg-yellow-50 text-yellow-600 border-yellow-200',
+  'bg-green-50 text-green-600 border-green-200',
+  'bg-teal-50 text-teal-600 border-teal-200',
+  'bg-cyan-50 text-cyan-600 border-cyan-200',
+  'bg-blue-50 text-blue-600 border-blue-200',
+  'bg-indigo-50 text-indigo-600 border-indigo-200',
+  'bg-violet-50 text-violet-600 border-violet-200',
+  'bg-fuchsia-50 text-fuchsia-600 border-fuchsia-200',
+  'bg-pink-50 text-pink-600 border-pink-200',
 ];
 function getGroupColor(name: string) {
   let hash = 0;
@@ -219,248 +216,359 @@ export default function RansomwareClient() {
 
   /* ─── RENDER ─────────────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-base pt-20 md:pt-6 pb-10 px-4 md:px-8">
-      {/* Page Title */}
-      <div className="max-w-7xl mx-auto mb-6">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20">
-            <Skull className="w-5 h-5 text-red-400" />
+    <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+        
+        {/* Top Header Row (Wazuh style tabs area) */}
+        <div className="flex items-center justify-between border-b border-gray-200 mb-4 bg-white px-6 rounded-t-md">
+          <div className="flex">
+            <button className="px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
+              <Skull className="w-4 h-4" />
+              Ransomware
+            </button>
+            <Link href="/" className="px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
+              Home Dashboard
+            </Link>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-text-base tracking-tight">Ransomware Tracker</h1>
-            <p className="text-sm text-text-muted">Global ransomware activity intelligence — powered by RansomLook & Ransomware.live</p>
-          </div>
-        </div>
-      </div>
-
-      {/* ─── Stats Bar ─────────────────────────────────────────── */}
-      {stats && !isLoading && (
-        <div className="max-w-7xl mx-auto mb-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <StatCard icon={<Users className="w-4 h-4" />} label="Active Groups" value={stats.groups} accent="text-violet-400" bgAccent="bg-violet-500/10 border-violet-500/20" />
-            <StatCard icon={<Crosshair className="w-4 h-4" />} label="Total Victims" value={stats.posts_total.toLocaleString()} accent="text-red-400" bgAccent="bg-red-500/10 border-red-500/20" />
-            <StatCard icon={<AlertTriangle className="w-4 h-4" />} label="Last 24h" value={stats.posts_24h} accent="text-amber-400" bgAccent="bg-amber-500/10 border-amber-500/20" />
-            <StatCard icon={<BarChart3 className="w-4 h-4" />} label={stats.posts_month_label || 'This Month'} value={stats.posts_month} accent="text-cyan-400" bgAccent="bg-cyan-500/10 border-cyan-500/20" />
+          <div className="flex items-center gap-4 text-sm text-gray-600">
           </div>
         </div>
-      )}
 
-      {/* ─── Search Bar ────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto mb-6">
-        <form onSubmit={handleSearch} className="relative">
-          <div className="flex items-center bg-surface border border-gray-200 rounded-xl overflow-hidden focus-within:border-red-500/50 transition-colors">
-            <div className="pl-4 text-text-muted">
-              <Search className="w-5 h-5" />
+        {/* ─── Stats Bar ─────────────────────────────────────────── */}
+        {stats && !isLoading && (
+          <div className="bg-white rounded-md border border-gray-200 shadow-sm mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200">
+            <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
+              <p className="text-xs font-medium text-gray-500 mb-1">Active Groups</p>
+              <p className="text-3xl font-normal text-blue-500 tracking-tight">{stats.groups.toLocaleString()}</p>
             </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search victims, groups, leaks..."
-              className="flex-1 bg-transparent text-text-base placeholder-text-muted px-3 py-3.5 text-sm outline-none"
-            />
-            {searchQuery && (
+            <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
+              <p className="text-xs font-medium text-gray-500 mb-1">Total Victims</p>
+              <p className="text-3xl font-normal text-red-500 tracking-tight">{stats.posts_total.toLocaleString()}</p>
+            </div>
+            <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
+              <p className="text-xs font-medium text-gray-500 mb-1">Victims (Last 24h)</p>
+              <p className="text-3xl font-normal text-orange-500 tracking-tight">{stats.posts_24h.toLocaleString()}</p>
+            </div>
+            <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
+              <p className="text-xs font-medium text-gray-500 mb-1">{stats.posts_month_label || 'This Month'}</p>
+              <p className="text-3xl font-normal text-green-500 tracking-tight">{stats.posts_month.toLocaleString()}</p>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Search Bar ────────────────────────────────────────── */}
+        <div className="mb-6">
+          <form onSubmit={handleSearch} className="relative">
+            <div className="flex items-center bg-white border border-gray-200 rounded-md overflow-hidden focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 shadow-sm transition-all">
+              <div className="pl-4 text-gray-400">
+                <Search className="w-4 h-4" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search victims, groups, leaks..."
+                className="flex-1 bg-transparent text-gray-900 placeholder-gray-400 px-4 py-2.5 text-sm outline-none"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => { setSearchQuery(''); setSearchResults(null); setShowSearch(false); }}
+                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
               <button
-                type="button"
-                onClick={() => { setSearchQuery(''); setSearchResults(null); setShowSearch(false); }}
-                className="p-2 text-text-muted hover:text-text-base transition-colors"
+                type="submit"
+                disabled={isSearching || searchQuery.length < 2}
+                className="px-6 py-2.5 bg-gray-50 border-l border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 transition-colors h-full"
               >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-            <button
-              type="submit"
-              disabled={isSearching || searchQuery.length < 2}
-              className="px-5 py-3.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 border-l border-gray-200 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {/* ─── Search Results (overlays main content) ────────────── */}
-      {showSearch && searchResults && (
-        <div className="max-w-7xl mx-auto mb-6">
-          <div className="bg-surface border border-gray-200 rounded-xl overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">
-              <div className="flex items-center gap-2">
-                <Search className="w-4 h-4 text-red-400" />
-                <span className="text-sm font-medium text-text-base">
-                  Search Results for &quot;{searchQuery}&quot;
-                </span>
-                <span className="text-xs text-text-muted">
-                  ({(searchResults.posts?.length || 0) + (searchResults.groups?.length || 0)} results)
-                </span>
-              </div>
-              <button onClick={() => { setShowSearch(false); setSearchResults(null); setSearchQuery(''); }} className="text-text-muted hover:text-text-base transition-colors">
-                <X className="w-4 h-4" />
+                {isSearching ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Search'}
               </button>
             </div>
+          </form>
+        </div>
 
-            {/* Search: Posts */}
-            {searchResults.posts && searchResults.posts.length > 0 && (
-              <div className="p-4">
-                <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
-                  <Crosshair className="w-3.5 h-3.5" /> Victim Posts ({searchResults.posts.length})
-                </h4>
-                <div className="space-y-2 max-h-80 overflow-y-auto pr-2">
-                  {searchResults.posts.map((p, i) => (
-                    <div key={i} className="flex items-center justify-between px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className={`text-xs px-2 py-0.5 rounded-full border font-medium whitespace-nowrap ${getGroupColor(p.group)}`}>
-                          {p.group}
-                        </span>
-                        <span className="text-sm text-text-base truncate">{p.title}</span>
+        {/* ─── Search Results (overlays main content) ────────────── */}
+        {showSearch && searchResults && (
+          <div className="mb-8">
+            <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-gray-50">
+                <div className="flex items-center gap-2">
+                  <Search className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm font-medium text-gray-900">
+                    Search Results for &quot;{searchQuery}&quot;
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    ({(searchResults.posts?.length || 0) + (searchResults.groups?.length || 0)} results)
+                  </span>
+                </div>
+                <button onClick={() => { setShowSearch(false); setSearchResults(null); setSearchQuery(''); }} className="text-gray-400 hover:text-gray-600 transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Search: Posts */}
+              {searchResults.posts && searchResults.posts.length > 0 && (
+                <div className="p-5">
+                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <Crosshair className="w-3.5 h-3.5" /> Victim Posts ({searchResults.posts.length})
+                  </h4>
+                  <div className="space-y-2 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+                    {searchResults.posts.map((p, i) => (
+                      <div key={i} className="flex items-center justify-between px-4 py-3 bg-white rounded-md border border-gray-200 hover:border-blue-300 transition-colors shadow-sm cursor-pointer" onClick={() => openGroupDetail(p.group)}>
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className={`text-[10px] px-2 py-0.5 rounded border font-medium whitespace-nowrap uppercase ${getGroupColor(p.group)}`}>
+                            {p.group}
+                          </span>
+                          <span className="text-sm font-medium text-gray-800 truncate">{p.title}</span>
+                        </div>
+                        <span className="text-xs text-gray-500 whitespace-nowrap ml-3">{timeAgo(p.discovered)}</span>
                       </div>
-                      <span className="text-xs text-text-muted whitespace-nowrap ml-3">{timeAgo(p.discovered)}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Search: Groups */}
-            {searchResults.groups && searchResults.groups.length > 0 && (
-              <div className="p-4 border-t border-gray-200">
-                <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5" /> Groups ({searchResults.groups.length})
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {searchResults.groups.map((g: any, i: number) => (
-                    <button
-                      key={i}
-                      onClick={() => { openGroupDetail(g.name || g); setShowSearch(false); }}
-                      className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-text-base hover:border-violet-500/50 hover:text-violet-400 transition-colors"
-                    >
-                      {g.name || g}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {(!searchResults.posts || searchResults.posts.length === 0) && (!searchResults.groups || searchResults.groups.length === 0) && (
-              <div className="p-8 text-center text-text-muted text-sm">
-                No results found for &quot;{searchQuery}&quot;
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ─── Loading State ─────────────────────────────────────── */}
-      {isLoading && (
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="relative">
-              <div className="w-16 h-16 rounded-full border-2 border-red-500/20 flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-red-400 animate-spin" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-pulse" />
-            </div>
-            <p className="text-text-muted text-sm">Loading ransomware intelligence...</p>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Error State ───────────────────────────────────────── */}
-      {error && !isLoading && (
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-6 text-center">
-            <AlertTriangle className="w-8 h-8 text-red-400 mx-auto mb-3" />
-            <p className="text-red-400 font-medium mb-1">Failed to load data</p>
-            <p className="text-text-muted text-sm mb-4">{error}</p>
-            <button onClick={fetchDashboard} className="px-4 py-2 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors text-sm font-medium">
-              Retry
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Main Content ─────────────────────────────────────── */}
-      {!isLoading && !error && (
-        <div className="max-w-7xl mx-auto">
-          {/* Tab Navigation */}
-          <div className="flex items-center gap-1 bg-surface border border-gray-200 rounded-xl p-1 mb-6">
-            <TabButton active={activeTab === 'victims'} onClick={() => setActiveTab('victims')} icon={<Crosshair className="w-4 h-4" />} label="Recent Victims" count={recentVictims.length} />
-            <TabButton active={activeTab === 'trending'} onClick={() => setActiveTab('trending')} icon={<TrendingUp className="w-4 h-4" />} label="Trending Groups" count={hotGroups.length} />
-            <TabButton active={activeTab === 'groups'} onClick={() => setActiveTab('groups')} icon={<Users className="w-4 h-4" />} label="Groups Directory" />
-          </div>
-
-          {/* ═══ Tab: Recent Victims ═══ */}
-          {activeTab === 'victims' && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2 text-text-muted text-xs">
-                  <Radio className="w-3.5 h-3.5 text-red-400 animate-pulse" />
-                  <span>Live feed — last 50 disclosed victims</span>
-                </div>
-              </div>
-              {recentVictims.length === 0 ? (
-                <EmptyState message="No recent victim data available" />
-              ) : (
-                <div className="grid gap-2.5">
-                  {recentVictims.map((v, i) => (
-                    <VictimCard key={i} victim={v} onGroupClick={(g) => openGroupDetail(g)} />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ═══ Tab: Trending Groups ═══ */}
-          {activeTab === 'trending' && (
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 text-text-muted text-xs">
-                  <Activity className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Ranked by activity — last {hotMeta.days} days • {hotMeta.total_posts} total posts</span>
-                </div>
-              </div>
-              {hotGroups.length === 0 ? (
-                <EmptyState message="No trending group data available" />
-              ) : (
-                <div className="space-y-2">
-                  {hotGroups.map((hg, i) => (
-                    <TrendingGroupRow key={hg.group} rank={i + 1} group={hg} maxCount={hotGroups[0]?.count || 1} onClick={() => openGroupDetail(hg.group)} />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ═══ Tab: Groups Directory ═══ */}
-          {activeTab === 'groups' && (
-            <div>
-              {groupsLoading ? (
-                <div className="flex items-center justify-center py-16 gap-3">
-                  <Loader2 className="w-5 h-5 text-text-muted animate-spin" />
-                  <span className="text-text-muted text-sm">Loading groups directory...</span>
-                </div>
-              ) : (
-                <>
-                  <div className="flex items-center gap-2 text-text-muted text-xs mb-4">
-                    <Server className="w-3.5 h-3.5 text-violet-400" />
-                    <span>{allGroups.length} ransomware groups tracked</span>
+                    ))}
                   </div>
-                  <GroupsGrid groups={allGroups} onGroupClick={(name) => openGroupDetail(name)} />
-                </>
+                </div>
+              )}
+
+              {/* Search: Groups */}
+              {searchResults.groups && searchResults.groups.length > 0 && (
+                <div className="p-5 border-t border-gray-200">
+                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <Users className="w-3.5 h-3.5" /> Groups ({searchResults.groups.length})
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {searchResults.groups.map((g: any, i: number) => (
+                      <button
+                        key={i}
+                        onClick={() => { openGroupDetail(g.name || g); setShowSearch(false); }}
+                        className="px-3 py-1.5 bg-white border border-gray-200 rounded text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600 shadow-sm transition-colors"
+                      >
+                        {g.name || g}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {(!searchResults.posts || searchResults.posts.length === 0) && (!searchResults.groups || searchResults.groups.length === 0) && (
+                <div className="p-10 text-center text-gray-500 font-medium text-sm">
+                  No results found for &quot;{searchQuery}&quot;
+                </div>
               )}
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* ─── Group Detail Modal ────────────────────────────────── */}
-      {(selectedGroup || groupDetailLoading) && (
-        <GroupDetailModal
-          group={selectedGroup}
-          posts={groupPosts}
-          loading={groupDetailLoading}
-          onClose={() => { setSelectedGroup(null); setGroupPosts([]); }}
-        />
-      )}
+        {/* ─── Loading State ─────────────────────────────────────── */}
+        {isLoading && (
+          <div>
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-full border-2 border-red-200 flex items-center justify-center">
+                  <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
+                </div>
+              </div>
+              <p className="text-gray-500 font-medium text-sm">Loading ransomware intelligence...</p>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Error State ───────────────────────────────────────── */}
+        {error && !isLoading && (
+          <div>
+            <div className="bg-red-50 border border-red-200 rounded-md p-8 text-center max-w-lg mx-auto">
+              <AlertTriangle className="w-10 h-10 text-red-500 mx-auto mb-4" />
+              <p className="text-red-700 font-medium mb-2 text-lg">Failed to load data</p>
+              <p className="text-red-600/80 text-sm mb-6">{error}</p>
+              <button onClick={fetchDashboard} className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium shadow-sm">
+                Retry
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Main Content ─────────────────────────────────────── */}
+        {!isLoading && !error && (
+          <div>
+            {/* Tab Navigation */}
+            <div className="flex border-b border-gray-200 mb-6 bg-white rounded-t-md px-6">
+              <button 
+                onClick={() => setActiveTab('victims')}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'victims' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+              >
+                Recent Victims <span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs ml-1">{recentVictims.length}</span>
+              </button>
+              <button 
+                onClick={() => setActiveTab('trending')}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'trending' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+              >
+                Trending Groups <span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs ml-1">{hotGroups.length}</span>
+              </button>
+              <button 
+                onClick={() => setActiveTab('groups')}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'groups' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+              >
+                Groups Directory
+              </button>
+            </div>
+
+            {/* ═══ Tab: Recent Victims ═══ */}
+            {activeTab === 'victims' && (
+              <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                  <div className="flex items-center gap-2 text-gray-600 text-[11px] font-semibold uppercase tracking-wider">
+                    <Radio className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+                    <span>Live feed — last 50 disclosed victims</span>
+                  </div>
+                </div>
+                
+                {recentVictims.length === 0 ? (
+                  <EmptyState message="No recent victim data available" />
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-gray-600">
+                      <thead className="text-[11px] font-semibold text-gray-500 bg-white border-b border-gray-200">
+                        <tr>
+                          <th className="px-5 py-3">Time</th>
+                          <th className="px-5 py-3">Group</th>
+                          <th className="px-5 py-3">Victim Name</th>
+                          <th className="px-5 py-3">Description</th>
+                          <th className="px-5 py-3 text-right">Website</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {recentVictims.map((v, i) => (
+                          <tr key={i} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-5 py-3 whitespace-nowrap text-xs">
+                              {timeAgo(v.discovered)}
+                            </td>
+                            <td className="px-5 py-3">
+                              <button
+                                onClick={(e) => { e.stopPropagation(); openGroupDetail(v.group); }}
+                                className={`text-[10px] px-2 py-0.5 rounded border font-medium uppercase hover:opacity-80 transition-opacity ${getGroupColor(v.group)}`}
+                              >
+                                {v.group}
+                              </button>
+                            </td>
+                            <td className="px-5 py-3 font-medium text-gray-800">
+                              {v.title}
+                            </td>
+                            <td className="px-5 py-3 max-w-[250px] truncate" title={v.description}>
+                              {v.description || '-'}
+                            </td>
+                            <td className="px-5 py-3 text-right">
+                              {v.website ? (
+                                <a href={v.website.startsWith('http') ? v.website : `https://${v.website}`} target="_blank" rel="noopener noreferrer" className="inline-flex p-1 text-gray-400 hover:text-blue-500 transition-colors" title={v.website}>
+                                  <ExternalLink className="w-4 h-4" />
+                                </a>
+                              ) : '-'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ═══ Tab: Trending Groups ═══ */}
+            {activeTab === 'trending' && (
+              <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                  <div className="flex items-center gap-2 text-gray-600 text-[11px] font-semibold uppercase tracking-wider">
+                    <Activity className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Ranked by activity — last {hotMeta.days} days • {hotMeta.total_posts} total posts</span>
+                  </div>
+                </div>
+                
+                {hotGroups.length === 0 ? (
+                  <EmptyState message="No trending group data available" />
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-gray-600">
+                      <thead className="text-[11px] font-semibold text-gray-500 bg-white border-b border-gray-200">
+                        <tr>
+                          <th className="px-5 py-3 w-16 text-center">Rank</th>
+                          <th className="px-5 py-3">Group</th>
+                          <th className="px-5 py-3">Last Post</th>
+                          <th className="px-5 py-3">Victims</th>
+                          <th className="px-5 py-3 w-48">Activity Volume</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {hotGroups.map((hg, i) => {
+                          const maxCount = hotGroups[0]?.count || 1;
+                          const barWidth = Math.max((hg.count / maxCount) * 100, 2);
+                          return (
+                            <tr key={hg.group} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => openGroupDetail(hg.group)}>
+                              <td className="px-5 py-3 text-center">
+                                <span className={`inline-flex items-center justify-center w-6 h-6 rounded text-xs font-bold ${
+                                  i === 0 ? 'bg-yellow-100 text-yellow-700' :
+                                  i === 1 ? 'bg-gray-200 text-gray-700' :
+                                  i === 2 ? 'bg-orange-100 text-orange-700' :
+                                  'bg-gray-50 text-gray-500 border border-gray-200'
+                                }`}>
+                                  {i + 1}
+                                </span>
+                              </td>
+                              <td className="px-5 py-3 font-medium text-blue-600 hover:underline">
+                                {hg.group}
+                              </td>
+                              <td className="px-5 py-3 text-xs">
+                                {timeAgo(hg.last_post)}
+                              </td>
+                              <td className="px-5 py-3 font-medium text-gray-800">
+                                {hg.count}
+                              </td>
+                              <td className="px-5 py-3">
+                                <div className="w-full h-2 bg-gray-100 rounded-sm overflow-hidden flex">
+                                  <div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ═══ Tab: Groups Directory ═══ */}
+            {activeTab === 'groups' && (
+              <div className="bg-white rounded-md border border-gray-200 shadow-sm p-5">
+                {groupsLoading ? (
+                  <div className="flex items-center justify-center py-20 gap-3">
+                    <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+                    <span className="text-gray-500 text-sm font-medium">Loading groups directory...</span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2 text-gray-500 text-[11px] font-semibold uppercase tracking-wider mb-4 border-b border-gray-100 pb-4">
+                      <Server className="w-3.5 h-3.5 text-blue-500" />
+                      <span>{allGroups.length} ransomware groups tracked</span>
+                    </div>
+                    <GroupsGrid groups={allGroups} onGroupClick={(name) => openGroupDetail(name)} />
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ─── Group Detail Modal ────────────────────────────────── */}
+        {(selectedGroup || groupDetailLoading) && (
+          <GroupDetailModal
+            group={selectedGroup}
+            posts={groupPosts}
+            loading={groupDetailLoading}
+            onClose={() => { setSelectedGroup(null); setGroupPosts([]); }}
+          />
+        )}
+      </main>
     </div>
   );
 }
@@ -468,124 +576,6 @@ export default function RansomwareClient() {
 /* ════════════════════════════════════════════════════════════════ */
 /*  Sub-Components                                                 */
 /* ════════════════════════════════════════════════════════════════ */
-
-function StatCard({ icon, label, value, accent, bgAccent }: { icon: React.ReactNode; label: string; value: string | number; accent: string; bgAccent: string }) {
-  return (
-    <div className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border ${bgAccent}`}>
-      <div className={`${accent}`}>{icon}</div>
-      <div>
-        <div className={`text-xl font-bold ${accent}`}>{value}</div>
-        <div className="text-xs text-text-muted">{label}</div>
-      </div>
-    </div>
-  );
-}
-
-function TabButton({ active, onClick, icon, label, count }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string; count?: number }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-        active
-          ? 'bg-red-500/10 text-red-400 border border-red-500/20 shadow-sm'
-          : 'text-text-muted hover:text-text-base hover:bg-gray-100'
-      }`}
-    >
-      {icon}
-      <span className="hidden sm:inline">{label}</span>
-      {count !== undefined && (
-        <span className={`text-xs px-1.5 py-0.5 rounded-full ${active ? 'bg-red-500/20 text-red-500' : 'bg-gray-200 text-text-muted'}`}>
-          {count}
-        </span>
-      )}
-    </button>
-  );
-}
-
-function VictimCard({ victim, onGroupClick }: { victim: Victim; onGroupClick: (g: string) => void }) {
-  return (
-    <div className="group flex items-center gap-4 bg-surface border border-gray-200 rounded-xl px-4 py-3.5 hover:border-red-500/30 transition-all duration-200">
-      {/* Threat icon */}
-      <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
-        <Crosshair className="w-4 h-4 text-red-400" />
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-semibold text-text-base truncate max-w-xs">{victim.title}</span>
-          {victim.website && (
-            <a href={victim.website.startsWith('http') ? victim.website : `https://${victim.website}`} target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-cyan-400 transition-colors" title={victim.website}>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          )}
-        </div>
-        {victim.description && (
-          <p className="text-xs text-text-muted mt-0.5 line-clamp-1">{victim.description}</p>
-        )}
-      </div>
-
-      {/* Group badge */}
-      <button
-        onClick={() => onGroupClick(victim.group)}
-        className={`text-xs px-2.5 py-1 rounded-full border font-medium whitespace-nowrap hover:opacity-80 transition-opacity ${getGroupColor(victim.group)}`}
-      >
-        {victim.group}
-      </button>
-
-      {/* Time */}
-      <div className="flex items-center gap-1.5 text-xs text-text-muted whitespace-nowrap">
-        <Clock className="w-3 h-3" />
-        {timeAgo(victim.discovered)}
-      </div>
-    </div>
-  );
-}
-
-function TrendingGroupRow({ rank, group, maxCount, onClick }: { rank: number; group: HotGroup; maxCount: number; onClick: () => void }) {
-  const barWidth = Math.max((group.count / maxCount) * 100, 4);
-  const medalColors: Record<number, string> = {
-    1: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
-    2: 'text-slate-300 bg-slate-400/10 border-slate-400/30',
-    3: 'text-orange-400 bg-orange-500/10 border-orange-500/30',
-  };
-  const rankStyle = medalColors[rank] || 'text-text-muted bg-gray-100 border-gray-200';
-
-  return (
-    <button onClick={onClick} className="w-full flex items-center gap-4 bg-surface border border-gray-200 rounded-xl px-4 py-3.5 hover:border-violet-500/30 transition-all duration-200 text-left group">
-      {/* Rank */}
-      <div className={`flex-shrink-0 w-8 h-8 rounded-lg border flex items-center justify-center text-sm font-bold ${rankStyle}`}>
-        {rank}
-      </div>
-
-      {/* Group Name */}
-      <div className="flex-1 min-w-0">
-        <div className="text-sm font-semibold text-text-base group-hover:text-violet-400 transition-colors truncate">
-          {group.group}
-        </div>
-        <div className="text-xs text-text-muted mt-0.5">
-          Last post: {timeAgo(group.last_post)}
-        </div>
-      </div>
-
-      {/* Activity Bar */}
-      <div className="hidden sm:flex flex-col items-end gap-1 w-48">
-        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-red-500 to-amber-500 rounded-full transition-all duration-500" style={{ width: `${barWidth}%` }} />
-        </div>
-        <span className="text-xs text-text-muted">{group.count} victims</span>
-      </div>
-
-      {/* Mobile count */}
-      <div className="sm:hidden flex items-center gap-1 text-xs text-red-400 font-semibold">
-        {group.count}
-        <Crosshair className="w-3 h-3" />
-      </div>
-
-      <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-violet-400 transition-colors flex-shrink-0" />
-    </button>
-  );
-}
 
 function GroupsGrid({ groups, onGroupClick }: { groups: any[]; onGroupClick: (name: string) => void }) {
   const [filter, setFilter] = useState('');
@@ -597,38 +587,38 @@ function GroupsGrid({ groups, onGroupClick }: { groups: any[]; onGroupClick: (na
   return (
     <div>
       {/* Filter Input */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+      <div className="relative mb-6 max-w-sm">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           type="text"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           placeholder="Filter groups..."
-          className="w-full bg-surface border border-gray-200 rounded-lg text-sm text-text-base placeholder-text-muted pl-10 pr-4 py-2.5 outline-none focus:border-violet-500/50 transition-colors"
+          className="w-full bg-white border border-gray-200 rounded-md text-sm text-gray-900 placeholder-gray-400 pl-10 pr-4 py-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 shadow-sm"
         />
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         {filtered.map((g: any, i: number) => (
           <button
             key={i}
             onClick={() => onGroupClick(g.name)}
-            className="px-3 py-3 bg-surface border border-gray-200 rounded-xl text-left hover:border-violet-500/30 hover:bg-violet-500/5 transition-all duration-200 group"
+            className="px-4 py-3 bg-white border border-gray-200 rounded-md text-left hover:border-blue-400 hover:shadow-sm transition-all duration-200 group"
           >
-            <div className="flex items-center gap-2 mb-1">
-              <Skull className="w-3.5 h-3.5 text-text-muted group-hover:text-violet-400 transition-colors" />
-              <span className="text-sm font-medium text-text-base truncate group-hover:text-violet-400 transition-colors">{g.name}</span>
+            <div className="flex items-center gap-2">
+              <Skull className="w-3.5 h-3.5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+              <span className="text-sm font-medium text-gray-800 group-hover:text-blue-600 transition-colors truncate">{g.name}</span>
             </div>
             {g.description && (
-              <p className="text-xs text-text-muted line-clamp-2 mt-1">{g.description}</p>
+              <p className="text-[10px] text-gray-500 line-clamp-1 mt-1">{g.description}</p>
             )}
           </button>
         ))}
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-8 text-text-muted text-sm">
+        <div className="text-center py-12 text-gray-500 text-sm font-medium">
           No groups matching &quot;{filter}&quot;
         </div>
       )}
@@ -641,51 +631,49 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
   const displayedPosts = showAllPosts ? posts : posts.slice(0, 5);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/20 backdrop-blur-sm">
+      <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Panel */}
-      <div className="relative w-full max-w-2xl max-h-[85vh] bg-surface border border-gray-200 rounded-2xl overflow-hidden flex flex-col shadow-2xl">
+      <div className="relative w-full max-w-3xl max-h-[90vh] bg-white border border-gray-200 rounded-md overflow-hidden flex flex-col shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-red-500/5 to-violet-500/5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-              <Skull className="w-5 h-5 text-red-400" />
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded border border-red-200 bg-red-50 flex items-center justify-center shadow-sm">
+              <Skull className="w-5 h-5 text-red-500" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-text-base">{loading ? 'Loading...' : group?.name || 'Group Detail'}</h3>
-              <p className="text-xs text-text-muted">Ransomware Group Intelligence</p>
+              <h3 className="text-base font-medium text-gray-900">{loading ? 'Loading...' : group?.name || 'Group Detail'}</h3>
+              <p className="text-xs text-gray-500 mt-0.5">Ransomware Group Intelligence</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-text-muted hover:text-text-base hover:bg-gray-100 rounded-lg transition-colors">
+          <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-5">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {loading ? (
-            <div className="flex items-center justify-center py-12 gap-3">
-              <Loader2 className="w-5 h-5 text-text-muted animate-spin" />
-              <span className="text-text-muted text-sm">Fetching group intelligence...</span>
+            <div className="flex flex-col items-center justify-center py-16 gap-3">
+              <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+              <span className="text-gray-500 text-sm font-medium">Fetching group intelligence...</span>
             </div>
           ) : group ? (
             <>
               {/* Meta badges */}
               <div className="flex flex-wrap gap-2">
                 {group.meta.raas && (
-                  <span className="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-200 font-semibold uppercase tracking-wider">
                     💰 RaaS
                   </span>
                 )}
                 {group.meta.captcha && (
-                  <span className="text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-orange-50 text-orange-600 border border-orange-200 font-semibold uppercase tracking-wider">
                     <Lock className="w-3 h-3 inline mr-1" />Captcha
                   </span>
                 )}
                 {group.meta.javascript_render && (
-                  <span className="text-xs px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-indigo-50 text-indigo-600 border border-indigo-200 font-semibold uppercase tracking-wider">
                     JS Render
                   </span>
                 )}
@@ -694,22 +682,32 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
               {/* Locations / Mirrors */}
               {group.locations.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <h4 className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <Globe className="w-3.5 h-3.5" /> Mirrors & Locations ({group.locations.length})
                   </h4>
-                  <div className="space-y-2">
-                    {group.locations.map((loc, i) => (
-                      <div key={i} className="flex items-center gap-3 px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200">
-                        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${loc.available ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm text-text-base font-mono truncate">{loc.slug}</div>
-                          {loc.title && <div className="text-xs text-text-muted">{loc.title}</div>}
-                        </div>
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${loc.available ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
-                          {loc.available ? 'Online' : 'Offline'}
-                        </span>
-                      </div>
-                    ))}
+                  <div className="border border-gray-200 rounded-md overflow-hidden">
+                    <table className="w-full text-left text-sm text-gray-600">
+                      <tbody className="divide-y divide-gray-100">
+                        {group.locations.map((loc, i) => (
+                          <tr key={i} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-4 py-2 w-8">
+                              <div className={`w-2 h-2 rounded-full ${loc.available ? 'bg-green-500' : 'bg-red-500'}`} />
+                            </td>
+                            <td className="px-4 py-2 font-medium text-gray-800 break-all">
+                              {loc.slug}
+                            </td>
+                            <td className="px-4 py-2 text-xs">
+                              {loc.title || '-'}
+                            </td>
+                            <td className="px-4 py-2 text-right">
+                              <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider border ${loc.available ? 'bg-green-50 text-green-600 border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
+                                {loc.available ? 'Online' : 'Offline'}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               )}
@@ -717,26 +715,32 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
               {/* Recent Posts */}
               {posts.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <h4 className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <Crosshair className="w-3.5 h-3.5" /> Recent Victims ({posts.length})
                   </h4>
-                  <div className="space-y-2">
-                    {displayedPosts.map((p, i) => (
-                      <div key={i} className="flex items-center justify-between px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <Crosshair className="w-3 h-3 text-red-400 flex-shrink-0" />
-                          <span className="text-sm text-text-base truncate">{p.title}</span>
-                        </div>
-                        <span className="text-xs text-text-muted whitespace-nowrap ml-2">{timeAgo(p.discovered)}</span>
-                      </div>
-                    ))}
+                  <div className="border border-gray-200 rounded-md overflow-hidden">
+                    <table className="w-full text-left text-sm text-gray-600">
+                      <tbody className="divide-y divide-gray-100">
+                        {displayedPosts.map((p, i) => (
+                          <tr key={i} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-4 py-3 font-medium text-gray-800 flex items-center gap-2">
+                              <Crosshair className="w-3.5 h-3.5 text-red-400" />
+                              {p.title}
+                            </td>
+                            <td className="px-4 py-3 text-xs text-right whitespace-nowrap">
+                              {timeAgo(p.discovered)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                   {posts.length > 5 && (
                     <button
                       onClick={() => setShowAllPosts(!showAllPosts)}
-                      className="mt-2 text-xs text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1"
+                      className="mt-3 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1.5 justify-center w-full bg-blue-50 py-2 rounded border border-blue-100"
                     >
-                      {showAllPosts ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                      {showAllPosts ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                       {showAllPosts ? 'Show less' : `Show all ${posts.length} victims`}
                     </button>
                   )}
@@ -744,7 +748,7 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
               )}
 
               {posts.length === 0 && group.locations.length === 0 && (
-                <div className="text-center py-8 text-text-muted text-sm">
+                <div className="text-center py-10 text-gray-500 text-sm font-medium">
                   No detailed information available for this group.
                 </div>
               )}
@@ -758,9 +762,9 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 gap-3 text-text-muted">
+    <div className="flex flex-col items-center justify-center py-20 gap-4 text-gray-500 bg-gray-50 border border-gray-200 rounded-md">
       <Shield className="w-10 h-10 opacity-30" />
-      <p className="text-sm">{message}</p>
+      <p className="font-medium text-sm">{message}</p>
     </div>
   );
 }

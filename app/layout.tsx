@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import ClientLayout from '@/components/ClientLayout';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-  title: 'SOC-Core Platform',
-  description: 'SOC Intelligence and Analysis Platform',
+  title: 'Wazuh Security System',
+  description: 'A clean, trust-first SaaS system for security operations',
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-base text-text-base antialiased`}>
+      <body className={`${manrope.variable} ${jetbrainsMono.variable} font-sans bg-base text-text-base antialiased`}>
         <ClientLayout>
           {children}
         </ClientLayout>

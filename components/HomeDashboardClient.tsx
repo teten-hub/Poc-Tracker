@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Radar, Search, Shield, UserX, Skull, ArrowRight, Activity, Globe, AlertTriangle, Eye, Clock, GitBranch, Star, Bug, Network, Database, Lock, ChevronDown, ExternalLink } from 'lucide-react';
+import { Radar, Search, Shield, UserX, Skull, ArrowRight, Activity, AlertTriangle, Bug, GitBranch, Lock, ChevronDown, ExternalLink, MoreVertical, Star, Activity as ActivityIcon, Moon, Sun } from 'lucide-react';
 import TorIcon from './TorIcon';
 import { PocData } from '@/types';
 
@@ -12,85 +11,44 @@ interface HomeDashboardClientProps {
   latestPocs?: PocData[];
 }
 
-function ModuleSpoiler({ 
-  tool, 
-  isOpen, 
-  onToggle 
-}: { 
-  tool: { title: string; description: string; href: string; icon: React.ReactNode; color: string; accentColor: string; stats: string; features: string[] };
-  isOpen: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <div className={`bg-white rounded-xl border transition-all duration-300 overflow-hidden ${
-      isOpen ? `border-gray-300 shadow-lg` : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
-    }`}>
-      {/* Collapsed Header — always visible */}
-      <button
-        onClick={onToggle}
-        className="w-full text-left p-5 flex items-center gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-xl transition-colors"
-      >
-        {/* Accent bar */}
-        <div className={`absolute left-0 top-0 w-1 h-full ${tool.accentColor} transition-opacity ${isOpen ? 'opacity-100' : 'opacity-40'}`} />
-        
-        {/* Icon */}
-        <div className={`shrink-0 p-3 rounded-xl border ${tool.color} transition-transform duration-300 ${isOpen ? 'scale-110' : 'group-hover:scale-105'}`}>
-          {tool.icon}
-        </div>
-
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-bold text-gray-900 tracking-tight">{tool.title}</h3>
-          <p className="text-sm text-gray-500 mt-0.5 line-clamp-1">{tool.description}</p>
-        </div>
-
-        {/* Stats badge */}
-        <span className="hidden sm:inline-flex items-center px-3 py-1 text-xs font-mono font-medium text-gray-500 bg-gray-100 rounded-full border border-gray-200 uppercase tracking-wider shrink-0">
-          {tool.stats}
-        </span>
-
-        {/* Chevron */}
-        <ChevronDown className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-
-      {/* Expanded Detail */}
-      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-        <div className="overflow-hidden">
-          <div className="px-5 pb-5 pt-0 border-t border-gray-100 mt-0">
-            <div className="pt-4 space-y-4">
-              {/* Full description */}
-              <p className="text-sm text-gray-600 leading-relaxed">{tool.description}</p>
-
-              {/* Feature highlights */}
-              <div className="flex flex-wrap gap-2">
-                {tool.features.map((feature, i) => (
-                  <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full bg-gray-50 border border-gray-200 text-gray-600">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
-                    {feature}
-                  </span>
-                ))}
-              </div>
-
-              {/* Action button */}
-              <Link
-                href={tool.href}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold text-sm rounded-lg hover:bg-primary/90 transition-all hover:shadow-md group/btn"
-              >
-                Open Module
-                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardClientProps) {
   const router = useRouter();
   const [ipAddress, setIpAddress] = useState('');
-  const [openModules, setOpenModules] = useState<Record<number, boolean>>({});
+  const [tweetFeedData, setTweetFeedData] = useState<any[]>([]);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Initialize Dark Mode based on local storage or system preference
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isDark = localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      setIsDarkMode(isDark);
+      if (isDark) document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+
+  useEffect(() => {
+    const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const to = new Date().toISOString().split('T')[0];
+    fetch(`/api/tweetfeed?from=${from}&to=${to}`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          setTweetFeedData(json.data || []);
+        }
+      })
+      .catch(err => console.error("Failed to load TweetFeed:", err));
+  }, []);
 
   const handleIpSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,236 +56,365 @@ export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardCl
     router.push(`/ip-analyzer?ip=${encodeURIComponent(ipAddress.trim())}`);
   };
 
-  const toggleModule = (idx: number) => {
-    setOpenModules(prev => ({ ...prev, [idx]: !prev[idx] }));
-  };
-
   const tools = [
     {
       title: 'PoC Tracker',
-      description: 'Real-time aggregation of Proof of Concepts from global repositories. Discover new exploits as they get published, track CVE-linked PoCs, and monitor trending security research.',
+      description: 'Real-time aggregation of Proof of Concepts from global repositories.',
       href: '/pocs',
-      icon: <Radar className="w-7 h-7 text-primary" />,
-      color: 'bg-blue-50 border-blue-200',
-      accentColor: 'bg-blue-500',
+      icon: <Radar className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+      color: 'bg-blue-50 dark:bg-blue-500/10',
+      borderColor: 'border-blue-200 dark:border-blue-500/20',
       stats: 'Global Repos',
-      features: ['CVE Tracking', 'CVSS Scoring', 'Star Trending', 'Real-time Updates']
+    },
+    {
+      title: 'Threat Intel',
+      description: 'Stream of actionable Indicators of Compromise (IOCs) from Twitter.',
+      href: '/tweetfeed',
+      icon: <Activity className="w-5 h-5 text-teal-600 dark:text-teal-400" />,
+      color: 'bg-teal-50 dark:bg-teal-500/10',
+      borderColor: 'border-teal-200 dark:border-teal-500/20',
+      stats: 'OSINT Feed',
     },
     {
       title: 'IP Analyzer',
-      description: 'Scan and analyze IP addresses against multiple intelligence feeds including VirusTotal, AbuseIPDB, and AlienVault OTX for comprehensive reputation and geolocation data.',
+      description: 'Scan and analyze IP addresses against multiple intelligence feeds.',
       href: '/ip-analyzer',
-      icon: <Search className="w-7 h-7 text-sky-600" />,
-      color: 'bg-sky-50 border-sky-200',
-      accentColor: 'bg-sky-500',
+      icon: <Search className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />,
+      color: 'bg-indigo-50 dark:bg-indigo-500/10',
+      borderColor: 'border-indigo-200 dark:border-indigo-500/20',
       stats: 'OSINT Feeds',
-      features: ['VirusTotal', 'AbuseIPDB', 'AlienVault OTX', 'Geolocation']
     },
     {
-      title: 'Have I Been Pwned',
-      description: 'Check if email addresses or passwords have been compromised in known data breaches. Powered by XposedOrNot for comprehensive breach intelligence and paste monitoring.',
+      title: 'Data Breach (HIBP)',
+      description: 'Check if emails or passwords have been compromised in data breaches.',
       href: '/hibp',
-      icon: <UserX className="w-7 h-7 text-red-500" />,
-      color: 'bg-red-50 border-red-200',
-      accentColor: 'bg-red-500',
+      icon: <UserX className="w-5 h-5 text-red-600 dark:text-red-400" />,
+      color: 'bg-red-50 dark:bg-red-500/10',
+      borderColor: 'border-red-200 dark:border-red-500/20',
       stats: 'Breach DB',
-      features: ['Email Lookup', 'Password Check', 'Paste Monitoring', 'Exposed Data Types']
     },
     {
       title: 'Ransomware Tracker',
-      description: 'Monitor recent ransomware group activities, victims, and leaked data announcements. Track trending threat groups and search across global ransomware intelligence.',
+      description: 'Monitor recent ransomware group activities and victims.',
       href: '/ransomware',
-      icon: <Skull className="w-7 h-7 text-purple-500" />,
-      color: 'bg-purple-50 border-purple-200',
-      accentColor: 'bg-purple-500',
+      icon: <Skull className="w-5 h-5 text-purple-600 dark:text-purple-400" />,
+      color: 'bg-purple-50 dark:bg-purple-500/10',
+      borderColor: 'border-purple-200 dark:border-purple-500/20',
       stats: 'Dark Web',
-      features: ['Live Victim Feed', 'Group Directory', 'Trending Analysis', 'Dark Web Intel']
     },
     {
       title: 'Tor Exit Nodes',
-      description: 'Directory of known Tor exit node IP addresses to detect potential anonymized malicious traffic. Continuously updated from curated Tor relay lists.',
+      description: 'Directory of known Tor exit node IP addresses.',
       href: '/tor-ips',
-      icon: <TorIcon className="w-7 h-7 text-emerald-600 fill-current" />,
-      color: 'bg-emerald-50 border-emerald-200',
-      accentColor: 'bg-emerald-500',
+      icon: <TorIcon className="w-4 h-4 text-green-600 dark:text-green-400 fill-current" />,
+      color: 'bg-green-50 dark:bg-green-500/10',
+      borderColor: 'border-green-200 dark:border-green-500/20',
       stats: 'Anonymization',
-      features: ['Exit Node IPs', 'Real-time Updates', 'IP Lookup', 'Analyzer Integration']
     }
   ];
 
+  const getSeverityLevel = (score: number | null) => {
+    if (score === null) return 0;
+    if (score >= 9.0) return 12; // Map to Wazuh high level
+    if (score >= 7.0) return 10;
+    if (score >= 4.0) return 7;
+    return 3;
+  };
+
+  // Stats Calculations
+  const totalPocs = latestPocs.length;
+  const countCritical = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 9.0).length;
+  const countHigh = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 7.0 && p.cvss_score < 9.0).length;
+  const countMedium = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 4.0 && p.cvss_score < 7.0).length;
+  const countLowOrUnknown = totalPocs - countCritical - countHigh - countMedium;
+
+  const pctCritical = totalPocs > 0 ? (countCritical / totalPocs) * 100 : 0;
+  const pctHigh = totalPocs > 0 ? (countHigh / totalPocs) * 100 : 0;
+  const pctMedium = totalPocs > 0 ? (countMedium / totalPocs) * 100 : 0;
+
+  const donutTrackBg = isDarkMode ? '#292929' : '#b7c6d7';
+  const conicGradient = `conic-gradient(#d64545 0% ${pctCritical}%, #ffeb6d ${pctCritical}% ${pctCritical + pctHigh}%, #3d82f6 ${pctCritical + pctHigh}% ${pctCritical + pctHigh + pctMedium}%, ${donutTrackBg} ${pctCritical + pctHigh + pctMedium}% 100%)`;
+
+  const topRepos = [...latestPocs].sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 5);
+  const maxStars = topRepos.length > 0 ? Math.max(...topRepos.map(r => r.stargazers_count), 1) : 1;
+  const trendingPocsCount = latestPocs.filter(p => p.stargazers_count >= 10).length;
+
+  // TweetFeed Calculations
+  const totalIocs = tweetFeedData.length;
+  const typeCounts: Record<string, number> = { url: 0, domain: 0, ip: 0, sha256: 0, md5: 0 };
+  tweetFeedData.forEach(ioc => {
+    if (typeCounts[ioc.type] !== undefined) {
+      typeCounts[ioc.type]++;
+    }
+  });
+
+  const pctUrl = totalIocs > 0 ? (typeCounts.url / totalIocs) * 100 : 0;
+  const pctDomain = totalIocs > 0 ? (typeCounts.domain / totalIocs) * 100 : 0;
+  const pctIp = totalIocs > 0 ? (typeCounts.ip / totalIocs) * 100 : 0;
+  const pctSha256 = totalIocs > 0 ? (typeCounts.sha256 / totalIocs) * 100 : 0;
+  const pctMd5 = totalIocs > 0 ? (typeCounts.md5 / totalIocs) * 100 : 0;
+
+  // Colors: url (blue #3d82f6), domain (purple #8b5cf6), ip (green #22c55e), sha256 (yellow #ffeb6d), md5 (orange #f97316)
+  let iocGradients = [];
+  let curPct = 0;
+  if (pctUrl > 0) { iocGradients.push(`#3d82f6 ${curPct}% ${curPct + pctUrl}%`); curPct += pctUrl; }
+  if (pctDomain > 0) { iocGradients.push(`#8b5cf6 ${curPct}% ${curPct + pctDomain}%`); curPct += pctDomain; }
+  if (pctIp > 0) { iocGradients.push(`#22c55e ${curPct}% ${curPct + pctIp}%`); curPct += pctIp; }
+  if (pctSha256 > 0) { iocGradients.push(`#ffeb6d ${curPct}% ${curPct + pctSha256}%`); curPct += pctSha256; }
+  if (pctMd5 > 0) { iocGradients.push(`#f97316 ${curPct}% ${curPct + pctMd5}%`); curPct += pctMd5; }
+  const iocConicGradient = iocGradients.length > 0 ? `conic-gradient(${iocGradients.join(', ')})` : `conic-gradient(${donutTrackBg} 0% 100%)`;
+
   return (
-    <div className="min-h-screen bg-base text-text-base font-sans pb-12">
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 mt-8 md:mt-10">
+    <div className="min-h-screen bg-[#f5f6f8] dark:bg-[#121212] text-gray-900 dark:text-gray-100 font-sans pb-12 transition-colors duration-300">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
-        {/* Header section (Search Engine Style) */}
-        <div className="mb-16 mt-8 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
-            <Shield className="w-4 h-4" />
-            <span>Threat Intelligence Platform</span>
+        {/* Page Header */}
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-[28px] font-medium text-[#292929] dark:text-white tracking-tight">Main Dashboard</h1>
+            <p className="text-[16px] text-[#292929] dark:text-gray-400 mt-1 font-light">Overview of tracked exploits, IPs, and global security intelligence.</p>
           </div>
-          
-          <div className="flex items-center gap-4 mb-6">
-            <Image src="/logo.png" alt="SOC-Core" width={56} height={56} className="rounded-xl" />
-            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
-              <span className="text-primary">SOC-Core</span> Intelligence
-            </h1>
+          {/* Dark Mode Toggle */}
+          <button 
+            onClick={toggleDarkMode}
+            className="p-2.5 rounded-md bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-gray-800 shadow-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            title="Toggle Dark Mode"
+          >
+            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+        </div>
+
+        {/* Global Overview Stats Strip - Flatter UI */}
+        <div className="bg-white dark:bg-[#1e1e1e] rounded-md border border-gray-200 dark:border-gray-800 mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200 dark:divide-gray-800 shadow-sm transition-colors">
+           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
+             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">Tracked Exploits</p>
+             <p className="text-3xl font-normal text-blue-600 dark:text-blue-400 tracking-tight">{totalPocs}</p>
+           </div>
+           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
+             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">Critical Severities</p>
+             <p className="text-3xl font-normal text-red-500 dark:text-red-400 tracking-tight">{countCritical}</p>
+           </div>
+           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
+             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">High Severities</p>
+             <p className="text-3xl font-normal text-orange-500 dark:text-[#ffeb6d] tracking-tight">{countHigh}</p>
+           </div>
+           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
+             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider">Trending (10+ Stars)</p>
+             <p className="text-3xl font-normal text-green-600 dark:text-green-400 tracking-tight">{trendingPocsCount}</p>
+           </div>
+        </div>
+
+        {/* IP Search Inline */}
+        <div className="mb-6 flex flex-col md:flex-row items-center gap-4 bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-gray-800 p-4 rounded-md shadow-sm transition-colors">
+          <div className="flex items-center gap-2 text-gray-700 dark:text-gray-200 min-w-[200px]">
+            <Search className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+            <span className="text-sm font-medium">Quick IP Analysis</span>
           </div>
-          
-          <p className="text-xl text-text-muted mb-10 max-w-2xl font-light">
-            Comprehensive domain, IP, and vulnerability analysis. Discover exploits, investigate IOCs, and monitor threat actors instantly.
-          </p>
-          
-          {/* Main Search Bar */}
-          <form onSubmit={handleIpSearch} className="w-full max-w-2xl relative group">
-            <div className="absolute inset-0 bg-primary/10 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative flex items-center bg-white rounded-full border border-gray-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-lg overflow-hidden h-14">
-              <div className="pl-5 text-text-muted">
-                <Search className="w-5 h-5" />
-              </div>
-              <input
-                type="text"
-                placeholder="Enter IP Address, Hash, or Domain to analyze..."
-                className="w-full bg-transparent border-none text-text-base placeholder-text-muted focus:ring-0 py-3 px-4 outline-none"
-                value={ipAddress}
-                onChange={(e) => setIpAddress(e.target.value)}
-              />
-              <button
-                type="submit"
-                disabled={!ipAddress.trim()}
-                className="h-full px-6 bg-primary hover:bg-primary/90 text-white disabled:opacity-50 font-semibold transition-colors flex items-center gap-2"
-              >
-                Scan <ArrowRight className="w-4 h-4 hidden sm:block" />
-              </button>
-            </div>
+          <form onSubmit={handleIpSearch} className="flex w-full md:w-auto flex-1">
+            <input
+              type="text"
+              className="flex-1 bg-gray-50 dark:bg-[#292929] border border-gray-200 dark:border-gray-700 rounded-l-md px-4 py-2 text-sm focus:border-blue-500 focus:bg-white dark:focus:bg-[#1e1e1e] focus:ring-1 focus:ring-blue-500 outline-none font-mono transition-all text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+              placeholder="Enter IP address (e.g. 8.8.8.8)..."
+              value={ipAddress}
+              onChange={(e) => setIpAddress(e.target.value)}
+            />
+            <button type="submit" className="bg-blue-600 border border-blue-600 dark:border-blue-500 dark:bg-blue-500 rounded-r-md px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors">
+              Analyze
+            </button>
           </form>
+        </div>
+
+        {/* Charts Split Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           
-          <div className="flex gap-4 mt-6 text-sm text-text-muted font-medium">
-            <span>Powered by multiple OSINT sources</span>
-            <span className="text-gray-300">&bull;</span>
-            <Link href="/pocs" className="hover:text-primary transition-colors flex items-center gap-1">
-              <Eye className="w-4 h-4" /> Browse Latest Exploits
-            </Link>
-          </div>
-        </div>
-
-        {/* Global Overview Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-           <div className="bg-white p-5 rounded-lg border border-gray-200 flex items-center gap-4 hover:shadow-md transition-shadow">
-             <div className="p-3 bg-blue-50 text-primary rounded-lg">
-               <Bug className="w-6 h-6" />
-             </div>
-             <div>
-               <p className="text-sm text-text-muted font-medium">Tracked Exploits</p>
-               <p className="text-2xl font-bold font-mono">14,248</p>
-             </div>
-           </div>
-           <div className="bg-white p-5 rounded-lg border border-gray-200 flex items-center gap-4 hover:shadow-md transition-shadow">
-             <div className="p-3 bg-emerald-50 text-emerald-600 rounded-lg">
-               <Network className="w-6 h-6" />
-             </div>
-             <div>
-               <p className="text-sm text-text-muted font-medium">Malicious Nodes</p>
-               <p className="text-2xl font-bold font-mono">3,192</p>
-             </div>
-           </div>
-           <div className="bg-white p-5 rounded-lg border border-gray-200 flex items-center gap-4 hover:shadow-md transition-shadow">
-             <div className="p-3 bg-red-50 text-red-500 rounded-lg">
-               <Database className="w-6 h-6" />
-             </div>
-             <div>
-               <p className="text-sm text-text-muted font-medium">Breached Records</p>
-               <p className="text-2xl font-bold font-mono">12.5B</p>
-             </div>
-           </div>
-           <div className="bg-white p-5 rounded-lg border border-gray-200 flex items-center gap-4 hover:shadow-md transition-shadow">
-             <div className="p-3 bg-purple-50 text-purple-500 rounded-lg">
-               <Lock className="w-6 h-6" />
-             </div>
-             <div>
-               <p className="text-sm text-text-muted font-medium">Active Ransomware</p>
-               <p className="text-2xl font-bold font-mono">84 Groups</p>
-             </div>
-           </div>
-        </div>
-
-        {/* Latest PoCs Section */}
-        {latestPocs.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <Radar className="w-6 h-6 text-primary" />
-                Latest Exploit PoCs
-              </h2>
-              <Link href="/pocs" className="text-sm text-text-muted hover:text-primary transition-colors flex items-center gap-1 font-medium">
-                View All <ArrowRight className="w-4 h-4" />
-              </Link>
+          {/* Chart 1: Donut Chart (Vulnerability Severities) */}
+          <div className="bg-white dark:bg-[#1e1e1e] rounded-md border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col transition-colors">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-800">
+              <h3 className="text-[13px] font-medium text-gray-800 dark:text-gray-200">PoC Severity Distribution</h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {latestPocs.map((poc, idx) => (
-                <a 
-                  key={idx} 
-                  href={poc.html_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="bg-white border border-gray-200 rounded-xl p-5 hover:border-primary/50 transition-all hover:shadow-md flex flex-col group block"
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <span className="font-mono text-sm font-bold bg-blue-50 text-primary px-2.5 py-1 rounded border border-blue-100">
-                      {poc.cve_id || 'NO-CVE'}
-                    </span>
-                    <span className="text-xs text-text-muted flex items-center gap-1 border border-gray-200 px-2 py-0.5 rounded-full">
-                      <Clock className="w-3 h-3" />
-                      {new Date(poc.created_at).toLocaleDateString()}
-                    </span>
+            <div className="p-5 flex-1 flex items-center justify-center gap-8">
+              <div className="relative w-36 h-36 rounded-full flex items-center justify-center shrink-0 transition-all" style={{ background: conicGradient }}>
+                <div className="w-24 h-24 bg-white dark:bg-[#1e1e1e] rounded-full flex items-center justify-center shadow-inner flex-col transition-colors">
+                  <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">{totalPocs}</span>
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Total</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 text-[12px] text-gray-600 dark:text-gray-400 flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#d64545]"></div> Critical</span>
+                  <span className="font-bold">{countCritical}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#ffeb6d]"></div> High</span>
+                  <span className="font-bold">{countHigh}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#3d82f6]"></div> Medium</span>
+                  <span className="font-bold">{countMedium}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm" style={{ backgroundColor: donutTrackBg }}></div> Low/Unknown</span>
+                  <span className="font-bold">{countLowOrUnknown}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Chart 2: Donut Chart (TweetFeed IOC Types) */}
+          <div className="bg-white dark:bg-[#1e1e1e] rounded-md border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col transition-colors">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-800">
+              <h3 className="text-[13px] font-medium text-gray-800 dark:text-gray-200">7-Day IOC Types (TweetFeed)</h3>
+            </div>
+            <div className="p-5 flex-1 flex items-center justify-center gap-8">
+              <div className="relative w-36 h-36 rounded-full flex items-center justify-center shrink-0 transition-all" style={{ background: iocConicGradient }}>
+                <div className="w-24 h-24 bg-white dark:bg-[#1e1e1e] rounded-full flex items-center justify-center shadow-inner flex-col transition-colors">
+                  <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">{totalIocs}</span>
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Total</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 text-[12px] text-gray-600 dark:text-gray-400 flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#3d82f6]"></div> URL</span>
+                  <span className="font-bold">{typeCounts.url}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#8b5cf6]"></div> Domain</span>
+                  <span className="font-bold">{typeCounts.domain}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#22c55e]"></div> IP</span>
+                  <span className="font-bold">{typeCounts.ip}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#ffeb6d]"></div> SHA256</span>
+                  <span className="font-bold">{typeCounts.sha256}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#f97316]"></div> MD5</span>
+                  <span className="font-bold">{typeCounts.md5}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Chart 3: Top Repositories Bar Chart */}
+          <div className="bg-white dark:bg-[#1e1e1e] rounded-md border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col transition-colors">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-800">
+              <h3 className="text-[13px] font-medium text-gray-800 dark:text-gray-200">Top 5 Trending Exploits (Stars)</h3>
+            </div>
+            <div className="p-5 flex-1 flex flex-col justify-center gap-4">
+              {topRepos.map((repo, i) => {
+                const barWidth = Math.max((repo.stargazers_count / maxStars) * 100, 2);
+                return (
+                  <div key={i} className="flex flex-col gap-1.5 group">
+                    <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+                      <span className="font-medium truncate max-w-[250px]" title={repo.repo_name}>
+                        {repo.repo_name ? (repo.repo_name.split('/')[1] || repo.repo_name) : 'Unknown'}
+                      </span>
+                      <span className="font-mono text-gray-400 dark:text-gray-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1"><Star className="w-3 h-3" /> {repo.stargazers_count}</span>
+                    </div>
+                    <div className="w-full h-2.5 bg-[#f5f5f5] dark:bg-[#292929] rounded-sm overflow-hidden flex transition-colors">
+                      <div className="h-full bg-[#3d82f6] dark:bg-blue-500 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                    </div>
                   </div>
-                  
-                  <h3 className="font-medium text-text-base mb-2 group-hover:text-primary transition-colors line-clamp-1" title={poc.repo_name}>
-                    {poc.repo_name}
-                  </h3>
-                  
-                  <p className="text-sm text-text-muted mb-4 line-clamp-2" title={poc.description}>
-                    {poc.description || 'No description provided.'}
-                  </p>
-                  
-                  <div className="mt-auto flex items-center gap-4 text-xs text-text-muted font-mono">
-                    <span className="flex items-center gap-1.5"><Star className="w-3.5 h-3.5" /> {poc.stargazers_count}</span>
-                  </div>
-                </a>
-              ))}
+                );
+              })}
+              {topRepos.length === 0 && (
+                <div className="text-center text-gray-400 dark:text-gray-600 text-xs py-10">No data available.</div>
+              )}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Latest PoCs Section (Flatter Layout) */}
+        {latestPocs.length > 0 && (
+          <div className="mb-8">
+            <div className="bg-white dark:bg-[#1e1e1e] rounded-md border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
+              <div className="px-5 py-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+                <h2 className="text-base font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                  <Bug className="w-4 h-4 text-gray-500 dark:text-gray-400" /> Latest Security Alerts
+                </h2>
+                <Link href="/pocs" className="text-xs text-blue-600 dark:text-blue-400 font-medium hover:underline">View all</Link>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm text-gray-600 dark:text-gray-300">
+                  <thead className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-[#252525] border-b border-gray-200 dark:border-gray-800 transition-colors">
+                    <tr>
+                      <th className="px-5 py-3 font-medium whitespace-nowrap">Time</th>
+                      <th className="px-5 py-3 font-medium whitespace-nowrap">Repository</th>
+                      <th className="px-5 py-3 font-medium whitespace-nowrap">CVE(s)</th>
+                      <th className="px-5 py-3 font-medium whitespace-nowrap">Description</th>
+                      <th className="px-5 py-3 font-medium whitespace-nowrap">Level</th>
+                      <th className="px-5 py-3 font-medium whitespace-nowrap text-right">Stars</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                    {latestPocs.slice(0, 10).map((poc) => {
+                      const level = getSeverityLevel(poc.cvss_score);
+                      return (
+                        <tr key={poc.id} className="hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors">
+                          <td className="px-5 py-2 whitespace-nowrap text-xs">
+                            {new Date(poc.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </td>
+                          <td className="px-5 py-2">
+                            <a href={poc.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 max-w-[150px] truncate hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
+                              <GitBranch className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
+                              {poc.repo_name ? (poc.repo_name.split('/')[1] || poc.repo_name) : 'Unknown'}
+                            </a>
+                          </td>
+                          <td className="px-5 py-2 font-medium text-gray-800 dark:text-gray-200">
+                            {poc.cve_id || '-'}
+                          </td>
+                          <td className="px-5 py-2 max-w-[300px] truncate text-xs" title={poc.description}>
+                            {poc.description || 'No description provided.'}
+                          </td>
+                          <td className="px-5 py-2">
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${
+                              level >= 10 ? 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20' :
+                              level >= 7 ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-[#ffeb6d] border-orange-200 dark:border-orange-500/20' :
+                              'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'
+                            }`}>
+                              Lvl {level}
+                            </span>
+                          </td>
+                          <td className="px-5 py-2 text-right">
+                            <span className="inline-flex items-center gap-1 font-mono text-xs">
+                              <Star className="w-3.5 h-3.5 text-orange-400 fill-orange-400" /> {poc.stargazers_count}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Intelligence Modules — Spoiler/Accordion */}
-        <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold flex items-center gap-2">
-              Intelligence Modules
-            </h2>
-            <button
-              onClick={() => {
-                const allOpen = tools.every((_, i) => openModules[i]);
-                const newState: Record<number, boolean> = {};
-                tools.forEach((_, i) => { newState[i] = !allOpen; });
-                setOpenModules(newState);
-              }}
-              className="text-sm text-text-muted hover:text-primary transition-colors font-medium flex items-center gap-1"
-            >
-              {tools.every((_, i) => openModules[i]) ? 'Collapse All' : 'Expand All'}
-              <ChevronDown className={`w-4 h-4 transition-transform ${tools.every((_, i) => openModules[i]) ? 'rotate-180' : ''}`} />
-            </button>
-          </div>
-          <div className="space-y-3">
+        {/* Modules Grid (Moved to Bottom) */}
+        <div>
+          <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 border-b border-gray-200 dark:border-gray-800 pb-2 transition-colors">Intelligence Modules Directory</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             {tools.map((tool, idx) => (
-              <ModuleSpoiler
-                key={idx}
-                tool={tool}
-                isOpen={!!openModules[idx]}
-                onToggle={() => toggleModule(idx)}
-              />
+              <Link key={idx} href={tool.href} className="bg-white dark:bg-[#1e1e1e] rounded-md border border-gray-200 dark:border-gray-800 shadow-sm hover:border-blue-400 dark:hover:border-blue-500 transition-all group p-4 flex flex-row items-center gap-4">
+                <div className={`p-3 rounded border shrink-0 ${tool.color} ${tool.borderColor}`}>
+                  {tool.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                    {tool.title}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
+                    {tool.description}
+                  </p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
+
       </main>
     </div>
   );

@@ -1,21 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --color-base: #f9fafb;
-  --color-surface: #ffffff;
-  --color-surface-elevated: #f3f4f6;
-  --color-primary: #3b82f6; 
-  --color-text-base: #111827;
-  --color-text-muted: #6b7280;
-  --color-text-negative: #ef4444;
+  --color-primary: #ffeb6d;
+  --color-secondary: #292929;
+  --color-tertiary: #3d82f6;
+  --color-neutral: #ffffff;
+  --color-surface: #f5f5f5;
+  --color-on-surface: #292929;
+  --color-muted: #b7c6d7;
+  --color-success: #2f9e44;
+  --color-error: #d64545;
+  --color-border: #e7e7e7;
+  --color-primary-contrast: #000000;
 
-  --radius-pill: 9999px;
-  --radius-circle: 50%;
+  --color-base: var(--color-surface);
+  --color-text-base: var(--color-secondary);
+  --color-text-muted: #666666; /* Need a legible muted text color, #b7c6d7 is too pale for text */
+  --color-text-negative: var(--color-error);
 
-  /* Fonts as per DESIGN.md Section 3 */
-  --font-sans: "SpotifyMixUI", "CircularSp-Arab", "CircularSp-Hebr", "CircularSp-Cyrl", "CircularSp-Grek", "CircularSp-Deva", var(--font-inter), "Helvetica Neue", helvetica, arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "MS Gothic", sans-serif;
-  --font-title: "SpotifyMixUITitle", "CircularSp-Arab", "CircularSp-Hebr", "CircularSp-Cyrl", "CircularSp-Grek", "CircularSp-Deva", var(--font-inter), "Helvetica Neue", helvetica, arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "MS Gothic", sans-serif;
-  --font-body: "SpotifyMixUI", "CircularSp-Arab", "CircularSp-Hebr", "CircularSp-Cyrl", "CircularSp-Grek", "CircularSp-Deva", var(--font-inter), "Helvetica Neue", helvetica, arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "MS Gothic", sans-serif;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Fonts */
+  --font-sans: var(--font-manrope), "Helvetica Neue", helvetica, arial, sans-serif;
+  --font-title: var(--font-manrope), "Helvetica Neue", helvetica, arial, sans-serif;
+  --font-body: var(--font-manrope), "Helvetica Neue", helvetica, arial, sans-serif;
 }
 
 /* Custom Scrollbar */
@@ -26,133 +38,170 @@
   background: var(--color-base);
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #c4c4c4;
+  background-color: var(--color-muted);
   border-radius: 10px;
   border: 3px solid var(--color-base);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #a3a3a3;
+  background-color: var(--color-secondary);
 }
 
 @utility no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
 }
 
-/* Typography utilities as per DESIGN.md Section 3 */
-@utility text-section-title {
-  font-family: var(--font-title);
-  font-size: 24px;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: normal;
+/* Base Body Styles */
+@layer base {
+  body {
+    background-color: var(--color-base);
+    color: var(--color-text-base);
+    font-family: var(--font-sans);
+  }
 }
 
-@utility text-feature-heading {
+/* Typography utilities from DESIGN.md */
+@utility text-headline-display {
+  font-family: var(--font-title);
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 55px;
+}
+
+@utility text-headline-lg {
+  font-family: var(--font-title);
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 35px;
+}
+
+@utility text-headline-md {
+  font-family: var(--font-title);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 32px;
+}
+
+@utility text-headline-sm {
+  font-family: var(--font-title);
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+@utility text-body-lg {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 200;
+  line-height: 35px;
+}
+
+@utility text-body-md {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+@utility text-body-sm {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+@utility text-label-lg {
   font-family: var(--font-body);
   font-size: 18px;
-  font-weight: 600;
-  line-height: 1.30;
-  letter-spacing: normal;
+  font-weight: 500;
+  line-height: 24px;
 }
 
-@utility text-body-bold {
+@utility text-label-md {
   font-family: var(--font-body);
   font-size: 16px;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: normal;
+  font-weight: 500;
+  line-height: 24px;
 }
 
-@utility text-body-normal {
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: normal;
-}
-
-@utility text-button-uppercase {
+@utility text-label-sm {
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 700;
-  line-height: 1.00;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 20px;
 }
 
-@utility text-button-normal {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: 0.14px;
-}
-
-@utility text-nav-link-bold {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: normal;
-}
-
-@utility text-nav-link-normal {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: normal;
-}
-
-@utility text-caption-bold {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.52;
-  letter-spacing: normal;
-}
-
-@utility text-caption-normal {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: normal;
-}
-
-@utility text-small-bold {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.50;
-  letter-spacing: normal;
-}
-
-@utility text-small-normal {
+@utility text-caption {
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 400;
-  line-height: normal;
-  letter-spacing: normal;
+  line-height: 16px;
 }
 
-@utility text-badge-custom {
-  font-family: var(--font-body);
-  font-size: 10.5px;
-  font-weight: 600;
-  line-height: 1.33;
-  letter-spacing: normal;
-  text-transform: capitalize;
-}
+/* Component classes */
+@layer components {
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-contrast);
+    @apply text-label-md transition-colors hover:bg-tertiary hover:text-neutral;
+    border-radius: var(--radius-sm);
+    padding: 16px 24px; /* Adjusted from 21x29 for practical UI compactness */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-@utility text-micro-normal {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: normal;
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-on-surface);
+    border: 1px solid var(--color-border);
+    @apply text-label-md transition-colors hover:bg-surface;
+    border-radius: var(--radius-sm);
+    padding: 16px 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-link {
+    background-color: transparent;
+    color: var(--color-on-surface);
+    @apply text-body-sm transition-colors hover:text-tertiary;
+    padding: 0px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wazuh-card {
+    background-color: var(--color-neutral);
+    color: var(--color-on-surface);
+    border-radius: var(--radius-lg);
+    padding: 30px 36px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    @apply transition-all duration-300 ease-out border border-transparent hover:shadow-lg;
+  }
+
+  /* Replacing old splunk-card where it might still exist during transition */
+  .splunk-card {
+    background-color: var(--color-neutral);
+    color: var(--color-on-surface);
+    border-radius: var(--radius-lg);
+    padding: 30px 36px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    @apply transition-all duration-300 ease-out border border-transparent hover:shadow-lg;
+  }
+
+  .wazuh-input {
+    background-color: var(--color-neutral);
+    color: var(--color-on-surface);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    padding: 12px;
+    outline: none;
+    @apply focus:border-tertiary transition-colors text-body-sm;
+  }
 }

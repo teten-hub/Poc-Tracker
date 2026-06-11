@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { Search, ShieldAlert, Star, ExternalLink, GitBranch, Clock, Activity, Shield, AlertTriangle, Bug, Radar } from 'lucide-react';
+import { Search, ShieldAlert, Star, ExternalLink, GitBranch, Clock, Activity, Shield, AlertTriangle, Bug, Radar, ChevronDown, FileText, Globe } from 'lucide-react';
+import Link from 'next/link';
 import { PocData } from '@/types';
 
 interface DashboardClientProps {
@@ -12,7 +13,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState({ field: 'date', order: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 15; // Increased for table view
 
   const filteredAndSortedData = useMemo(() => {
     let result = [...initialData];
@@ -59,67 +60,64 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
   const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
   const currentData = filteredAndSortedData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  const getSeverityLevel = (score: number | null) => {
+    if (score === null) return 0;
+    if (score >= 9.0) return 12; // Map to Wazuh high level
+    if (score >= 7.0) return 10;
+    if (score >= 4.0) return 7;
+    return 3;
+  };
+
   return (
-    <div className="min-h-screen bg-base text-text-base font-sans pb-12">
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 mt-8 md:mt-10">
+    <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
-        {/* Title Area */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-text-base">POC TRACKER</h2>
-            <h2 className="text-3xl font-semibold tracking-tight text-gray-900">POC TRACKER</h2>
-            <p className="mt-2 text-gray-500 text-sm md:text-base font-medium">Real-time aggregation of Proof of Concepts from global repositories.</p>
+        {/* Top Header Row (Wazuh style tabs area) */}
+        <div className="flex items-center justify-between border-b border-gray-200 mb-4 bg-white px-6 rounded-t-md">
+          <div className="flex">
+            <button className="px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
+              <Radar className="w-4 h-4" />
+              PoC Tracker
+            </button>
+            <Link href="/" className="px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
+              Home Dashboard
+            </Link>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-gray-600">
           </div>
         </div>
 
-        {/* Top Metric Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-          <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-all relative overflow-hidden group">
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="p-3 bg-gray-100 text-gray-900 rounded-lg">
-                <Shield className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-text-muted uppercase tracking-wider">Tracked Exploits</p>
-                <p className="text-2xl font-mono font-semibold text-text-base">{initialData.length}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-all relative overflow-hidden group">
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="p-3 bg-gray-100 text-text-base rounded-lg">
-                <AlertTriangle className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-text-muted uppercase tracking-wider">Trending PoCs</p>
-                <p className="text-2xl font-mono font-semibold text-text-base">
-                  {initialData.filter(p => p.stargazers_count >= 30).length}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-all relative overflow-hidden group">
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="p-3 bg-gray-100 text-text-base rounded-lg">
-                <Activity className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-text-muted uppercase tracking-wider">Data Source</p>
-                <a href="https://poc-in-github.motikan2010.net" target="_blank" rel="noopener noreferrer" className="text-xl font-semibold text-primary transition-colors">poc-in-github.motikan2010.net</a>
-              </div>
-            </div>
-          </div>
+        {/* Global Overview Stats - Single Strip Card */}
+        <div className="bg-white rounded-md border border-gray-200 shadow-sm mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200">
+           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
+             <p className="text-sm font-medium text-gray-600 mb-1">Total PoCs Tracked</p>
+             <p className="text-3xl font-normal text-blue-500 tracking-tight">{initialData.length.toLocaleString()}</p>
+           </div>
+           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
+             <p className="text-sm font-medium text-gray-600 mb-1">Trending PoCs (30+ Stars)</p>
+             <p className="text-3xl font-normal text-red-500 tracking-tight">
+               {initialData.filter(p => p.stargazers_count >= 30).length.toLocaleString()}
+             </p>
+           </div>
+           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
+             <p className="text-sm font-medium text-gray-600 mb-1">Critical Severities</p>
+             <p className="text-3xl font-normal text-orange-500 tracking-tight">
+               {initialData.filter(p => p.severity === 'CRITICAL').length.toLocaleString()}
+             </p>
+           </div>
+           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
+             <p className="text-sm font-medium text-gray-600 mb-1">Data Source</p>
+             <a href="https://poc-in-github.motikan2010.net" target="_blank" rel="noopener noreferrer" className="text-base font-medium text-blue-500 hover:underline mt-1 truncate max-w-[200px]">poc-in-github</a>
+           </div>
         </div>
         
         {/* Controls Section */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <div className="flex flex-1 items-center bg-white rounded-full border border-gray-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 px-4 py-3 transition-all shadow-sm">
-            <Search className="h-5 w-5 text-text-muted shrink-0 mr-3" />
+        <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
+          <div className="flex flex-1 items-center bg-white rounded-md border border-gray-200 focus-within:border-blue-500 px-4 py-2 shadow-sm">
+            <Search className="h-4 w-4 text-gray-400 shrink-0 mr-3" />
             <input
               type="text"
-              className="w-full bg-transparent border-0 outline-none text-sm font-medium placeholder:text-text-muted text-text-base"
+              className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-gray-400 text-gray-900"
               placeholder="Search CVE ID, keyword, or repository..."
               value={searchTerm}
               onChange={(e) => {
@@ -129,149 +127,150 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
             />
           </div>
 
-          <div className="flex bg-gray-50 p-1 rounded-full shrink-0 items-center gap-1 overflow-x-auto border border-gray-200">
+          <div className="flex bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden text-sm">
             <button
               onClick={() => handleSort('date')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium transition-all ${
+              className={`px-4 py-2 font-medium transition-colors border-r border-gray-200 ${
                 sortBy.field === 'date' 
-                  ? 'bg-surface text-text-base border border-gray-200' 
-                  : 'text-text-muted hover:text-text-base hover:bg-gray-100'
+                  ? 'bg-blue-50 text-blue-600' 
+                  : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              <Clock className={`w-4 h-4 ${sortBy.field === 'date' ? 'text-primary' : ''}`} />
-              {sortBy.field === 'date' && sortBy.order === 'asc' ? 'Oldest Release' : 'Latest Release'}
+              Time {sortBy.field === 'date' && (sortBy.order === 'desc' ? '↓' : '↑')}
             </button>
-            <div className="w-px h-6 bg-gray-200 mx-1"></div>
             <button
               onClick={() => handleSort('score')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium transition-all whitespace-nowrap ${
+              className={`px-4 py-2 font-medium transition-colors border-r border-gray-200 ${
                 sortBy.field === 'score' 
-                  ? 'bg-surface text-text-base border border-gray-200' 
-                  : 'text-text-muted hover:text-text-base hover:bg-gray-100'
+                  ? 'bg-blue-50 text-blue-600' 
+                  : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              <ShieldAlert className={`w-4 h-4 ${sortBy.field === 'score' ? 'text-text-negative' : ''}`} />
-              {sortBy.field === 'score' && sortBy.order === 'asc' ? 'Lowest CVSS' : 'Highest CVSS'}
+              CVSS {sortBy.field === 'score' && (sortBy.order === 'desc' ? '↓' : '↑')}
             </button>
-            <div className="w-px h-6 bg-gray-100 mx-1"></div>
             <button
               onClick={() => handleSort('stars')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-medium transition-all whitespace-nowrap ${
+              className={`px-4 py-2 font-medium transition-colors ${
                 sortBy.field === 'stars' 
-                  ? 'bg-surface text-text-base border border-gray-200' 
-                  : 'text-text-muted hover:text-text-base hover:bg-gray-100'
+                  ? 'bg-blue-50 text-blue-600' 
+                  : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              <Star className={`w-4 h-4 ${sortBy.field === 'stars' ? 'text-primary fill-primary' : ''}`} />
-              {sortBy.field === 'stars' && sortBy.order === 'asc' ? 'Least Trending' : 'Most Trending'}
+              Stars {sortBy.field === 'stars' && (sortBy.order === 'desc' ? '↓' : '↑')}
             </button>
           </div>
         </div>
 
-        {/* List Section */}
-        <div className="space-y-5">
-          {currentData.length === 0 ? (
-            <div className="text-center py-20 bg-surface rounded-xl border border-gray-200">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-pill bg-base mb-5 border border-gray-200">
-                <Bug className="h-10 w-10 text-text-muted" />
+        {/* Table Section (Wazuh Style) */}
+        <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden mb-6">
+          <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h2 className="text-base font-medium text-gray-900">Security alerts ({filteredAndSortedData.length} total)</h2>
+          </div>
+          
+          <div className="overflow-x-auto min-h-[400px]">
+            {currentData.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+                <Bug className="h-10 w-10 mb-4 opacity-50" />
+                <p>No vulnerabilities found matching your search.</p>
               </div>
-              <h3 className="text-xl font-semibold text-text-base">No vulnerabilities found</h3>
-              <p className="text-text-muted mt-2 font-medium">Try adjusting your search criteria.</p>
-            </div>
-          ) : (
-            currentData.map((poc) => {
-              const isViral = poc.stargazers_count >= 30;
-              
-              return (
-                <div 
-                  key={poc.id} 
-                  className={`group bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden`}
+            ) : (
+              <table className="w-full text-left text-sm text-gray-600">
+                <thead className="text-[11px] font-semibold text-gray-500 bg-white border-b border-gray-200 sticky top-0">
+                  <tr>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap">Time <ChevronDown className="w-3 h-3 inline text-blue-500" /></th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap">Agent name</th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap">CVE(s)</th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap">Description</th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap">Level</th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap">Stars</th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {currentData.map((poc) => {
+                    const isViral = poc.stargazers_count >= 30;
+                    const level = getSeverityLevel(poc.cvss_score);
+                    
+                    return (
+                      <tr key={poc.id} className="hover:bg-gray-50 transition-colors group">
+                        <td className="px-5 py-3 whitespace-nowrap">
+                          <span className="text-gray-400 mr-1">&gt;</span> 
+                          {new Date(poc.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </td>
+                        <td className="px-5 py-3">
+                          <span className="flex items-center gap-1.5 max-w-[150px] truncate" title={poc.repo_name}>
+                            <GitBranch className="w-3.5 h-3.5 text-gray-400" />
+                            {poc.repo_name ? (poc.repo_name.split('/')[1] || poc.repo_name) : 'Unknown'}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 font-medium text-blue-500">
+                          {poc.cve_id || '-'}
+                        </td>
+                        <td className="px-5 py-3 max-w-[300px] truncate" title={poc.description}>
+                          {poc.description || 'No description provided.'}
+                        </td>
+                        <td className="px-5 py-3">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                            level >= 10 ? 'bg-red-50 text-red-600' :
+                            level >= 7 ? 'bg-orange-50 text-orange-600' :
+                            'bg-blue-50 text-blue-600'
+                          }`}>
+                            {level} {poc.cvss_score ? `(${poc.cvss_score})` : ''}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3">
+                          <span className={`flex items-center gap-1 font-medium ${isViral ? 'text-orange-500' : 'text-gray-600'}`}>
+                            <Star className={`w-3.5 h-3.5 ${isViral ? 'fill-orange-500' : ''}`} />
+                            {poc.stargazers_count}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 text-right">
+                          <a
+                            href={poc.html_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded transition-colors"
+                            title="View Repository"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+          
+          {/* Pagination Footer */}
+          {totalPages > 1 && (
+            <div className="px-5 py-3 border-t border-gray-200 flex justify-between items-center bg-gray-50">
+              <div className="text-xs text-gray-500 font-medium">
+                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}
+              </div>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
                 >
-                  {isViral && <div className="absolute top-0 left-0 w-1 h-full bg-text-negative"></div>}
-                  <div className="flex-1 min-w-0 relative z-10">
-                    <div className="flex flex-wrap items-center gap-3 mb-3">
-                      <span className={`inline-flex items-center px-3.5 py-1 rounded-md text-xs font-medium tracking-wide uppercase border border-gray-200 ${
-                        isViral
-                          ? 'bg-red-50 text-red-600 border-red-200' 
-                          : 'bg-gray-50 text-gray-900'
-                      }`}>
-                        {isViral && <AlertTriangle className="w-3 h-3 mr-1.5 inline" />}
-                        {poc.cve_id || "UNKNOWN-CVE"}
-                      </span>
-
-                      {poc.severity && poc.severity !== 'UNKNOWN' && (
-                        <div className={`flex items-center px-3 py-1 rounded-sm border text-xs font-bold tracking-wider ${
-                          poc.severity === 'CRITICAL' ? 'border-red-500 text-red-500 bg-red-500/10' :
-                          poc.severity === 'HIGH' ? 'border-orange-500 text-orange-500 bg-orange-500/10' :
-                          poc.severity === 'MEDIUM' ? 'border-yellow-500 text-yellow-500 bg-yellow-500/10' :
-                          'border-emerald-500 text-emerald-500 bg-emerald-500/10'
-                        }`}>
-                          {poc.severity} {poc.cvss_score !== null ? `(${poc.cvss_score})` : ''}
-                        </div>
-                      )}
-                      
-                      <div className="flex items-center text-text-base text-sm font-medium truncate bg-base px-3 py-1 rounded-sm border border-gray-200">
-                        <GitBranch className="w-4 h-4 mr-2 text-text-muted" />
-                        <span className="truncate">{poc.repo_name}</span>
-                      </div>
-                    </div>
-                    
-                    <p className="text-text-muted text-sm leading-relaxed mb-4 max-w-3xl font-medium">
-                      {poc.description || "No description provided."}
-                    </p>
-                    
-                    <div className="flex items-center text-xs font-medium text-text-muted gap-4">
-                      <span className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5" />
-                        {new Date(poc.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center w-full md:w-auto shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-gray-200 mt-2 md:mt-0 gap-3 relative z-10">
-                    <div className="flex items-center gap-1.5 text-text-base font-mono font-medium bg-base px-3.5 py-1.5 rounded-sm border border-gray-200 text-sm">
-                      <Star className={`w-4 h-4 ${isViral ? 'text-text-negative fill-text-negative' : 'text-primary'}`} />
-                      <span className={isViral ? 'text-text-negative' : ''}>{poc.stargazers_count ? poc.stargazers_count.toLocaleString() : 0}</span>
-                    </div>
-                    
-                    <a
-                      href={poc.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center px-5 py-2.5 bg-primary text-white rounded-pill uppercase tracking-widest font-bold text-xs hover:scale-105 transition-all gap-2 group/btn"
-                    >
-                      View Source 
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
+                  Previous
+                </button>
+                <div className="px-3 py-1.5 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200 rounded">
+                  {currentPage}
                 </div>
-              );
-            })
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           )}
         </div>
-
-        {/* Pagination Section */}
-        {totalPages > 1 && (
-          <div className="flex justify-center mt-8 gap-2">
-            <button
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-white text-text-base font-medium rounded-md border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
-            >
-              Previous
-            </button>
-            <div className="flex items-center px-4 font-mono font-medium text-text-base bg-white rounded-md border border-gray-200">
-              Page {currentPage} of {totalPages}
-            </div>
-            <button
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-white text-text-base font-medium rounded-md border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
-            >
-              Next
-            </button>
-          </div>
-        )}
       </main>
     </div>
   );

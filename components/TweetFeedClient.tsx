@@ -6,8 +6,9 @@ import {
   Globe, Calendar, ChevronRight, ChevronLeft, AlertTriangle, Activity,
   ExternalLink, Clock, BarChart3, Link2, Hash, X,
   Copy, Check, Filter, Radio, FileText, Cpu, Eye,
-  ArrowUpRight, Zap, Target
+  ArrowUpRight, Zap, Target, MoreVertical
 } from 'lucide-react';
+import Link from 'next/link';
 
 /* ─── Types ───────────────────────────────────────────────────── */
 interface IOCEntry {
@@ -23,29 +24,25 @@ type TabKey = 'feed' | 'researchers';
 type IOCTypeFilter = 'all' | 'url' | 'domain' | 'ip' | 'sha256' | 'md5';
 
 /* ─── Constants ───────────────────────────────────────────────── */
-const IOC_TYPE_CONFIG: Record<string, { label: string; color: string; bgColor: string; icon: React.ReactNode }> = {
-  url:    { label: 'URL',    color: 'text-blue-400',    bgColor: 'bg-blue-500/10 border-blue-500/20',    icon: <Link2 className="w-3.5 h-3.5" /> },
-  domain: { label: 'Domain', color: 'text-cyan-400',    bgColor: 'bg-cyan-500/10 border-cyan-500/20',    icon: <Globe className="w-3.5 h-3.5" /> },
-  ip:     { label: 'IP',     color: 'text-emerald-400', bgColor: 'bg-emerald-500/10 border-emerald-500/20', icon: <Target className="w-3.5 h-3.5" /> },
-  sha256: { label: 'SHA256', color: 'text-amber-400',   bgColor: 'bg-amber-500/10 border-amber-500/20',  icon: <FileText className="w-3.5 h-3.5" /> },
-  md5:    { label: 'MD5',    color: 'text-orange-400',  bgColor: 'bg-orange-500/10 border-orange-500/20', icon: <Hash className="w-3.5 h-3.5" /> },
+const IOC_TYPE_CONFIG: Record<string, { label: string; color: string; bgColor: string; icon: React.ReactNode; rawColor: string }> = {
+  url:    { label: 'URL',    color: 'text-blue-500',    bgColor: 'bg-blue-500/10 border-blue-500/20',    icon: <Link2 className="w-4 h-4" />, rawColor: '#3b82f6' },
+  domain: { label: 'Domain', color: 'text-indigo-600',    bgColor: 'bg-indigo-500/10 border-indigo-500/20',    icon: <Globe className="w-4 h-4" />, rawColor: '#4f46e5' },
+  ip:     { label: 'IP',     color: 'text-green-500',     bgColor: 'bg-green-500/10 border-green-500/20', icon: <Target className="w-4 h-4" />, rawColor: '#22c55e' },
+  sha256: { label: 'SHA256', color: 'text-yellow-500',   bgColor: 'bg-yellow-500/10 border-yellow-500/20',  icon: <FileText className="w-4 h-4" />, rawColor: '#eab308' },
+  md5:    { label: 'MD5',    color: 'text-orange-500',  bgColor: 'bg-orange-500/10 border-orange-500/20', icon: <Hash className="w-4 h-4" />, rawColor: '#f97316' },
 };
 
 const TAG_COLORS = [
-  'bg-red-500/15 text-red-400 border-red-500/25',
-  'bg-violet-500/15 text-violet-400 border-violet-500/25',
-  'bg-pink-500/15 text-pink-400 border-pink-500/25',
-  'bg-amber-500/15 text-amber-400 border-amber-500/25',
-  'bg-emerald-500/15 text-emerald-400 border-emerald-500/25',
-  'bg-cyan-500/15 text-cyan-400 border-cyan-500/25',
-  'bg-blue-500/15 text-blue-400 border-blue-500/25',
-  'bg-indigo-500/15 text-indigo-400 border-indigo-500/25',
-  'bg-teal-500/15 text-teal-400 border-teal-500/25',
-  'bg-fuchsia-500/15 text-fuchsia-400 border-fuchsia-500/25',
-  'bg-rose-500/15 text-rose-400 border-rose-500/25',
-  'bg-sky-500/15 text-sky-400 border-sky-500/25',
-  'bg-lime-500/15 text-lime-400 border-lime-500/25',
-  'bg-purple-500/15 text-purple-400 border-purple-500/25',
+  'bg-red-50 text-red-600 border-red-200',
+  'bg-violet-50 text-violet-600 border-violet-200',
+  'bg-pink-50 text-pink-600 border-pink-200',
+  'bg-blue-50 text-blue-600 border-blue-200',
+  'bg-green-50 text-green-600 border-green-200',
+  'bg-cyan-50 text-cyan-600 border-cyan-200',
+  'bg-indigo-50 text-indigo-600 border-indigo-200',
+  'bg-teal-50 text-teal-600 border-teal-200',
+  'bg-orange-50 text-orange-600 border-orange-200',
+  'bg-yellow-50 text-yellow-600 border-yellow-200',
 ];
 
 function getTagColor(tag: string) {
@@ -247,160 +244,184 @@ export default function TweetFeedClient() {
 
   /* ─── RENDER ─────────────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-base pt-20 md:pt-6 pb-10 px-4 md:px-8">
-      {/* Page Title */}
-      <div className="max-w-7xl mx-auto mb-6">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
-            <Rss className="w-5 h-5 text-cyan-400" />
+    <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+        
+        {/* Top Header Row (Wazuh style tabs area) */}
+        <div className="flex items-center justify-between border-b border-gray-200 mb-4 bg-white px-6 rounded-t-md">
+          <div className="flex">
+            <button className="px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
+              <Rss className="w-4 h-4" />
+              TweetFeed
+            </button>
+            <Link href="/" className="px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
+              Home Dashboard
+            </Link>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-text-base tracking-tight">TweetFeed IOC</h1>
-            <p className="text-sm text-text-muted">Real-time IOC feeds from Twitter/X researchers — powered by TweetFeed.live</p>
-          </div>
-        </div>
-      </div>
-
-      {/* ─── Period Selector + Stats ─────────────────────────────── */}
-      <div className="max-w-7xl mx-auto mb-6">
-        {/* Date Range Picker */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-          <div className="flex items-center gap-2 bg-surface border border-gray-200 rounded-lg p-1">
-            <div className="flex items-center gap-2 px-2 py-1.5">
-              <Calendar className="w-4 h-4 text-text-muted" />
-              <input
-                type="date"
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-                max={toDate}
-                className="bg-transparent border-none text-sm text-text-base outline-none cursor-pointer"
-              />
-            </div>
-            <div className="text-text-muted text-xs font-medium">to</div>
-            <div className="flex items-center gap-2 px-2 py-1.5">
-              <input
-                type="date"
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
-                min={fromDate}
-                max={new Date().toISOString().split('T')[0]}
-                className="bg-transparent border-none text-sm text-text-base outline-none cursor-pointer"
-              />
-            </div>
-          </div>
-          
-          <button 
-            onClick={() => fetchData(fromDate, toDate)}
-            className="px-4 py-2 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded-lg text-sm font-medium hover:bg-cyan-500/20 transition-colors"
-          >
-            Apply Range
-          </button>
-          
-          <div className="sm:ml-auto flex items-center gap-2 text-xs text-text-muted">
-            <Radio className="w-3 h-3 text-cyan-400 animate-pulse" />
-            <span>Updates every 15 min</span>
+          <div className="flex items-center gap-4 text-sm text-gray-600">
           </div>
         </div>
 
-        {/* Stats Cards & Analytics */}
-        {!isLoading && !error && (
-          <>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-              <StatCard
-                icon={<Zap className="w-4 h-4" />}
-                label="Total IOCs"
-                value={stats.total.toLocaleString()}
-                accent="text-cyan-400"
-                bgAccent="bg-cyan-500/10 border-cyan-500/20"
-              />
-              {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => (
-                <StatCard
-                  key={type}
-                  icon={cfg.icon}
-                  label={cfg.label}
-                  value={(stats.typeCounts[type] || 0).toLocaleString()}
-                  accent={cfg.color}
-                  bgAccent={cfg.bgColor}
+        {/* ─── Period Selector + Stats ─────────────────────────────── */}
+        <div className="mb-8">
+          {/* Date Range Picker */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+            <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-md p-1 shadow-sm">
+              <div className="flex items-center gap-2 px-3 py-1.5">
+                <Calendar className="w-4 h-4 text-gray-400" />
+                <input
+                  type="date"
+                  value={fromDate}
+                  onChange={(e) => setFromDate(e.target.value)}
+                  max={toDate}
+                  className="bg-transparent border-none text-sm font-medium text-gray-700 outline-none cursor-pointer"
                 />
-              ))}
+              </div>
+              <div className="text-gray-400 text-xs font-bold uppercase tracking-wider px-1">to</div>
+              <div className="flex items-center gap-2 px-3 py-1.5">
+                <input
+                  type="date"
+                  value={toDate}
+                  onChange={(e) => setToDate(e.target.value)}
+                  min={fromDate}
+                  max={new Date().toISOString().split('T')[0]}
+                  className="bg-transparent border-none text-sm font-medium text-gray-700 outline-none cursor-pointer"
+                />
+              </div>
             </div>
+            
+            <button 
+              onClick={() => fetchData(fromDate, toDate)}
+              className="px-4 py-2 text-sm font-medium bg-blue-50 text-blue-600 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors shadow-sm"
+            >
+              Apply Range
+            </button>
+            
+            <div className="sm:ml-auto flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-gray-500 bg-white px-3 py-2 rounded-md border border-gray-200 shadow-sm">
+              <Radio className="w-3.5 h-3.5 text-green-500 animate-pulse" />
+              <span>Updates every 15 min</span>
+            </div>
+          </div>
 
-            {/* Analytics Charts */}
-            <div className="space-y-6">
-              {/* IOC Type Distribution */}
-              <div className="bg-surface border border-gray-200 rounded-xl overflow-hidden">
-                <div className="px-5 py-4 border-b border-gray-200">
-                  <h3 className="text-sm font-semibold text-text-base flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-cyan-400" />
-                    IOC Type Distribution
-                  </h3>
-                </div>
-                <div className="p-5 space-y-3">
-                  {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => {
-                    const count = stats.typeCounts[type] || 0;
-                    const pct = stats.total > 0 ? (count / stats.total) * 100 : 0;
-                    return (
-                      <div key={type} className="group">
-                        <div className="flex items-center justify-between mb-1">
-                          <div className="flex items-center gap-2">
-                            <span className={cfg.color}>{cfg.icon}</span>
-                            <span className="text-sm font-medium text-text-base">{cfg.label}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-text-base">{count.toLocaleString()}</span>
-                            <span className="text-xs text-text-muted">({pct.toFixed(1)}%)</span>
-                          </div>
-                        </div>
-                        <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full transition-all duration-700 ${
-                              type === 'url' ? 'bg-blue-400' :
-                              type === 'domain' ? 'bg-cyan-400' :
-                              type === 'ip' ? 'bg-emerald-400' :
-                              type === 'sha256' ? 'bg-amber-400' : 'bg-orange-400'
-                            }`}
-                            style={{ width: `${Math.max(pct, 0.5)}%` }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+          {/* Stats Cards - Single Strip Card */}
+          {!isLoading && !error && (
+            <>
+              <div className="bg-white rounded-md border border-gray-200 shadow-sm mb-6 flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-gray-200">
+                 <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
+                   <p className="text-xs font-medium text-gray-500 mb-1">Total IOCs</p>
+                   <p className="text-2xl font-normal text-blue-500 tracking-tight">{stats.total.toLocaleString()}</p>
+                 </div>
+                 {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => (
+                   <div key={type} className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
+                     <p className="text-xs font-medium text-gray-500 mb-1">{cfg.label}s</p>
+                     <p className={`text-2xl font-normal tracking-tight`} style={{ color: cfg.rawColor }}>
+                       {(stats.typeCounts[type] || 0).toLocaleString()}
+                     </p>
+                   </div>
+                 ))}
               </div>
 
-              {/* Two columns: Top Tags + Timeline */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Top Tags */}
-                <div className="bg-surface border border-gray-200 rounded-xl overflow-hidden">
-                  <div className="px-5 py-4 border-b border-gray-200">
-                    <h3 className="text-sm font-semibold text-text-base flex items-center gap-2">
-                      <Hash className="w-4 h-4 text-violet-400" />
+              {/* Analytics Charts */}
+              <div className="space-y-6">
+                
+                {/* Two columns: Donut + Timeline */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Donut Chart (IOC Type Distribution) */}
+                  <div className="bg-white rounded-md border border-gray-200 shadow-sm flex flex-col">
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
+                      <h3 className="text-[13px] font-medium text-gray-800">IOC Types</h3>
+                      <MoreVertical className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <div className="p-5 flex-1 flex flex-col items-center justify-center gap-6">
+                      {/* Calculate Donut gradients based on stats */}
+                      {(() => {
+                        let currentPct = 0;
+                        const gradients = Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => {
+                          const count = stats.typeCounts[type] || 0;
+                          const pct = stats.total > 0 ? (count / stats.total) * 100 : 0;
+                          const start = currentPct;
+                          const end = currentPct + pct;
+                          currentPct = end;
+                          return `${cfg.rawColor} ${start}% ${end}%`;
+                        });
+                        const conicString = gradients.length > 0 ? `conic-gradient(${gradients.join(', ')})` : 'conic-gradient(#e5e7eb 0% 100%)';
+                        
+                        return (
+                          <div className="relative w-36 h-36 rounded-full flex items-center justify-center" style={{ background: conicString }}>
+                            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-inner">
+                              <span className="text-xl font-bold text-gray-800">{stats.total > 0 ? Object.keys(stats.typeCounts).length : 0}</span>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                      
+                      {/* Legend */}
+                      <div className="flex flex-col gap-2 text-[12px] text-gray-600 w-full px-4">
+                        {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => {
+                           const count = stats.typeCounts[type] || 0;
+                           const pct = stats.total > 0 ? (count / stats.total) * 100 : 0;
+                           return (
+                             <div key={type} className="flex items-center justify-between">
+                               <div className="flex items-center gap-2">
+                                 <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cfg.rawColor }}></div>
+                                 <span>{cfg.label}</span>
+                               </div>
+                               <span className="font-medium">{pct.toFixed(1)}%</span>
+                             </div>
+                           );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Activity Timeline (Stacked Bar Area) */}
+                  <div className="bg-white rounded-md border border-gray-200 shadow-sm lg:col-span-2 flex flex-col">
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
+                      <h3 className="text-[13px] font-medium text-gray-800">
+                        {fromDate === toDate ? 'Hourly Activity evolution' : 'Daily Activity evolution'}
+                      </h3>
+                      <div className="text-[11px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded">timestamp per {fromDate === toDate ? '60 mins' : 'day'}</div>
+                    </div>
+                    <div className="p-5 flex-1 flex flex-col">
+                      {fromDate === toDate ? (
+                        <HourlyChart hourCounts={stats.hourCounts} />
+                      ) : (
+                        <DailyChart dayCounts={stats.dayCounts} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top Tags - Stacked Bar / Progress bars */}
+                <div className="bg-white rounded-md border border-gray-200 shadow-sm">
+                  <div className="px-5 py-3 border-b border-gray-100">
+                    <h3 className="text-[13px] font-medium text-gray-800 flex items-center gap-2">
                       Top Threat Tags
                     </h3>
                   </div>
-                  <div className="p-5 max-h-[260px] overflow-y-auto custom-scrollbar">
+                  <div className="p-6 overflow-y-auto max-h-[300px] custom-scrollbar bg-gray-50/50">
                     {stats.topTags.length === 0 ? (
-                      <p className="text-sm text-text-muted text-center py-4">No tagged IOCs in this period</p>
+                      <p className="text-sm font-medium text-gray-500 text-center py-6">No tagged IOCs in this period</p>
                     ) : (
-                      <div className="space-y-2.5">
+                      <div className="space-y-4">
                         {stats.topTags.map(([tag, count], i) => {
                           const maxCount = stats.topTags[0][1];
-                          const barW = Math.max((count / maxCount) * 100, 4);
+                          const barW = Math.max((count / maxCount) * 100, 2);
                           return (
-                            <button
-                              key={tag}
-                              onClick={() => { setTagFilter(tag); setActiveTab('feed'); }}
-                              className="w-full flex items-center gap-3 group text-left hover:bg-gray-50 rounded-lg px-2 py-1.5 -mx-2 transition-colors"
-                            >
-                              <span className="text-xs text-text-muted w-5 text-right font-mono">{i + 1}</span>
-                              <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${getTagColor('#' + tag)}`}>
-                                #{tag}
-                              </span>
-                              <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-gradient-to-r from-violet-400 to-purple-500 rounded-full transition-all duration-500" style={{ width: `${barW}%` }} />
+                            <div key={tag} className="group">
+                              <div className="flex items-center justify-between mb-1">
+                                <button
+                                  onClick={() => { setTagFilter(tag); setActiveTab('feed'); }}
+                                  className="text-xs font-medium text-gray-700 hover:text-blue-600 transition-colors uppercase tracking-wider"
+                                >
+                                  #{tag}
+                                </button>
+                                <span className="text-sm font-bold text-gray-800">{count}</span>
                               </div>
-                              <span className="text-xs font-semibold text-text-base min-w-[2.5rem] text-right">{count}</span>
-                            </button>
+                              <div className="w-full h-3 bg-gray-100 rounded-sm overflow-hidden flex">
+                                <div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${barW}%` }} />
+                              </div>
+                            </div>
                           );
                         })}
                       </div>
@@ -408,215 +429,242 @@ export default function TweetFeedClient() {
                   </div>
                 </div>
 
-                {/* Activity Timeline */}
-                <div className="bg-surface border border-gray-200 rounded-xl overflow-hidden">
-                  <div className="px-5 py-4 border-b border-gray-200">
-                    <h3 className="text-sm font-semibold text-text-base flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-emerald-400" />
-                      {fromDate === toDate ? 'Hourly Activity (UTC)' : 'Daily Activity'}
-                    </h3>
-                  </div>
-                  <div className="p-5">
-                    {fromDate === toDate ? (
-                      <HourlyChart hourCounts={stats.hourCounts} />
-                    ) : (
-                      <DailyChart dayCounts={stats.dayCounts} />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* ─── Loading State ─────────────────────────────────────── */}
+        {isLoading && (
+          <div>
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-full border-2 border-blue-200 flex items-center justify-center">
+                  <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                </div>
+              </div>
+              <p className="text-gray-500 font-medium text-sm">Fetching IOC intelligence...</p>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Error State ───────────────────────────────────────── */}
+        {error && !isLoading && (
+          <div>
+            <div className="bg-red-50 border border-red-200 rounded-md p-8 text-center max-w-lg mx-auto">
+              <AlertTriangle className="w-10 h-10 text-red-500 mx-auto mb-4" />
+              <p className="text-red-700 font-medium mb-2 text-lg">Failed to load data</p>
+              <p className="text-red-600/80 text-sm mb-6">{error}</p>
+              <button onClick={() => fetchData(fromDate, toDate)} className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium shadow-sm">
+                Retry
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Main Content ─────────────────────────────────────── */}
+        {!isLoading && !error && (
+          <div>
+            {/* Tab Navigation */}
+            <div className="flex border-b border-gray-200 mb-6 bg-white rounded-t-md px-6">
+              <button 
+                onClick={() => setActiveTab('feed')}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'feed' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+              >
+                Live Feed
+              </button>
+              <button 
+                onClick={() => setActiveTab('researchers')}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'researchers' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+              >
+                Researchers <span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">{stats.topResearchers.length}</span>
+              </button>
+            </div>
+
+            {/* ═══ Tab: Live Feed ═══ */}
+            {activeTab === 'feed' && (
+              <div className="bg-white rounded-md border border-gray-200 shadow-sm p-5">
+                {/* Search & Filter Bar */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search IOCs, researchers, tags..."
+                      className="w-full bg-white border border-gray-200 rounded-md text-sm text-gray-900 placeholder-gray-400 pl-11 pr-4 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 shadow-sm"
+                    />
+                    {searchQuery && (
+                      <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1">
+                        <X className="w-4 h-4" />
+                      </button>
                     )}
                   </div>
                 </div>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
 
-      {/* ─── Loading State ─────────────────────────────────────── */}
-      {isLoading && (
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="relative">
-              <div className="w-16 h-16 rounded-full border-2 border-cyan-500/20 flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-cyan-500 rounded-full animate-pulse" />
-            </div>
-            <p className="text-text-muted text-sm">Fetching IOC intelligence...</p>
-          </div>
-        </div>
-      )}
+                {/* Type Filter Chips */}
+                <div className="flex flex-wrap items-center gap-2 mb-6">
+                  <Filter className="w-4 h-4 text-gray-400 mr-2" />
+                  <FilterChip active={typeFilter === 'all'} onClick={() => setTypeFilter('all')} label="All" count={stats.total} />
+                  {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => (
+                    <FilterChip
+                      key={type}
+                      active={typeFilter === type}
+                      onClick={() => setTypeFilter(type as IOCTypeFilter)}
+                      label={cfg.label}
+                      count={stats.typeCounts[type] || 0}
+                    />
+                  ))}
 
-      {/* ─── Error State ───────────────────────────────────────── */}
-      {error && !isLoading && (
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-6 text-center">
-            <AlertTriangle className="w-8 h-8 text-red-400 mx-auto mb-3" />
-            <p className="text-red-400 font-medium mb-1">Failed to load data</p>
-            <p className="text-text-muted text-sm mb-4">{error}</p>
-            <button onClick={() => fetchData(fromDate, toDate)} className="px-4 py-2 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors text-sm font-medium">
-              Retry
-            </button>
-          </div>
-        </div>
-      )}
+                  {/* Active tag/researcher filter badges */}
+                  {tagFilter && (
+                    <span className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-600 border border-blue-200 rounded text-xs font-medium ml-2">
+                      #{tagFilter}
+                      <button onClick={() => setTagFilter(null)} className="hover:text-blue-800"><X className="w-3.5 h-3.5" /></button>
+                    </span>
+                  )}
+                  {researcherFilter && (
+                    <span className="flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded text-xs font-medium ml-2">
+                      @{researcherFilter}
+                      <button onClick={() => setResearcherFilter(null)} className="hover:text-indigo-800"><X className="w-3.5 h-3.5" /></button>
+                    </span>
+                  )}
 
-      {/* ─── Main Content ─────────────────────────────────────── */}
-      {!isLoading && !error && (
-        <div className="max-w-7xl mx-auto">
-          {/* Tab Navigation */}
-          <div className="flex items-center gap-1 bg-surface border border-gray-200 rounded-xl p-1 mb-6">
-            <TabButton active={activeTab === 'feed'} onClick={() => setActiveTab('feed')} icon={<Rss className="w-4 h-4" />} label="Live Feed" count={filteredData.length} />
-            <TabButton active={activeTab === 'researchers'} onClick={() => setActiveTab('researchers')} icon={<Users className="w-4 h-4" />} label="Researchers" count={stats.topResearchers.length} />
-          </div>
-
-          {/* ═══ Tab: Live Feed ═══ */}
-          {activeTab === 'feed' && (
-            <div>
-              {/* Search & Filter Bar */}
-              <div className="flex flex-col sm:flex-row gap-3 mb-4">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search IOCs, researchers, tags..."
-                    className="w-full bg-surface border border-gray-200 rounded-lg text-sm text-text-base placeholder-text-muted pl-10 pr-4 py-2.5 outline-none focus:border-cyan-500/50 transition-colors"
-                  />
-                  {searchQuery && (
-                    <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-base">
-                      <X className="w-4 h-4" />
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="ml-auto text-xs font-medium text-gray-500 hover:text-red-500 transition-colors"
+                    >
+                      Clear all
                     </button>
                   )}
                 </div>
-              </div>
 
-              {/* Type Filter Chips */}
-              <div className="flex flex-wrap items-center gap-2 mb-4">
-                <Filter className="w-4 h-4 text-text-muted" />
-                <FilterChip active={typeFilter === 'all'} onClick={() => setTypeFilter('all')} label="All" count={stats.total} />
-                {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => (
-                  <FilterChip
-                    key={type}
-                    active={typeFilter === type}
-                    onClick={() => setTypeFilter(type as IOCTypeFilter)}
-                    label={cfg.label}
-                    count={stats.typeCounts[type] || 0}
-                  />
-                ))}
-
-                {/* Active tag/researcher filter badges */}
-                {tagFilter && (
-                  <span className="flex items-center gap-1 px-2.5 py-1 bg-violet-500/10 text-violet-400 border border-violet-500/20 rounded-full text-xs font-medium">
-                    #{tagFilter}
-                    <button onClick={() => setTagFilter(null)} className="hover:text-violet-300"><X className="w-3 h-3" /></button>
-                  </span>
-                )}
-                {researcherFilter && (
-                  <span className="flex items-center gap-1 px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-medium">
-                    @{researcherFilter}
-                    <button onClick={() => setResearcherFilter(null)} className="hover:text-emerald-300"><X className="w-3 h-3" /></button>
-                  </span>
-                )}
-
-                {hasActiveFilters && (
-                  <button
-                    onClick={clearFilters}
-                    className="ml-auto text-xs text-text-muted hover:text-red-400 transition-colors"
-                  >
-                    Clear all
-                  </button>
-                )}
-              </div>
-
-              {/* IOC Feed List */}
-              {filteredData.length === 0 ? (
-                <EmptyState message="No IOCs match your filters" />
-              ) : (
-                <>
-                  <div className="space-y-2">
-                    {filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((entry, i) => (
-                      <IOCRow
-                        key={`${entry.value}-${i}`}
-                        entry={entry}
-                        onTagClick={(t) => { setTagFilter(t); setActiveTab('feed'); }}
-                        onUserClick={(u) => { setResearcherFilter(u); setActiveTab('feed'); }}
-                        onClick={() => setSelectedIOC(entry)}
-                      />
-                    ))}
+                {/* Table View */}
+                {filteredData.length === 0 ? (
+                  <EmptyState message="No IOCs match your filters" />
+                ) : (
+                  <div className="overflow-x-auto border border-gray-200 rounded-md">
+                    <table className="w-full text-left text-sm text-gray-600">
+                      <thead className="text-[11px] font-semibold text-gray-500 bg-gray-50 border-b border-gray-200">
+                        <tr>
+                          <th className="px-4 py-3">Time</th>
+                          <th className="px-4 py-3">Type</th>
+                          <th className="px-4 py-3">Value</th>
+                          <th className="px-4 py-3">Researcher</th>
+                          <th className="px-4 py-3">Tags</th>
+                          <th className="px-4 py-3 text-right">Tweet</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((entry, i) => {
+                          const cfg = IOC_TYPE_CONFIG[entry.type];
+                          return (
+                            <tr key={`${entry.value}-${i}`} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => setSelectedIOC(entry)}>
+                              <td className="px-4 py-3 whitespace-nowrap text-xs">
+                                {timeAgo(entry.date)}
+                              </td>
+                              <td className="px-4 py-3">
+                                <span className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider" style={{ color: cfg.rawColor }}>
+                                  {cfg.icon} {cfg.label}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 font-mono text-gray-800 break-all min-w-[200px]">
+                                {defang(entry.value, entry.type)}
+                              </td>
+                              <td className="px-4 py-3 whitespace-nowrap">
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); setResearcherFilter(entry.user); setActiveTab('feed'); }}
+                                  className="text-gray-700 hover:text-blue-600 hover:underline text-xs font-medium flex items-center gap-1"
+                                >
+                                  <Users className="w-3 h-3" /> @{entry.user}
+                                </button>
+                              </td>
+                              <td className="px-4 py-3">
+                                <div className="flex flex-wrap gap-1">
+                                  {entry.tags.slice(0, 2).map((tag) => (
+                                    <button
+                                      key={tag}
+                                      onClick={(e) => { e.stopPropagation(); setTagFilter(tag.replace('#', '').toLowerCase()); setActiveTab('feed'); }}
+                                      className={`text-[10px] px-1.5 py-0.5 rounded border font-medium hover:opacity-80 transition-opacity ${getTagColor(tag)}`}
+                                    >
+                                      {tag}
+                                    </button>
+                                  ))}
+                                  {entry.tags.length > 2 && (
+                                    <span className="text-[10px] text-gray-400">+{entry.tags.length - 2}</span>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-4 py-3 text-right">
+                                <a
+                                  href={entry.tweet}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="inline-flex p-1 text-gray-400 hover:text-blue-500 transition-colors"
+                                  title="View original tweet"
+                                >
+                                  <ExternalLink className="w-4 h-4" />
+                                </a>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
                   </div>
-                  
-                  {/* Pagination Controls */}
-                  {Math.ceil(filteredData.length / itemsPerPage) > 1 && (
-                    <div className="flex items-center justify-between mt-6 bg-surface border border-gray-200 rounded-xl px-4 py-3">
-                      <div className="text-sm text-text-muted hidden sm:block">
-                        Showing <span className="font-medium text-text-base">{((currentPage - 1) * itemsPerPage) + 1}</span> to <span className="font-medium text-text-base">{Math.min(currentPage * itemsPerPage, filteredData.length)}</span> of <span className="font-medium text-text-base">{filteredData.length}</span> results
-                      </div>
-                      
-                      <div className="flex items-center gap-1 w-full sm:w-auto justify-between sm:justify-end">
-                        <button
-                          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                          disabled={currentPage === 1}
-                          className="p-2 rounded-lg border border-gray-200 text-text-muted hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
-                          <ChevronLeft className="w-4 h-4" />
-                        </button>
-                        
-                        <div className="flex items-center gap-1 px-2">
-                          {Array.from({ length: Math.min(5, Math.ceil(filteredData.length / itemsPerPage)) }, (_, i) => {
-                            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-                            let pageNum = currentPage;
-                            if (currentPage <= 3) pageNum = i + 1;
-                            else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
-                            else pageNum = currentPage - 2 + i;
-                            
-                            if (pageNum < 1 || pageNum > totalPages) return null;
-                            
-                            return (
-                              <button
-                                key={pageNum}
-                                onClick={() => setCurrentPage(pageNum)}
-                                className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
-                                  currentPage === pageNum 
-                                    ? 'bg-cyan-500/10 text-cyan-500 border border-cyan-500/30' 
-                                    : 'text-text-muted hover:bg-gray-100 border border-transparent'
-                                }`}
-                              >
-                                {pageNum}
-                              </button>
-                            );
-                          })}
-                        </div>
-                        
-                        <button
-                          onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredData.length / itemsPerPage), p + 1))}
-                          disabled={currentPage === Math.ceil(filteredData.length / itemsPerPage)}
-                          className="p-2 rounded-lg border border-gray-200 text-text-muted hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
-                          <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
+                )}
+                
+                {/* Pagination Controls */}
+                {Math.ceil(filteredData.length / itemsPerPage) > 1 && (
+                  <div className="flex justify-between items-center mt-4">
+                    <div className="text-xs text-gray-500 font-medium">
+                      Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length}
                     </div>
-                  )}
-                </>
-              )}
-            </div>
-          )}
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                      >
+                        Previous
+                      </button>
+                      <div className="px-3 py-1.5 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200 rounded">
+                        {currentPage}
+                      </div>
+                      <button
+                        onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredData.length / itemsPerPage), p + 1))}
+                        disabled={currentPage === Math.ceil(filteredData.length / itemsPerPage)}
+                        className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
 
-          {/* ═══ Tab: Researchers ═══ */}
-          {activeTab === 'researchers' && (
-            <ResearchersGrid
-              researchers={stats.researcherDetails}
-              onUserClick={(u) => { setResearcherFilter(u); setActiveTab('feed'); }}
-            />
-          )}
-        </div>
-      )}
+            {/* ═══ Tab: Researchers ═══ */}
+            {activeTab === 'researchers' && (
+              <div className="bg-white rounded-md border border-gray-200 shadow-sm p-5">
+                <ResearchersGrid
+                  researchers={stats.researcherDetails}
+                  onUserClick={(u) => { setResearcherFilter(u); setActiveTab('feed'); }}
+                />
+              </div>
+            )}
+          </div>
+        )}
 
-      {/* ─── IOC Detail Modal ────────────────────────────────────── */}
-      {selectedIOC && (
-        <IOCDetailModal entry={selectedIOC} onClose={() => setSelectedIOC(null)} />
-      )}
+        {/* ─── IOC Detail Modal ────────────────────────────────────── */}
+        {selectedIOC && (
+          <IOCDetailModal entry={selectedIOC} onClose={() => setSelectedIOC(null)} />
+        )}
+      </main>
     </div>
   );
 }
@@ -625,122 +673,21 @@ export default function TweetFeedClient() {
 /*  Sub-Components                                                 */
 /* ════════════════════════════════════════════════════════════════ */
 
-function StatCard({ icon, label, value, accent, bgAccent }: { icon: React.ReactNode; label: string; value: string | number; accent: string; bgAccent: string }) {
-  return (
-    <div className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border ${bgAccent}`}>
-      <div className={`${accent}`}>{icon}</div>
-      <div>
-        <div className={`text-xl font-bold ${accent}`}>{value}</div>
-        <div className="text-xs text-text-muted">{label}</div>
-      </div>
-    </div>
-  );
-}
-
-function TabButton({ active, onClick, icon, label, count }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string; count?: number }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-        active
-          ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-sm'
-          : 'text-text-muted hover:text-text-base hover:bg-gray-100'
-      }`}
-    >
-      {icon}
-      <span className="hidden sm:inline">{label}</span>
-      {count !== undefined && (
-        <span className={`text-xs px-1.5 py-0.5 rounded-full ${active ? 'bg-cyan-500/20 text-cyan-500' : 'bg-gray-200 text-text-muted'}`}>
-          {count}
-        </span>
-      )}
-    </button>
-  );
-}
-
 function FilterChip({ active, onClick, label, count }: { active: boolean; onClick: () => void; label: string; count: number }) {
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+      className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 shadow-sm border ${
         active
-          ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
-          : 'text-text-muted hover:text-text-base bg-gray-50 border border-gray-200 hover:border-gray-300'
+          ? 'bg-blue-50 text-blue-600 border-blue-200'
+          : 'text-gray-600 bg-white border-gray-200 hover:bg-gray-50'
       }`}
     >
       {label}
-      <span className={`ml-1 ${active ? 'text-cyan-500' : 'text-text-muted/60'}`}>
+      <span className={`ml-1.5 px-1.5 py-0.5 rounded text-[10px] ${active ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'}`}>
         {count}
       </span>
     </button>
-  );
-}
-
-function IOCRow({ entry, onTagClick, onUserClick, onClick }: {
-  entry: IOCEntry;
-  onTagClick: (tag: string) => void;
-  onUserClick: (user: string) => void;
-  onClick: () => void;
-}) {
-  const cfg = IOC_TYPE_CONFIG[entry.type];
-  return (
-    <div
-      onClick={onClick}
-      className="group flex items-center gap-3 bg-surface border border-gray-200 rounded-xl px-4 py-3 hover:border-cyan-500/30 transition-all duration-200 cursor-pointer"
-    >
-      {/* Type Badge */}
-      <div className={`flex-shrink-0 w-9 h-9 rounded-lg border flex items-center justify-center ${cfg?.bgColor || 'bg-gray-100 border-gray-200'} group-hover:scale-105 transition-transform`}>
-        <span className={cfg?.color || 'text-text-muted'}>{cfg?.icon}</span>
-      </div>
-
-      {/* Value */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-mono text-text-base truncate">{defang(entry.value, entry.type)}</span>
-        </div>
-        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-          {entry.tags.slice(0, 3).map((tag) => (
-            <button
-              key={tag}
-              onClick={(e) => { e.stopPropagation(); onTagClick(tag.replace('#', '').toLowerCase()); }}
-              className={`text-[10px] px-1.5 py-0.5 rounded-full border font-medium hover:opacity-80 transition-opacity ${getTagColor(tag)}`}
-            >
-              {tag}
-            </button>
-          ))}
-          {entry.tags.length > 3 && (
-            <span className="text-[10px] text-text-muted">+{entry.tags.length - 3}</span>
-          )}
-        </div>
-      </div>
-
-      {/* Researcher */}
-      <button
-        onClick={(e) => { e.stopPropagation(); onUserClick(entry.user); }}
-        className="hidden md:flex items-center gap-1 text-xs text-text-muted hover:text-cyan-400 transition-colors whitespace-nowrap"
-      >
-        <Users className="w-3 h-3" />
-        @{entry.user}
-      </button>
-
-      {/* Tweet Link */}
-      <a
-        href={entry.tweet}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={(e) => e.stopPropagation()}
-        className="flex-shrink-0 p-1.5 text-text-muted hover:text-cyan-400 transition-colors"
-        title="View original tweet"
-      >
-        <ExternalLink className="w-3.5 h-3.5" />
-      </a>
-
-      {/* Time */}
-      <div className="flex items-center gap-1 text-xs text-text-muted whitespace-nowrap">
-        <Clock className="w-3 h-3" />
-        {timeAgo(entry.date)}
-      </div>
-    </div>
   );
 }
 
@@ -757,84 +704,77 @@ function IOCDetailModal({ entry, onClose }: { entry: IOCEntry; onClose: () => vo
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-surface border border-gray-200 rounded-2xl overflow-hidden flex flex-col shadow-2xl">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/20 backdrop-blur-sm">
+      <div className="relative w-full max-w-lg bg-white border border-gray-200 rounded-md overflow-hidden flex flex-col shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-cyan-500/5 to-blue-500/5">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${cfg?.bgColor}`}>
-              <span className={cfg?.color}>{cfg?.icon}</span>
+            <div className={`w-10 h-10 rounded border flex items-center justify-center bg-white shadow-sm`} style={{ borderColor: cfg.rawColor, color: cfg.rawColor }}>
+              {cfg?.icon}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-text-base">{cfg?.label || entry.type.toUpperCase()} IOC</h3>
-              <p className="text-xs text-text-muted">Indicator of Compromise Detail</p>
+              <h3 className="text-base font-medium text-gray-900">{cfg?.label || entry.type.toUpperCase()} Indicator</h3>
+              <p className="text-xs text-gray-500 mt-0.5">IOC Details</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-text-muted hover:text-text-base hover:bg-gray-100 rounded-lg transition-colors">
+          <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="p-6 space-y-5">
+        <div className="p-6 space-y-6">
           {/* IOC Value */}
           <div>
-            <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block">IOC Value (Defanged)</label>
-            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3">
-              <code className="flex-1 text-sm font-mono text-text-base break-all">{defang(entry.value, entry.type)}</code>
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2 block">IOC Value (Defanged)</label>
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-md px-4 py-3 shadow-inner">
+              <code className="flex-1 text-sm font-mono text-gray-900 break-all">{defang(entry.value, entry.type)}</code>
               <button
                 onClick={copyValue}
-                className="flex-shrink-0 p-2 text-text-muted hover:text-cyan-400 transition-colors"
+                className="flex-shrink-0 p-2 rounded bg-white border border-gray-200 text-gray-500 hover:text-blue-600 transition-all shadow-sm"
                 title="Copy raw value"
               >
-                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
           </div>
 
           {/* Meta Grid */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs text-text-muted mb-1 block">Type</label>
-              <span className={`inline-flex items-center gap-1.5 text-sm font-medium px-2.5 py-1 rounded-lg border ${cfg?.bgColor} ${cfg?.color}`}>
-                {cfg?.icon} {cfg?.label}
-              </span>
+            <div className="bg-gray-50 p-3 rounded-md border border-gray-100">
+              <label className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1 block">Researcher</label>
+              <span className="text-sm font-medium text-gray-800 flex items-center gap-1.5"><Users className="w-4 h-4 text-gray-400" /> @{entry.user}</span>
             </div>
-            <div>
-              <label className="text-xs text-text-muted mb-1 block">Researcher</label>
-              <span className="text-sm font-medium text-text-base">@{entry.user}</span>
-            </div>
-            <div>
-              <label className="text-xs text-text-muted mb-1 block">Timestamp</label>
-              <span className="text-sm text-text-base">{formatDateTime(entry.date)}</span>
-            </div>
-            <div>
-              <label className="text-xs text-text-muted mb-1 block">Source</label>
-              <a
-                href={entry.tweet}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
-              >
-                View Tweet <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
+            <div className="bg-gray-50 p-3 rounded-md border border-gray-100">
+              <label className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1 block">Timestamp</label>
+              <span className="text-sm font-medium text-gray-800 flex items-center gap-1.5"><Clock className="w-4 h-4 text-gray-400" /> {formatDateTime(entry.date)}</span>
             </div>
           </div>
 
           {/* Tags */}
           {entry.tags.length > 0 && (
             <div>
-              <label className="text-xs text-text-muted mb-2 block">Tags</label>
+              <label className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2 block">Associated Tags</label>
               <div className="flex flex-wrap gap-2">
                 {entry.tags.map((tag) => (
-                  <span key={tag} className={`text-xs px-2.5 py-1 rounded-full border font-medium ${getTagColor(tag)}`}>
+                  <span key={tag} className={`text-xs px-2.5 py-1 rounded border font-medium shadow-sm ${getTagColor(tag)}`}>
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
           )}
+          
+          <div className="pt-2">
+             <a
+               href={entry.tweet}
+               target="_blank"
+               rel="noopener noreferrer"
+               className="btn-primary w-full justify-center gap-2"
+             >
+               View Original Tweet <ExternalLink className="w-4 h-4" />
+             </a>
+          </div>
         </div>
       </div>
     </div>
@@ -846,31 +786,34 @@ function HourlyChart({ hourCounts }: { hourCounts: Record<number, number> }) {
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
   return (
-    <div>
-      <div className="flex items-end gap-[3px] h-[220px]">
+    <div className="h-full flex relative pt-4">
+      {/* Y Axis */}
+      <div className="flex flex-col justify-between text-[10px] text-gray-400 mr-2 py-2 w-8 text-right">
+        <span>{maxCount}</span>
+        <span>{Math.floor(maxCount/2)}</span>
+        <span>0</span>
+      </div>
+      <div className="flex-1 flex items-end gap-1 pb-1 border-b border-l border-gray-200 pl-1 relative">
+         {/* Grid lines */}
+         <div className="absolute w-full top-0 border-t border-gray-100 border-dashed" />
+         <div className="absolute w-full top-1/2 border-t border-gray-100 border-dashed" />
+        
         {hours.map((h) => {
           const count = hourCounts[h] || 0;
-          const height = count > 0 ? Math.max((count / maxCount) * 100, 4) : 2;
+          const height = count > 0 ? Math.max((count / maxCount) * 100, 2) : 0;
           return (
             <div key={h} className="flex-1 flex flex-col items-center justify-end group relative h-full">
               <div
-                className={`w-full rounded-t transition-all duration-300 ${count > 0 ? 'bg-cyan-400 group-hover:bg-cyan-300' : 'bg-gray-200'}`}
+                className="w-full bg-blue-500 border border-blue-600 transition-all duration-300 hover:bg-blue-400"
                 style={{ height: `${height}%` }}
               />
               {/* Tooltip */}
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-                {h}:00 — {count} IOCs
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white border border-gray-200 text-gray-800 text-[10px] font-medium rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                {h}:00 — <span className="text-blue-600">{count}</span> IOCs
               </div>
             </div>
           );
         })}
-      </div>
-      <div className="flex justify-between mt-1.5 text-[10px] text-text-muted">
-        <span>0:00</span>
-        <span>6:00</span>
-        <span>12:00</span>
-        <span>18:00</span>
-        <span>23:00</span>
       </div>
     </div>
   );
@@ -878,31 +821,36 @@ function HourlyChart({ hourCounts }: { hourCounts: Record<number, number> }) {
 
 function DailyChart({ dayCounts }: { dayCounts: Record<string, number> }) {
   const sortedDays = Object.entries(dayCounts).sort((a, b) => a[0].localeCompare(b[0]));
-  if (sortedDays.length === 0) return <p className="text-sm text-text-muted text-center py-4">No timeline data</p>;
+  if (sortedDays.length === 0) return <p className="text-sm font-medium text-gray-500 text-center py-10">No timeline data</p>;
 
   const maxCount = Math.max(...sortedDays.map(([_, c]) => c), 1);
 
   return (
-    <div>
-      <div className="flex items-end gap-[2px] h-[220px]">
+    <div className="h-full flex relative pt-4">
+      {/* Y Axis */}
+      <div className="flex flex-col justify-between text-[10px] text-gray-400 mr-2 py-2 w-8 text-right">
+        <span>{maxCount}</span>
+        <span>{Math.floor(maxCount/2)}</span>
+        <span>0</span>
+      </div>
+      <div className="flex-1 flex items-end gap-[2px] pb-1 border-b border-l border-gray-200 pl-1 relative">
+         <div className="absolute w-full top-0 border-t border-gray-100 border-dashed" />
+         <div className="absolute w-full top-1/2 border-t border-gray-100 border-dashed" />
+        
         {sortedDays.map(([day, count]) => {
-          const height = Math.max((count / maxCount) * 100, 4);
+          const height = Math.max((count / maxCount) * 100, 2);
           return (
             <div key={day} className="flex-1 flex flex-col items-center justify-end group relative h-full">
               <div
-                className="w-full rounded-t bg-cyan-400 group-hover:bg-cyan-300 transition-all duration-300"
+                className="w-full bg-blue-500 border border-blue-600 transition-all duration-300 hover:bg-blue-400"
                 style={{ height: `${height}%` }}
               />
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-                {day} — {count} IOCs
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white border border-gray-200 text-gray-800 text-[10px] font-medium rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                {day} — <span className="text-blue-600">{count}</span> IOCs
               </div>
             </div>
           );
         })}
-      </div>
-      <div className="flex justify-between mt-1.5 text-[10px] text-text-muted">
-        <span>{sortedDays[0]?.[0]?.slice(5) || ''}</span>
-        <span>{sortedDays[sortedDays.length - 1]?.[0]?.slice(5) || ''}</span>
       </div>
     </div>
   );
@@ -918,68 +866,72 @@ function ResearchersGrid({ researchers, onUserClick }: {
   return (
     <div>
       {/* Filter */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-        <input
-          type="text"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Filter researchers..."
-          className="w-full bg-surface border border-gray-200 rounded-lg text-sm text-text-base placeholder-text-muted pl-10 pr-4 py-2.5 outline-none focus:border-cyan-500/50 transition-colors"
-        />
-      </div>
-
-      <div className="flex items-center gap-2 text-xs text-text-muted mb-4">
-        <Users className="w-3.5 h-3.5 text-cyan-400" />
-        <span>{filtered.length} researchers contributing IOCs</span>
-      </div>
-
-      {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {filtered.map((r) => (
-          <button
-            key={r.user}
-            onClick={() => onUserClick(r.user)}
-            className="bg-surface border border-gray-200 rounded-xl px-4 py-4 text-left hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all duration-200 group"
-          >
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                {r.user.charAt(0).toUpperCase()}
-              </div>
-              <div className="min-w-0">
-                <div className="text-sm font-semibold text-text-base group-hover:text-cyan-400 transition-colors truncate">@{r.user}</div>
-                <div className="text-xs text-text-muted">{timeAgo(r.latest)}</div>
-              </div>
-              <span className="ml-auto text-lg font-bold text-cyan-400">{r.count}</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {r.tags.map((t) => (
-                <span key={t} className="text-[10px] px-1.5 py-0.5 bg-gray-100 text-text-muted rounded-full">
-                  #{t}
-                </span>
-              ))}
-              {r.tags.length === 0 && (
-                <span className="text-[10px] text-text-muted italic">No tags</span>
-              )}
-            </div>
-          </button>
-        ))}
-      </div>
-
-      {filtered.length === 0 && (
-        <div className="text-center py-8 text-text-muted text-sm">
-          No researchers matching &quot;{filter}&quot;
+      <div className="flex items-center gap-4 mb-6 border-b border-gray-100 pb-4">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="Filter researchers..."
+            className="w-full bg-white border border-gray-200 rounded-md text-sm text-gray-900 placeholder-gray-400 pl-10 pr-4 py-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50"
+          />
         </div>
-      )}
+      </div>
+
+      {/* Table view for researchers to match Wazuh style */}
+      <div className="overflow-x-auto border border-gray-200 rounded-md">
+        <table className="w-full text-left text-sm text-gray-600">
+          <thead className="text-[11px] font-semibold text-gray-500 bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th className="px-4 py-3">Researcher</th>
+              <th className="px-4 py-3">IOC Count</th>
+              <th className="px-4 py-3">Last Active</th>
+              <th className="px-4 py-3">Top Tags</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {filtered.map((r) => (
+              <tr key={r.user} className="hover:bg-gray-50 transition-colors">
+                <td className="px-4 py-3">
+                  <button onClick={() => onUserClick(r.user)} className="flex items-center gap-2 group text-left">
+                    <div className="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold border border-blue-200">
+                      {r.user.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">@{r.user}</span>
+                  </button>
+                </td>
+                <td className="px-4 py-3 font-medium text-blue-600">{r.count}</td>
+                <td className="px-4 py-3 text-xs">{timeAgo(r.latest)}</td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-wrap gap-1">
+                    {r.tags.map((t) => (
+                      <span key={t} className="text-[10px] px-1.5 py-0.5 bg-gray-100 border border-gray-200 text-gray-600 rounded">
+                        #{t}
+                      </span>
+                    ))}
+                    {r.tags.length === 0 && <span className="text-[10px] text-gray-400 italic">No tags</span>}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {filtered.length === 0 && (
+          <div className="text-center py-10 text-gray-500 text-sm">
+            No researchers matching &quot;{filter}&quot;
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 gap-3 text-text-muted">
+    <div className="flex flex-col items-center justify-center py-20 gap-4 text-gray-500 bg-gray-50 border border-gray-200 rounded-md">
       <Shield className="w-10 h-10 opacity-30" />
-      <p className="text-sm">{message}</p>
+      <p className="font-medium text-sm">{message}</p>
     </div>
   );
 }
