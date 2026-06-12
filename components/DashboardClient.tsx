@@ -69,7 +69,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
+    <div className="min-h-screen bg-base text-text-base font-sans pb-12">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
         {/* Page Title Header */}
@@ -81,36 +81,36 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
         </div>
 
         {/* Global Overview Stats - Single Strip Card */}
-        <div className="bg-white rounded-md border border-gray-200 shadow-sm mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200">
+        <div className="bg-neutral rounded-md border border-border shadow-sm mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200">
            <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-sm font-medium text-gray-600 mb-1">Total PoCs Tracked</p>
+             <p className="text-sm font-medium text-text-muted mb-1">Total PoCs Tracked</p>
              <p className="text-3xl font-normal text-blue-500 tracking-tight">{initialData.length.toLocaleString()}</p>
            </div>
            <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-sm font-medium text-gray-600 mb-1">Trending PoCs (30+ Stars)</p>
+             <p className="text-sm font-medium text-text-muted mb-1">Trending PoCs (30+ Stars)</p>
              <p className="text-3xl font-normal text-red-500 tracking-tight">
                {initialData.filter(p => p.stargazers_count >= 30).length.toLocaleString()}
              </p>
            </div>
            <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-sm font-medium text-gray-600 mb-1">Critical Severities</p>
+             <p className="text-sm font-medium text-text-muted mb-1">Critical Severities</p>
              <p className="text-3xl font-normal text-orange-500 tracking-tight">
                {initialData.filter(p => p.severity === 'CRITICAL').length.toLocaleString()}
              </p>
            </div>
            <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-sm font-medium text-gray-600 mb-1">Data Source</p>
+             <p className="text-sm font-medium text-text-muted mb-1">Data Source</p>
              <a href="https://poc-in-github.motikan2010.net" target="_blank" rel="noopener noreferrer" className="text-base font-medium text-blue-500 hover:underline mt-1 truncate max-w-[200px]">poc-in-github</a>
            </div>
         </div>
         
         {/* Controls Section */}
         <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
-          <div className="flex flex-1 items-center bg-white rounded-md border border-gray-200 focus-within:border-blue-500 px-4 py-2 shadow-sm">
-            <Search className="h-4 w-4 text-gray-400 shrink-0 mr-3" />
+          <div className="flex flex-1 items-center bg-neutral rounded-md border border-border focus-within:border-blue-500 px-4 py-2 shadow-sm">
+            <Search className="h-4 w-4 text-text-muted shrink-0 mr-3" />
             <input
               type="text"
-              className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-gray-400 text-gray-900"
+              className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-text-muted text-text-base"
               placeholder="Search CVE ID, keyword, or repository..."
               value={searchTerm}
               onChange={(e) => {
@@ -120,23 +120,23 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
             />
           </div>
 
-          <div className="flex bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden text-sm">
+          <div className="flex bg-neutral rounded-md border border-border shadow-sm overflow-hidden text-sm">
             <button
               onClick={() => handleSort('date')}
-              className={`px-4 py-2 font-medium transition-colors border-r border-gray-200 ${
+              className={`px-4 py-2 font-medium transition-colors border-r border-border ${
                 sortBy.field === 'date' 
                   ? 'bg-blue-50 text-blue-600' 
-                  : 'text-gray-600 hover:bg-gray-50'
+                  : 'text-text-muted hover:bg-surface'
               }`}
             >
               Time {sortBy.field === 'date' && (sortBy.order === 'desc' ? '↓' : '↑')}
             </button>
             <button
               onClick={() => handleSort('score')}
-              className={`px-4 py-2 font-medium transition-colors border-r border-gray-200 ${
+              className={`px-4 py-2 font-medium transition-colors border-r border-border ${
                 sortBy.field === 'score' 
                   ? 'bg-blue-50 text-blue-600' 
-                  : 'text-gray-600 hover:bg-gray-50'
+                  : 'text-text-muted hover:bg-surface'
               }`}
             >
               CVSS {sortBy.field === 'score' && (sortBy.order === 'desc' ? '↓' : '↑')}
@@ -146,7 +146,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
               className={`px-4 py-2 font-medium transition-colors ${
                 sortBy.field === 'stars' 
                   ? 'bg-blue-50 text-blue-600' 
-                  : 'text-gray-600 hover:bg-gray-50'
+                  : 'text-text-muted hover:bg-surface'
               }`}
             >
               Stars {sortBy.field === 'stars' && (sortBy.order === 'desc' ? '↓' : '↑')}
@@ -155,20 +155,20 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
         </div>
 
         {/* Table Section (Wazuh Style) */}
-        <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden mb-6">
-          <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-base font-medium text-gray-900">Security alerts ({filteredAndSortedData.length} total)</h2>
+        <div className="bg-neutral rounded-md border border-border shadow-sm overflow-hidden mb-6">
+          <div className="px-5 py-4 border-b border-border flex justify-between items-center">
+            <h2 className="text-base font-medium text-text-base">Security alerts ({filteredAndSortedData.length} total)</h2>
           </div>
           
           <div className="overflow-x-auto min-h-[400px]">
             {currentData.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+              <div className="flex flex-col items-center justify-center py-20 text-text-muted">
                 <Bug className="h-10 w-10 mb-4 opacity-50" />
                 <p>No vulnerabilities found matching your search.</p>
               </div>
             ) : (
-              <table className="w-full text-left text-sm text-gray-600">
-                <thead className="text-[11px] font-semibold text-gray-500 bg-white border-b border-gray-200 sticky top-0">
+              <table className="w-full text-left text-sm text-text-muted">
+                <thead className="text-[11px] font-semibold text-text-muted bg-neutral border-b border-border sticky top-0">
                   <tr>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">Time <ChevronDown className="w-3 h-3 inline text-blue-500" /></th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">Agent name</th>
@@ -185,14 +185,14 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
                     const level = getSeverityLevel(poc.cvss_score);
                     
                     return (
-                      <tr key={poc.id} className="hover:bg-gray-50 transition-colors group">
+                      <tr key={poc.id} className="hover:bg-surface transition-colors group">
                         <td className="px-5 py-3 whitespace-nowrap">
-                          <span className="text-gray-400 mr-1">&gt;</span> 
+                          <span className="text-text-muted mr-1">&gt;</span> 
                           {new Date(poc.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                         </td>
                         <td className="px-5 py-3">
                           <span className="flex items-center gap-1.5 max-w-[150px] truncate" title={poc.repo_name}>
-                            <GitBranch className="w-3.5 h-3.5 text-gray-400" />
+                            <GitBranch className="w-3.5 h-3.5 text-text-muted" />
                             {poc.repo_name ? (poc.repo_name.split('/')[1] || poc.repo_name) : 'Unknown'}
                           </span>
                         </td>
@@ -212,7 +212,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
                           </span>
                         </td>
                         <td className="px-5 py-3">
-                          <span className={`flex items-center gap-1 font-medium ${isViral ? 'text-orange-500' : 'text-gray-600'}`}>
+                          <span className={`flex items-center gap-1 font-medium ${isViral ? 'text-orange-500' : 'text-text-muted'}`}>
                             <Star className={`w-3.5 h-3.5 ${isViral ? 'fill-orange-500' : ''}`} />
                             {poc.stargazers_count}
                           </span>
@@ -222,7 +222,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
                             href={poc.html_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded transition-colors"
+                            className="inline-flex items-center justify-center p-1.5 text-text-muted hover:text-blue-500 hover:bg-blue-50 rounded transition-colors"
                             title="View Repository"
                           >
                             <ExternalLink className="w-4 h-4" />
@@ -238,15 +238,15 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
           
           {/* Pagination Footer */}
           {totalPages > 1 && (
-            <div className="px-5 py-3 border-t border-gray-200 flex justify-between items-center bg-gray-50">
-              <div className="text-xs text-gray-500 font-medium">
+            <div className="px-5 py-3 border-t border-border flex justify-between items-center bg-surface">
+              <div className="text-xs text-text-muted font-medium">
                 Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}
               </div>
               <div className="flex gap-1">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                  className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
                 >
                   Previous
                 </button>
@@ -256,7 +256,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                  className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
                 >
                   Next
                 </button>

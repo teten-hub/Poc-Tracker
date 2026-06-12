@@ -1,6 +1,31 @@
 1:"$Sreact.fragment"
-2:I[96777,["/_next/static/chunks/0pog85p1f65l3.js","/_next/static/chunks/0a0o4dde.oa2w.js","/_next/static/chunks/15ntjhm47t.-h.js"],"default"]
-3:I[97367,["/_next/static/chunks/0pog85p1f65l3.js","/_next/static/chunks/0a0o4dde.oa2w.js"],"OutletBoundary"]
-4:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"latestPocs":[{"id":"1265869688","cve_id":"CVE-2026-5027","name":"-CVE-2026-5027","owner":"HORKimhab","full_name":"HORKimhab/-CVE-2026-5027","html_url":"https://github.com/HORKimhab/-CVE-2026-5027","description":" CVE-2026-5027 - Draft","stargazers_count":"0","vuln_description":"The 'POST /api/v2/files' endpoint does not sanitize the 'filename' parameter from the multipart form data, allowing an attacker to write files to arbitrary locations on the filesystem using path traversal sequences ('../').","created_at":"2026-06-11 15:32:34","updated_at":"2026-06-11 15:32:49","pushed_at":"2026-06-11 15:32:38","inserted_at":"2026-06-11 16:36:43"},{"id":"1265857517","cve_id":"CVE-2026-50507","name":"CVE-2026-50507","owner":"HORKimhab","full_name":"HORKimhab/CVE-2026-50507","html_url":"https://github.com/HORKimhab/CVE-2026-50507","description":"CVE-2026-50507 - Draft","stargazers_count":"0","vuln_description":"Protection mechanism failure in Windows BitLocker allows an unauthorized attacker to bypass a security feature with a physical attack.","created_at":"2026-06-11 15:18:03","updated_at":"2026-06-11 15:22:58","pushed_at":"2026-06-11 15:18:07","inserted_at":"2026-06-11 16:36:43"},{"id":"1265843072","cve_id":"CVE-2017-9841","name":"CVE-2017-9841-PHPUnit-Remote-Code-Execution-RCE-PoC","owner":"krisdewa","full_name":"krisdewa/CVE-2017-9841-PHPUnit-Remote-Code-Execution-RCE-PoC","html_url":"https://github.com/krisdewa/CVE-2017-9841-PHPUnit-Remote-Code-Execution-RCE-PoC","description":"CVE-2017-9841 is a Remote Code Execution (RCE) vulnerability in the PHPUnit library affecting versions prior to 5.6.3 and 6.x prior to 6.4.2.","stargazers_count":"0","vuln_description":"Util/PHP/eval-stdin.php in PHPUnit before 4.8.28 and 5.x before 5.6.3 allows remote attackers to execute arbitrary PHP code via HTTP POST data beginning with a \"<?php \" substring, as demonstrated by an attack on a site with an exposed /vendor folder, i.e., external access to the /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php URI.","created_at":"2026-06-11 14:59:55","updated_at":"2026-06-11 15:02:28","pushed_at":"2026-06-11 15:00:58","inserted_at":"2026-06-11 16:36:39"}]}],[["$","script","script-0",{"src":"/_next/static/chunks/15ntjhm47t.-h.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"y7ldcDcPTZVKPTYtfNU6G"}
-5:null
+2:I[96777,["/_next/static/chunks/0wrmwqukc9tt-.js","/_next/static/chunks/0a0o4dde.oa2w.js","/_next/static/chunks/0m0z7t45v9r65.js"],"default"]
+4:I[97367,["/_next/static/chunks/0wrmwqukc9tt-.js","/_next/static/chunks/0a0o4dde.oa2w.js"],"OutletBoundary"]
+5:"$Sreact.suspense"
+3:T400,In the Linux kernel, the following vulnerability has been resolved:
+
+netfilter: nf_tables: fix inverted genmask check in nft_map_catchall_activate()
+
+nft_map_catchall_activate() has an inverted element activity check
+compared to its non-catchall counterpart nft_mapelem_activate() and
+compared to what is logically required.
+
+nft_map_catchall_activate() is called from the abort path to re-activate
+catchall map elements that were deactivated during a failed transaction.
+It should skip elements that are already active (they don't need
+re-activation) and process elements that are inactive (they need to be
+restored). Instead, the current code does the opposite: it skips inactive
+elements and processes active ones.
+
+Compare the non-catchall activate callback, which is correct:
+
+  nft_mapelem_activate():
+    if (nft_set_elem_active(ext, iter->genmask))
+        return 0;   /* skip active, process inactive */
+
+With the buggy catchall version:
+
+  nft_map_catchall_activate():
+    if (!nft_set_elem_active(ext, genmask))
+ 0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"latestPocs":[{"id":"1266459179","cve_id":"CVE-2026-23111","name":"CVE-2026-23111-nftables-lab","owner":"ishankaru","full_name":"ishankaru/CVE-2026-23111-nftables-lab","html_url":"https://github.com/ishankaru/CVE-2026-23111-nftables-lab","description":"Exposure checker and safe disposable-VM lab for CVE-2026-23111 (Linux nf_tables use-after-free local privilege escalation). Defensive: detection, mitigation, multi-distro lab. No exploit.","stargazers_count":"0","vuln_description":"$3","created_at":"2026-06-12 01:28:31","updated_at":"2026-06-12 03:06:15","pushed_at":"2026-06-12 03:05:23","inserted_at":"2026-06-12 04:36:43"},{"id":"1266417578","cve_id":"CVE-2026-23479","name":"redis-cve-2026-23479-scanner","owner":"v1c0mmrt","full_name":"v1c0mmrt/redis-cve-2026-23479-scanner","html_url":"https://github.com/v1c0mmrt/redis-cve-2026-23479-scanner","description":"CVE-2026-23479 Redis Use-After-Free vulnerability detection tool","stargazers_count":"0","vuln_description":"Redis is an in-memory data structure store. In redis-server from 7.2.0 until 8.6.3, the unblock client flow does not handle an error return from `processCommandAndResetClient` when re-executing a blocked command. If a blocked client is evicted during this flow, an authenticated attacker can trigger a use-after-free that may lead to remote code execution. This has been patched in version 8.6.3.","created_at":"2026-06-12 00:43:56","updated_at":"2026-06-12 01:25:59","pushed_at":"2026-06-12 01:18:22","inserted_at":"2026-06-12 04:36:43"},{"id":"1266392105","cve_id":"CVE-2026-11645","name":"CVE-2026-11645","owner":"0xBlackash","full_name":"0xBlackash/CVE-2026-11645","html_url":"https://github.com/0xBlackash/CVE-2026-11645","description":"CVE-2026-11645","stargazers_count":"1","vuln_description":"Out of bounds read and write in V8 in Google Chrome prior to 149.0.7827.103 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)","created_at":"2026-06-12 00:17:47","updated_at":"2026-06-12 03:03:46","pushed_at":"2026-06-12 00:58:17","inserted_at":"2026-06-12 04:36:43"}]}],[["$","script","script-0",{"src":"/_next/static/chunks/0m0z7t45v9r65.js","async":true}]],["$","$L4",null,{"children":["$","$5",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"09PNDjusq38tQl4mLcWiT"}
+6:null

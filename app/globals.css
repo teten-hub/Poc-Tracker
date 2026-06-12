@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #ffeb6d;
-  --color-secondary: #292929;
-  --color-tertiary: #3d82f6;
-  --color-neutral: #ffffff;
-  --color-surface: #f5f5f5;
-  --color-on-surface: #292929;
-  --color-muted: #b7c6d7;
-  --color-success: #2f9e44;
-  --color-error: #d64545;
-  --color-border: #e7e7e7;
-  --color-primary-contrast: #000000;
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-neutral: var(--neutral);
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-muted: var(--muted);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-border: var(--border);
+  --color-primary-contrast: var(--primary-contrast);
 
-  --color-base: var(--color-surface);
-  --color-text-base: var(--color-secondary);
-  --color-text-muted: #666666; /* Need a legible muted text color, #b7c6d7 is too pale for text */
-  --color-text-negative: var(--color-error);
+  --color-base: var(--base);
+  --color-text-base: var(--text-base);
+  --color-text-muted: var(--text-muted);
+  --color-text-negative: var(--text-negative);
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -56,6 +56,44 @@
 
 /* Base Body Styles */
 @layer base {
+  :root {
+    --primary: #ffeb6d;
+    --secondary: #292929;
+    --tertiary: #3d82f6;
+    --neutral: #ffffff;
+    --surface: #f5f5f5;
+    --on-surface: #292929;
+    --muted: #b7c6d7;
+    --success: #2f9e44;
+    --error: #d64545;
+    --border: #e7e7e7;
+    --primary-contrast: #000000;
+    
+    --base: var(--surface);
+    --text-base: var(--secondary);
+    --text-muted: #666666;
+    --text-negative: var(--error);
+  }
+
+  .dark {
+    --primary: #ffeb6d;
+    --secondary: #f5f5f5;
+    --tertiary: #3b82f6;
+    --neutral: #1a1b1e;
+    --surface: #141517;
+    --on-surface: #e4e5e7;
+    --muted: #3f434a;
+    --success: #40c057;
+    --error: #fa5252;
+    --border: #2c2e33;
+    --primary-contrast: #000000;
+    
+    --base: var(--surface);
+    --text-base: var(--secondary);
+    --text-muted: #9ca3af;
+    --text-negative: var(--error);
+  }
+
   body {
     background-color: var(--color-base);
     color: var(--color-text-base);

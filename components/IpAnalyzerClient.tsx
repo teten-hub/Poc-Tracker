@@ -148,7 +148,7 @@ export default function IpAnalyzerClient() {
   const alertLevel = getAlertLevel();
 
   return (
-    <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
+    <div className="min-h-screen bg-base text-text-base font-sans pb-12">
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
         
         {/* Page Title Header */}
@@ -162,11 +162,11 @@ export default function IpAnalyzerClient() {
         {/* Search Bar */}
         <div className="mb-8">
           <form onSubmit={handleAnalyze} className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-1 items-center bg-white border border-gray-200 rounded-md focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 px-4 py-2 shadow-sm transition-all">
-              <Search className="h-4 w-4 text-gray-400 shrink-0 mr-3" />
+            <div className="flex flex-1 items-center bg-neutral border border-border rounded-md focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 px-4 py-2 shadow-sm transition-all">
+              <Search className="h-4 w-4 text-text-muted shrink-0 mr-3" />
               <input
                 type="text"
-                className="w-full bg-transparent border-0 outline-none text-sm placeholder-gray-400 text-gray-900 font-mono py-1"
+                className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-text-muted text-text-base font-mono py-1"
                 placeholder="Enter IP Address (e.g. 8.8.8.8)..."
                 value={ipAddress}
                 onChange={(e) => setIpAddress(e.target.value)}
@@ -188,17 +188,17 @@ export default function IpAnalyzerClient() {
           <div className="space-y-6">
             
             {/* Overview Card */}
-            <div className="bg-white rounded-md border border-gray-200 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="bg-neutral rounded-md border border-border shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3">
-                  <h3 className="text-2xl font-mono font-medium tracking-tight text-gray-900">{results.ip}</h3>
+                  <h3 className="text-2xl font-mono font-medium tracking-tight text-text-base">{results.ip}</h3>
                   {alertLevel && (
                     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border ${alertLevel.colorClass}`}>
                       {alertLevel.icon} {alertLevel.label}
                     </span>
                   )}
                 </div>
-                <p className="text-sm font-medium text-gray-500 mt-2 flex items-center gap-2">
+                <p className="text-sm font-medium text-text-muted mt-2 flex items-center gap-2">
                   <Globe className="w-4 h-4" />
                   {results.location.city !== 'N/A' ? results.location.city + ', ' : ''}
                   {results.location.country} • {results.location.isp}
@@ -210,28 +210,28 @@ export default function IpAnalyzerClient() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
               {/* 1. VirusTotal Section */}
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm flex flex-col">
-                <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+              <div className="bg-neutral rounded-md border border-border shadow-sm flex flex-col">
+                <div className="p-5 border-b border-border flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-200">
                       <Shield className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-[13px] text-gray-800">VirusTotal Analysis</h4>
+                      <h4 className="font-medium text-[13px] text-text-base">VirusTotal Analysis</h4>
                     </div>
                   </div>
                   {!results.vt.configured ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200 font-semibold uppercase tracking-wider flex items-center gap-1">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-surface text-text-muted border border-border font-semibold uppercase tracking-wider flex items-center gap-1">
                       <Lock className="w-3 h-3" /> Key Missing
                     </span>
                   ) : (
-                    <MoreVertical className="w-4 h-4 text-gray-400" />
+                    <MoreVertical className="w-4 h-4 text-text-muted" />
                   )}
                 </div>
 
                 <div className="p-5 flex-1">
                   {!results.vt.configured ? (
-                    <div className="text-sm text-gray-500 leading-relaxed text-center py-10">
+                    <div className="text-sm text-text-muted leading-relaxed text-center py-10">
                       <p>API Key not configured.</p>
                     </div>
                   ) : !results.vt.success ? (
@@ -256,24 +256,24 @@ export default function IpAnalyzerClient() {
                           return (
                             <>
                               <div className="relative w-32 h-32 rounded-full flex items-center justify-center" style={{ background: conic }}>
-                                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-inner flex-col">
-                                  <span className="text-2xl font-bold text-gray-800">{malicious + suspicious}</span>
-                                  <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Flags</span>
+                                <div className="w-24 h-24 bg-neutral rounded-full flex items-center justify-center shadow-inner flex-col">
+                                  <span className="text-2xl font-bold text-text-base">{malicious + suspicious}</span>
+                                  <span className="text-[10px] text-text-muted font-medium uppercase tracking-wider">Flags</span>
                                 </div>
                               </div>
                               
-                              <div className="flex flex-col gap-3 text-[12px] text-gray-600">
+                              <div className="flex flex-col gap-3 text-[12px] text-text-muted">
                                 <div className="flex items-center justify-between gap-4">
                                   <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#d64545]"></div> Malicious</div>
-                                  <span className="font-bold text-gray-800">{malicious}</span>
+                                  <span className="font-bold text-text-base">{malicious}</span>
                                 </div>
                                 <div className="flex items-center justify-between gap-4">
                                   <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#ffeb6d]"></div> Suspicious</div>
-                                  <span className="font-bold text-gray-800">{suspicious}</span>
+                                  <span className="font-bold text-text-base">{suspicious}</span>
                                 </div>
                                 <div className="flex items-center justify-between gap-4">
                                   <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#2f9e44]"></div> Clean/Unrated</div>
-                                  <span className="font-bold text-gray-800">{clean}</span>
+                                  <span className="font-bold text-text-base">{clean}</span>
                                 </div>
                               </div>
                             </>
@@ -283,24 +283,24 @@ export default function IpAnalyzerClient() {
 
                       {/* Network & Registry Details */}
                       <div>
-                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-3 border-b border-gray-100 pb-2">
+                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-3 border-b border-border pb-2">
                           Network Metadata
                         </h5>
-                        <div className="space-y-1.5 text-xs text-gray-600">
+                        <div className="space-y-1.5 text-xs text-text-muted">
                           <div className="flex justify-between py-1">
-                            <span className="text-gray-500">IP Network Block</span>
+                            <span className="text-text-muted">IP Network Block</span>
                             <span className="font-mono font-medium">{results.vt.network || 'Unknown'}</span>
                           </div>
                           <div className="flex justify-between py-1">
-                            <span className="text-gray-500">ASN Number</span>
+                            <span className="text-text-muted">ASN Number</span>
                             <span className="font-mono font-medium">{results.vt.asn ? `AS${results.vt.asn}` : 'N/A'}</span>
                           </div>
                           <div className="flex justify-between py-1">
-                            <span className="text-gray-500">Autonomous System Owner</span>
+                            <span className="text-text-muted">Autonomous System Owner</span>
                             <span className="font-medium truncate max-w-[200px] text-right">{results.vt.as_owner || 'N/A'}</span>
                           </div>
                           <div className="flex justify-between py-1">
-                            <span className="text-gray-500">Internet Registry</span>
+                            <span className="text-text-muted">Internet Registry</span>
                             <span className="font-medium uppercase">{results.vt.regional_internet_registry || 'N/A'}</span>
                           </div>
                         </div>
@@ -311,28 +311,28 @@ export default function IpAnalyzerClient() {
               </div>
 
               {/* 2. AbuseIPDB Section */}
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm flex flex-col">
-                <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+              <div className="bg-neutral rounded-md border border-border shadow-sm flex flex-col">
+                <div className="p-5 border-b border-border flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded bg-purple-50 flex items-center justify-center text-purple-600 border border-purple-200">
                       <AlertTriangle className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-[13px] text-gray-800">AbuseIPDB Threat Check</h4>
+                      <h4 className="font-medium text-[13px] text-text-base">AbuseIPDB Threat Check</h4>
                     </div>
                   </div>
                   {!results.abuseipdb.configured ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200 font-semibold uppercase tracking-wider flex items-center gap-1">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-surface text-text-muted border border-border font-semibold uppercase tracking-wider flex items-center gap-1">
                       <Lock className="w-3 h-3" /> Key Missing
                     </span>
                   ) : (
-                    <MoreVertical className="w-4 h-4 text-gray-400" />
+                    <MoreVertical className="w-4 h-4 text-text-muted" />
                   )}
                 </div>
 
                 <div className="p-5 flex-1">
                   {!results.abuseipdb.configured ? (
-                    <div className="text-sm text-gray-500 leading-relaxed text-center py-10">
+                    <div className="text-sm text-text-muted leading-relaxed text-center py-10">
                       <p>API Key not configured.</p>
                     </div>
                   ) : !results.abuseipdb.success ? (
@@ -350,19 +350,19 @@ export default function IpAnalyzerClient() {
                           return (
                             <>
                               <div className="relative w-32 h-32 rounded-full flex items-center justify-center" style={{ background: conic }}>
-                                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-inner flex-col">
-                                  <span className="text-2xl font-bold text-gray-800">{score}%</span>
-                                  <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Confidence</span>
+                                <div className="w-24 h-24 bg-neutral rounded-full flex items-center justify-center shadow-inner flex-col">
+                                  <span className="text-2xl font-bold text-text-base">{score}%</span>
+                                  <span className="text-[10px] text-text-muted font-medium uppercase tracking-wider">Confidence</span>
                                 </div>
                               </div>
-                              <div className="flex flex-col gap-3 text-[12px] text-gray-600">
+                              <div className="flex flex-col gap-3 text-[12px] text-text-muted">
                                 <div className="flex items-center justify-between gap-4">
-                                  <span className="text-gray-500">Total Reports</span>
-                                  <span className="font-bold text-gray-800">{results.abuseipdb.reported_times}</span>
+                                  <span className="text-text-muted">Total Reports</span>
+                                  <span className="font-bold text-text-base">{results.abuseipdb.reported_times}</span>
                                 </div>
                                 <div className="flex items-center justify-between gap-4">
-                                  <span className="text-gray-500">Unique Reporters</span>
-                                  <span className="font-bold text-gray-800">{results.abuseipdb.num_distinct_users}</span>
+                                  <span className="text-text-muted">Unique Reporters</span>
+                                  <span className="font-bold text-text-base">{results.abuseipdb.num_distinct_users}</span>
                                 </div>
                               </div>
                             </>
@@ -372,24 +372,24 @@ export default function IpAnalyzerClient() {
 
                       {/* Meta Details */}
                       <div>
-                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-3 border-b border-gray-100 pb-2">
+                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-3 border-b border-border pb-2">
                           Host & Usage Metadata
                         </h5>
-                        <div className="space-y-1.5 text-xs text-gray-600">
+                        <div className="space-y-1.5 text-xs text-text-muted">
                           <div className="flex justify-between py-1">
-                            <span className="text-gray-500">Usage Classification</span>
+                            <span className="text-text-muted">Usage Classification</span>
                             <span className="font-medium">{results.abuseipdb.usage_type || 'Unknown'}</span>
                           </div>
                           <div className="flex justify-between py-1">
-                            <span className="text-gray-500">IP Primary Domain</span>
+                            <span className="text-text-muted">IP Primary Domain</span>
                             <span className="font-mono font-medium text-blue-600">{results.abuseipdb.domain || 'N/A'}</span>
                           </div>
                           <div className="flex justify-between py-1">
-                            <span className="text-gray-500">ISP Provider</span>
+                            <span className="text-text-muted">ISP Provider</span>
                             <span className="font-medium truncate max-w-[200px] text-right">{results.abuseipdb.isp || 'N/A'}</span>
                           </div>
                           <div className="flex justify-between py-1">
-                            <span className="text-gray-500">Last Reported Incident</span>
+                            <span className="text-text-muted">Last Reported Incident</span>
                             <span className="font-medium">{results.abuseipdb.last_reported_at ? formatDate(results.abuseipdb.last_reported_at) : 'No incidents reported'}</span>
                           </div>
                         </div>
@@ -400,17 +400,17 @@ export default function IpAnalyzerClient() {
               </div>
 
               {/* 3. AlienVault OTX Section */}
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm lg:col-span-2 flex flex-col">
-                <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+              <div className="bg-neutral rounded-md border border-border shadow-sm lg:col-span-2 flex flex-col">
+                <div className="p-5 border-b border-border flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded bg-sky-50 flex items-center justify-center text-sky-600 border border-sky-200">
                       <AlertCircle className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-[13px] text-gray-800">AlienVault OTX</h4>
+                      <h4 className="font-medium text-[13px] text-text-base">AlienVault OTX</h4>
                     </div>
                   </div>
-                  <MoreVertical className="w-4 h-4 text-gray-400" />
+                  <MoreVertical className="w-4 h-4 text-text-muted" />
                 </div>
 
                 <div className="p-5 flex-1">
@@ -422,14 +422,14 @@ export default function IpAnalyzerClient() {
                     <>
                       {/* Top metrics */}
                       <div className="flex items-center gap-6 mb-6">
-                        <div className="flex flex-col items-center justify-center px-6 py-4 bg-gray-50 rounded border border-gray-200 min-w-[150px]">
-                          <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Active Pulses</span>
-                          <span className={`text-3xl font-normal ${results.otx.pulses > 0 ? 'text-red-500' : 'text-gray-800'}`}>
+                        <div className="flex flex-col items-center justify-center px-6 py-4 bg-surface rounded border border-border min-w-[150px]">
+                          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-1">Active Pulses</span>
+                          <span className={`text-3xl font-normal ${results.otx.pulses > 0 ? 'text-red-500' : 'text-text-base'}`}>
                             {results.otx.pulses}
                           </span>
                         </div>
                         <div className="flex flex-col justify-center flex-1">
-                          <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Correlated Malware Families</span>
+                          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-2">Correlated Malware Families</span>
                           {results.otx.malware_family && results.otx.malware_family.length > 0 ? (
                             <div className="flex flex-wrap gap-1.5">
                               {results.otx.malware_family.map((mf: string) => (
@@ -439,21 +439,21 @@ export default function IpAnalyzerClient() {
                               ))}
                             </div>
                           ) : (
-                            <span className="text-xs text-gray-400 italic">None identified</span>
+                            <span className="text-xs text-text-muted italic">None identified</span>
                           )}
                         </div>
                       </div>
 
                       {/* Detailed Pulse List Table View */}
                       <div>
-                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-3 border-b border-gray-100 pb-2 flex items-center gap-2">
+                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-3 border-b border-border pb-2 flex items-center gap-2">
                           <FileText className="w-3.5 h-3.5" /> Correlated Intelligence Pulses ({results.otx.pulses_details?.length || 0} shown)
                         </h5>
 
                         {results.otx.pulses_details && results.otx.pulses_details.length > 0 ? (
-                          <div className="border border-gray-200 rounded-md overflow-hidden mt-3">
-                            <table className="w-full text-left text-sm text-gray-600">
-                              <thead className="text-[11px] font-semibold text-gray-500 bg-gray-50 border-b border-gray-200">
+                          <div className="border border-border rounded-md overflow-hidden mt-3">
+                            <table className="w-full text-left text-sm text-text-muted">
+                              <thead className="text-[11px] font-semibold text-text-muted bg-surface border-b border-border">
                                 <tr>
                                   <th className="px-4 py-3">Pulse Name</th>
                                   <th className="px-4 py-3">Adversary</th>
@@ -463,8 +463,8 @@ export default function IpAnalyzerClient() {
                               </thead>
                               <tbody className="divide-y divide-gray-100">
                                 {results.otx.pulses_details.map((pulse: PulseDetail, index: number) => (
-                                  <tr key={pulse.id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-4 py-3 font-medium text-gray-800 min-w-[200px]">
+                                  <tr key={pulse.id} className="hover:bg-surface transition-colors">
+                                    <td className="px-4 py-3 font-medium text-text-base min-w-[200px]">
                                       <div className="flex items-center gap-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
                                         <span className="truncate max-w-[300px]" title={pulse.name}>{pulse.name}</span>
@@ -480,7 +480,7 @@ export default function IpAnalyzerClient() {
                                     <td className="px-4 py-3">
                                       <div className="flex flex-wrap gap-1">
                                         {pulse.tags && pulse.tags.slice(0, 3).map((tag: string) => (
-                                          <span key={tag} className="px-1.5 py-0.5 bg-gray-100 border border-gray-200 text-gray-600 rounded text-[10px] font-medium">
+                                          <span key={tag} className="px-1.5 py-0.5 bg-surface border border-border text-text-muted rounded text-[10px] font-medium">
                                             #{tag}
                                           </span>
                                         ))}
@@ -495,7 +495,7 @@ export default function IpAnalyzerClient() {
                             </table>
                           </div>
                         ) : (
-                          <div className="bg-gray-50 rounded-md p-8 border border-gray-200 text-center text-sm text-gray-500 italic">
+                          <div className="bg-surface rounded-md p-8 border border-border text-center text-sm text-text-muted italic">
                             No related threat pulses found in the database. This IP address is not associated with active security campaigns.
                           </div>
                         )}

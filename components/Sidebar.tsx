@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Radar, Search, Shield, Menu, X, UserX, ChevronLeft, ChevronRight, Skull, Rss } from 'lucide-react';
 import TorIcon from './TorIcon';
+import { ThemeToggle } from './ThemeToggle';
 
 interface SidebarProps {
   isMobileOpen: boolean;
@@ -102,13 +103,16 @@ export default function Sidebar({
         
         {/* Footer / Status Area */}
         <div className="p-4 mt-auto flex flex-col gap-2 md:items-center md:group-hover:items-stretch overflow-hidden border-t border-border">
-          <div className="flex items-center w-full relative">
+          <div className="flex items-center w-full relative justify-between">
              <div className="flex items-center gap-3 md:justify-center md:group-hover:justify-start px-3 py-3 w-full text-text-muted hover:text-text-base transition-colors cursor-default rounded-lg hover:bg-surface" title="System Online">
                <span className="relative flex h-2.5 w-2.5 shrink-0">
                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success"></span>
                </span>
                <span className="text-sm truncate md:w-0 md:opacity-0 md:group-hover:w-auto md:group-hover:opacity-100 transition-all duration-300">System Online</span>
+             </div>
+             <div className="md:w-0 md:opacity-0 md:group-hover:w-auto md:group-hover:opacity-100 transition-all duration-300">
+               <ThemeToggle />
              </div>
           </div>
         </div>

@@ -244,7 +244,7 @@ export default function TweetFeedClient() {
 
   /* ─── RENDER ─────────────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
+    <div className="min-h-screen bg-base text-text-base font-sans pb-12">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
         {/* Page Title Header */}
@@ -259,18 +259,18 @@ export default function TweetFeedClient() {
         <div className="mb-8">
           {/* Date Range Picker */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-            <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-md p-1 shadow-sm">
+            <div className="flex items-center gap-2 bg-neutral border border-border rounded-md p-1 shadow-sm">
               <div className="flex items-center gap-2 px-3 py-1.5">
-                <Calendar className="w-4 h-4 text-gray-400" />
+                <Calendar className="w-4 h-4 text-text-muted" />
                 <input
                   type="date"
                   value={fromDate}
                   onChange={(e) => setFromDate(e.target.value)}
                   max={toDate}
-                  className="bg-transparent border-none text-sm font-medium text-gray-700 outline-none cursor-pointer"
+                  className="bg-transparent border-none text-sm font-medium text-text-base outline-none cursor-pointer"
                 />
               </div>
-              <div className="text-gray-400 text-xs font-bold uppercase tracking-wider px-1">to</div>
+              <div className="text-text-muted text-xs font-bold uppercase tracking-wider px-1">to</div>
               <div className="flex items-center gap-2 px-3 py-1.5">
                 <input
                   type="date"
@@ -278,7 +278,7 @@ export default function TweetFeedClient() {
                   onChange={(e) => setToDate(e.target.value)}
                   min={fromDate}
                   max={new Date().toISOString().split('T')[0]}
-                  className="bg-transparent border-none text-sm font-medium text-gray-700 outline-none cursor-pointer"
+                  className="bg-transparent border-none text-sm font-medium text-text-base outline-none cursor-pointer"
                 />
               </div>
             </div>
@@ -290,7 +290,7 @@ export default function TweetFeedClient() {
               Apply Range
             </button>
             
-            <div className="sm:ml-auto flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-gray-500 bg-white px-3 py-2 rounded-md border border-gray-200 shadow-sm">
+            <div className="sm:ml-auto flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-text-muted bg-neutral px-3 py-2 rounded-md border border-border shadow-sm">
               <Radio className="w-3.5 h-3.5 text-green-500 animate-pulse" />
               <span>Updates every 15 min</span>
             </div>
@@ -299,14 +299,14 @@ export default function TweetFeedClient() {
           {/* Stats Cards - Single Strip Card */}
           {!isLoading && !error && (
             <>
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm mb-6 flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-gray-200">
+              <div className="bg-neutral rounded-md border border-border shadow-sm mb-6 flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-gray-200">
                  <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
-                   <p className="text-xs font-medium text-gray-500 mb-1">Total IOCs</p>
+                   <p className="text-xs font-medium text-text-muted mb-1">Total IOCs</p>
                    <p className="text-2xl font-normal text-blue-500 tracking-tight">{stats.total.toLocaleString()}</p>
                  </div>
                  {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => (
                    <div key={type} className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
-                     <p className="text-xs font-medium text-gray-500 mb-1">{cfg.label}s</p>
+                     <p className="text-xs font-medium text-text-muted mb-1">{cfg.label}s</p>
                      <p className={`text-2xl font-normal tracking-tight`} style={{ color: cfg.rawColor }}>
                        {(stats.typeCounts[type] || 0).toLocaleString()}
                      </p>
@@ -320,10 +320,10 @@ export default function TweetFeedClient() {
                 {/* Two columns: Donut + Timeline */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* Donut Chart (IOC Type Distribution) */}
-                  <div className="bg-white rounded-md border border-gray-200 shadow-sm flex flex-col">
-                    <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
-                      <h3 className="text-[13px] font-medium text-gray-800">IOC Types</h3>
-                      <MoreVertical className="w-4 h-4 text-gray-400" />
+                  <div className="bg-neutral rounded-md border border-border shadow-sm flex flex-col">
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+                      <h3 className="text-[13px] font-medium text-text-base">IOC Types</h3>
+                      <MoreVertical className="w-4 h-4 text-text-muted" />
                     </div>
                     <div className="p-5 flex-1 flex flex-col items-center justify-center gap-6">
                       {/* Calculate Donut gradients based on stats */}
@@ -341,15 +341,15 @@ export default function TweetFeedClient() {
                         
                         return (
                           <div className="relative w-36 h-36 rounded-full flex items-center justify-center" style={{ background: conicString }}>
-                            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-inner">
-                              <span className="text-xl font-bold text-gray-800">{stats.total > 0 ? Object.keys(stats.typeCounts).length : 0}</span>
+                            <div className="w-24 h-24 bg-neutral rounded-full flex items-center justify-center shadow-inner">
+                              <span className="text-xl font-bold text-text-base">{stats.total > 0 ? Object.keys(stats.typeCounts).length : 0}</span>
                             </div>
                           </div>
                         );
                       })()}
                       
                       {/* Legend */}
-                      <div className="flex flex-col gap-2 text-[12px] text-gray-600 w-full px-4">
+                      <div className="flex flex-col gap-2 text-[12px] text-text-muted w-full px-4">
                         {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => {
                            const count = stats.typeCounts[type] || 0;
                            const pct = stats.total > 0 ? (count / stats.total) * 100 : 0;
@@ -368,12 +368,12 @@ export default function TweetFeedClient() {
                   </div>
 
                   {/* Activity Timeline (Stacked Bar Area) */}
-                  <div className="bg-white rounded-md border border-gray-200 shadow-sm lg:col-span-2 flex flex-col">
-                    <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
-                      <h3 className="text-[13px] font-medium text-gray-800">
+                  <div className="bg-neutral rounded-md border border-border shadow-sm lg:col-span-2 flex flex-col">
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+                      <h3 className="text-[13px] font-medium text-text-base">
                         {fromDate === toDate ? 'Hourly Activity evolution' : 'Daily Activity evolution'}
                       </h3>
-                      <div className="text-[11px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded">timestamp per {fromDate === toDate ? '60 mins' : 'day'}</div>
+                      <div className="text-[11px] bg-surface text-text-muted px-2 py-0.5 rounded">timestamp per {fromDate === toDate ? '60 mins' : 'day'}</div>
                     </div>
                     <div className="p-5 flex-1 flex flex-col">
                       {fromDate === toDate ? (
@@ -386,15 +386,15 @@ export default function TweetFeedClient() {
                 </div>
 
                 {/* Top Tags - Stacked Bar / Progress bars */}
-                <div className="bg-white rounded-md border border-gray-200 shadow-sm">
-                  <div className="px-5 py-3 border-b border-gray-100">
-                    <h3 className="text-[13px] font-medium text-gray-800 flex items-center gap-2">
+                <div className="bg-neutral rounded-md border border-border shadow-sm">
+                  <div className="px-5 py-3 border-b border-border">
+                    <h3 className="text-[13px] font-medium text-text-base flex items-center gap-2">
                       Top Threat Tags
                     </h3>
                   </div>
-                  <div className="p-6 overflow-y-auto max-h-[300px] custom-scrollbar bg-gray-50/50">
+                  <div className="p-6 overflow-y-auto max-h-[300px] custom-scrollbar bg-surface/50">
                     {stats.topTags.length === 0 ? (
-                      <p className="text-sm font-medium text-gray-500 text-center py-6">No tagged IOCs in this period</p>
+                      <p className="text-sm font-medium text-text-muted text-center py-6">No tagged IOCs in this period</p>
                     ) : (
                       <div className="space-y-4">
                         {stats.topTags.map(([tag, count], i) => {
@@ -405,13 +405,13 @@ export default function TweetFeedClient() {
                               <div className="flex items-center justify-between mb-1">
                                 <button
                                   onClick={() => { setTagFilter(tag); setActiveTab('feed'); }}
-                                  className="text-xs font-medium text-gray-700 hover:text-blue-600 transition-colors uppercase tracking-wider"
+                                  className="text-xs font-medium text-text-base hover:text-blue-600 transition-colors uppercase tracking-wider"
                                 >
                                   #{tag}
                                 </button>
-                                <span className="text-sm font-bold text-gray-800">{count}</span>
+                                <span className="text-sm font-bold text-text-base">{count}</span>
                               </div>
-                              <div className="w-full h-3 bg-gray-100 rounded-sm overflow-hidden flex">
+                              <div className="w-full h-3 bg-surface rounded-sm overflow-hidden flex">
                                 <div className="h-full bg-[#3d82f6] transition-all duration-500" style={{ width: `${barW}%` }} />
                               </div>
                             </div>
@@ -436,7 +436,7 @@ export default function TweetFeedClient() {
                   <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
                 </div>
               </div>
-              <p className="text-gray-500 font-medium text-sm">Fetching IOC intelligence...</p>
+              <p className="text-text-muted font-medium text-sm">Fetching IOC intelligence...</p>
             </div>
           </div>
         )}
@@ -459,37 +459,37 @@ export default function TweetFeedClient() {
         {!isLoading && !error && (
           <div>
             {/* Tab Navigation */}
-            <div className="flex border-b border-gray-200 mb-6 bg-white rounded-t-md px-6">
+            <div className="flex border-b border-border mb-6 bg-neutral rounded-t-md px-6">
               <button 
                 onClick={() => setActiveTab('feed')}
-                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'feed' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'feed' ? 'border-blue-600 text-blue-600' : 'border-transparent text-text-muted hover:text-text-base'}`}
               >
                 Live Feed
               </button>
               <button 
                 onClick={() => setActiveTab('researchers')}
-                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'researchers' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'researchers' ? 'border-blue-600 text-blue-600' : 'border-transparent text-text-muted hover:text-text-base'}`}
               >
-                Researchers <span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">{stats.topResearchers.length}</span>
+                Researchers <span className="bg-surface text-text-muted px-1.5 py-0.5 rounded text-xs">{stats.topResearchers.length}</span>
               </button>
             </div>
 
             {/* ═══ Tab: Live Feed ═══ */}
             {activeTab === 'feed' && (
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm p-5">
+              <div className="bg-neutral rounded-md border border-border shadow-sm p-5">
                 {/* Search & Filter Bar */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-4">
                   <div className="flex-1 relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search IOCs, researchers, tags..."
-                      className="w-full bg-white border border-gray-200 rounded-md text-sm text-gray-900 placeholder-gray-400 pl-11 pr-4 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 shadow-sm"
+                      className="w-full bg-neutral border border-border rounded-md text-sm text-text-base placeholder:text-text-muted pl-11 pr-4 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 shadow-sm"
                     />
                     {searchQuery && (
-                      <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1">
+                      <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-muted p-1">
                         <X className="w-4 h-4" />
                       </button>
                     )}
@@ -498,7 +498,7 @@ export default function TweetFeedClient() {
 
                 {/* Type Filter Chips */}
                 <div className="flex flex-wrap items-center gap-2 mb-6">
-                  <Filter className="w-4 h-4 text-gray-400 mr-2" />
+                  <Filter className="w-4 h-4 text-text-muted mr-2" />
                   <FilterChip active={typeFilter === 'all'} onClick={() => setTypeFilter('all')} label="All" count={stats.total} />
                   {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => (
                     <FilterChip
@@ -527,7 +527,7 @@ export default function TweetFeedClient() {
                   {hasActiveFilters && (
                     <button
                       onClick={clearFilters}
-                      className="ml-auto text-xs font-medium text-gray-500 hover:text-red-500 transition-colors"
+                      className="ml-auto text-xs font-medium text-text-muted hover:text-red-500 transition-colors"
                     >
                       Clear all
                     </button>
@@ -538,9 +538,9 @@ export default function TweetFeedClient() {
                 {filteredData.length === 0 ? (
                   <EmptyState message="No IOCs match your filters" />
                 ) : (
-                  <div className="overflow-x-auto border border-gray-200 rounded-md">
-                    <table className="w-full text-left text-sm text-gray-600">
-                      <thead className="text-[11px] font-semibold text-gray-500 bg-gray-50 border-b border-gray-200">
+                  <div className="overflow-x-auto border border-border rounded-md">
+                    <table className="w-full text-left text-sm text-text-muted">
+                      <thead className="text-[11px] font-semibold text-text-muted bg-surface border-b border-border">
                         <tr>
                           <th className="px-4 py-3">Time</th>
                           <th className="px-4 py-3">Type</th>
@@ -554,7 +554,7 @@ export default function TweetFeedClient() {
                         {filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((entry, i) => {
                           const cfg = IOC_TYPE_CONFIG[entry.type];
                           return (
-                            <tr key={`${entry.value}-${i}`} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => setSelectedIOC(entry)}>
+                            <tr key={`${entry.value}-${i}`} className="hover:bg-surface transition-colors cursor-pointer" onClick={() => setSelectedIOC(entry)}>
                               <td className="px-4 py-3 whitespace-nowrap text-xs">
                                 {timeAgo(entry.date)}
                               </td>
@@ -563,13 +563,13 @@ export default function TweetFeedClient() {
                                   {cfg.icon} {cfg.label}
                                 </span>
                               </td>
-                              <td className="px-4 py-3 font-mono text-gray-800 break-all min-w-[200px]">
+                              <td className="px-4 py-3 font-mono text-text-base break-all min-w-[200px]">
                                 {defang(entry.value, entry.type)}
                               </td>
                               <td className="px-4 py-3 whitespace-nowrap">
                                 <button
                                   onClick={(e) => { e.stopPropagation(); setResearcherFilter(entry.user); setActiveTab('feed'); }}
-                                  className="text-gray-700 hover:text-blue-600 hover:underline text-xs font-medium flex items-center gap-1"
+                                  className="text-text-base hover:text-blue-600 hover:underline text-xs font-medium flex items-center gap-1"
                                 >
                                   <Users className="w-3 h-3" /> @{entry.user}
                                 </button>
@@ -586,7 +586,7 @@ export default function TweetFeedClient() {
                                     </button>
                                   ))}
                                   {entry.tags.length > 2 && (
-                                    <span className="text-[10px] text-gray-400">+{entry.tags.length - 2}</span>
+                                    <span className="text-[10px] text-text-muted">+{entry.tags.length - 2}</span>
                                   )}
                                 </div>
                               </td>
@@ -596,7 +596,7 @@ export default function TweetFeedClient() {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   onClick={(e) => e.stopPropagation()}
-                                  className="inline-flex p-1 text-gray-400 hover:text-blue-500 transition-colors"
+                                  className="inline-flex p-1 text-text-muted hover:text-blue-500 transition-colors"
                                   title="View original tweet"
                                 >
                                   <ExternalLink className="w-4 h-4" />
@@ -613,14 +613,14 @@ export default function TweetFeedClient() {
                 {/* Pagination Controls */}
                 {Math.ceil(filteredData.length / itemsPerPage) > 1 && (
                   <div className="flex justify-between items-center mt-4">
-                    <div className="text-xs text-gray-500 font-medium">
+                    <div className="text-xs text-text-muted font-medium">
                       Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length}
                     </div>
                     <div className="flex gap-1">
                       <button
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
-                        className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                        className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
                       >
                         Previous
                       </button>
@@ -630,7 +630,7 @@ export default function TweetFeedClient() {
                       <button
                         onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredData.length / itemsPerPage), p + 1))}
                         disabled={currentPage === Math.ceil(filteredData.length / itemsPerPage)}
-                        className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                        className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
                       >
                         Next
                       </button>
@@ -643,7 +643,7 @@ export default function TweetFeedClient() {
 
             {/* ═══ Tab: Researchers ═══ */}
             {activeTab === 'researchers' && (
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm p-5">
+              <div className="bg-neutral rounded-md border border-border shadow-sm p-5">
                 <ResearchersGrid
                   researchers={stats.researcherDetails}
                   onUserClick={(u) => { setResearcherFilter(u); setActiveTab('feed'); }}
@@ -673,11 +673,11 @@ function FilterChip({ active, onClick, label, count }: { active: boolean; onClic
       className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 shadow-sm border ${
         active
           ? 'bg-blue-50 text-blue-600 border-blue-200'
-          : 'text-gray-600 bg-white border-gray-200 hover:bg-gray-50'
+          : 'text-text-muted bg-neutral border-border hover:bg-surface'
       }`}
     >
       {label}
-      <span className={`ml-1.5 px-1.5 py-0.5 rounded text-[10px] ${active ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'}`}>
+      <span className={`ml-1.5 px-1.5 py-0.5 rounded text-[10px] ${active ? 'bg-blue-100 text-blue-700' : 'bg-surface text-text-muted'}`}>
         {count}
       </span>
     </button>
@@ -698,19 +698,19 @@ function IOCDetailModal({ entry, onClose }: { entry: IOCEntry; onClose: () => vo
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/20 backdrop-blur-sm">
-      <div className="relative w-full max-w-lg bg-white border border-gray-200 rounded-md overflow-hidden flex flex-col shadow-xl">
+      <div className="relative w-full max-w-lg bg-neutral border border-border rounded-md overflow-hidden flex flex-col shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded border flex items-center justify-center bg-white shadow-sm`} style={{ borderColor: cfg.rawColor, color: cfg.rawColor }}>
+            <div className={`w-10 h-10 rounded border flex items-center justify-center bg-neutral shadow-sm`} style={{ borderColor: cfg.rawColor, color: cfg.rawColor }}>
               {cfg?.icon}
             </div>
             <div>
-              <h3 className="text-base font-medium text-gray-900">{cfg?.label || entry.type.toUpperCase()} Indicator</h3>
-              <p className="text-xs text-gray-500 mt-0.5">IOC Details</p>
+              <h3 className="text-base font-medium text-text-base">{cfg?.label || entry.type.toUpperCase()} Indicator</h3>
+              <p className="text-xs text-text-muted mt-0.5">IOC Details</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
+          <button onClick={onClose} className="p-1.5 text-text-muted hover:text-text-muted hover:bg-surface rounded transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -719,12 +719,12 @@ function IOCDetailModal({ entry, onClose }: { entry: IOCEntry; onClose: () => vo
         <div className="p-6 space-y-6">
           {/* IOC Value */}
           <div>
-            <label className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2 block">IOC Value (Defanged)</label>
-            <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-md px-4 py-3 shadow-inner">
-              <code className="flex-1 text-sm font-mono text-gray-900 break-all">{defang(entry.value, entry.type)}</code>
+            <label className="text-xs font-medium text-text-muted uppercase tracking-wider mb-2 block">IOC Value (Defanged)</label>
+            <div className="flex items-center gap-3 bg-surface border border-border rounded-md px-4 py-3 shadow-inner">
+              <code className="flex-1 text-sm font-mono text-text-base break-all">{defang(entry.value, entry.type)}</code>
               <button
                 onClick={copyValue}
-                className="flex-shrink-0 p-2 rounded bg-white border border-gray-200 text-gray-500 hover:text-blue-600 transition-all shadow-sm"
+                className="flex-shrink-0 p-2 rounded bg-neutral border border-border text-text-muted hover:text-blue-600 transition-all shadow-sm"
                 title="Copy raw value"
               >
                 {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
@@ -734,20 +734,20 @@ function IOCDetailModal({ entry, onClose }: { entry: IOCEntry; onClose: () => vo
 
           {/* Meta Grid */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-50 p-3 rounded-md border border-gray-100">
-              <label className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1 block">Researcher</label>
-              <span className="text-sm font-medium text-gray-800 flex items-center gap-1.5"><Users className="w-4 h-4 text-gray-400" /> @{entry.user}</span>
+            <div className="bg-surface p-3 rounded-md border border-border">
+              <label className="text-xs font-medium text-text-muted uppercase tracking-wider mb-1 block">Researcher</label>
+              <span className="text-sm font-medium text-text-base flex items-center gap-1.5"><Users className="w-4 h-4 text-text-muted" /> @{entry.user}</span>
             </div>
-            <div className="bg-gray-50 p-3 rounded-md border border-gray-100">
-              <label className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1 block">Timestamp</label>
-              <span className="text-sm font-medium text-gray-800 flex items-center gap-1.5"><Clock className="w-4 h-4 text-gray-400" /> {formatDateTime(entry.date)}</span>
+            <div className="bg-surface p-3 rounded-md border border-border">
+              <label className="text-xs font-medium text-text-muted uppercase tracking-wider mb-1 block">Timestamp</label>
+              <span className="text-sm font-medium text-text-base flex items-center gap-1.5"><Clock className="w-4 h-4 text-text-muted" /> {formatDateTime(entry.date)}</span>
             </div>
           </div>
 
           {/* Tags */}
           {entry.tags.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2 block">Associated Tags</label>
+              <label className="text-xs font-medium text-text-muted uppercase tracking-wider mb-2 block">Associated Tags</label>
               <div className="flex flex-wrap gap-2">
                 {entry.tags.map((tag) => (
                   <span key={tag} className={`text-xs px-2.5 py-1 rounded border font-medium shadow-sm ${getTagColor(tag)}`}>
@@ -781,15 +781,15 @@ function HourlyChart({ hourCounts }: { hourCounts: Record<number, number> }) {
   return (
     <div className="h-full flex relative pt-4">
       {/* Y Axis */}
-      <div className="flex flex-col justify-between text-[10px] text-gray-400 mr-2 py-2 w-8 text-right">
+      <div className="flex flex-col justify-between text-[10px] text-text-muted mr-2 py-2 w-8 text-right">
         <span>{maxCount}</span>
         <span>{Math.floor(maxCount/2)}</span>
         <span>0</span>
       </div>
-      <div className="flex-1 flex items-end gap-1 pb-1 border-b border-l border-gray-200 pl-1 relative">
+      <div className="flex-1 flex items-end gap-1 pb-1 border-b border-l border-border pl-1 relative">
          {/* Grid lines */}
-         <div className="absolute w-full top-0 border-t border-gray-100 border-dashed" />
-         <div className="absolute w-full top-1/2 border-t border-gray-100 border-dashed" />
+         <div className="absolute w-full top-0 border-t border-border border-dashed" />
+         <div className="absolute w-full top-1/2 border-t border-border border-dashed" />
         
         {hours.map((h) => {
           const count = hourCounts[h] || 0;
@@ -801,7 +801,7 @@ function HourlyChart({ hourCounts }: { hourCounts: Record<number, number> }) {
                 style={{ height: `${height}%` }}
               />
               {/* Tooltip */}
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white border border-gray-200 text-gray-800 text-[10px] font-medium rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-neutral border border-border text-text-base text-[10px] font-medium rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
                 {h}:00 — <span className="text-blue-600">{count}</span> IOCs
               </div>
             </div>
@@ -814,21 +814,21 @@ function HourlyChart({ hourCounts }: { hourCounts: Record<number, number> }) {
 
 function DailyChart({ dayCounts }: { dayCounts: Record<string, number> }) {
   const sortedDays = Object.entries(dayCounts).sort((a, b) => a[0].localeCompare(b[0]));
-  if (sortedDays.length === 0) return <p className="text-sm font-medium text-gray-500 text-center py-10">No timeline data</p>;
+  if (sortedDays.length === 0) return <p className="text-sm font-medium text-text-muted text-center py-10">No timeline data</p>;
 
   const maxCount = Math.max(...sortedDays.map(([_, c]) => c), 1);
 
   return (
     <div className="h-full flex relative pt-4">
       {/* Y Axis */}
-      <div className="flex flex-col justify-between text-[10px] text-gray-400 mr-2 py-2 w-8 text-right">
+      <div className="flex flex-col justify-between text-[10px] text-text-muted mr-2 py-2 w-8 text-right">
         <span>{maxCount}</span>
         <span>{Math.floor(maxCount/2)}</span>
         <span>0</span>
       </div>
-      <div className="flex-1 flex items-end gap-[2px] pb-1 border-b border-l border-gray-200 pl-1 relative">
-         <div className="absolute w-full top-0 border-t border-gray-100 border-dashed" />
-         <div className="absolute w-full top-1/2 border-t border-gray-100 border-dashed" />
+      <div className="flex-1 flex items-end gap-[2px] pb-1 border-b border-l border-border pl-1 relative">
+         <div className="absolute w-full top-0 border-t border-border border-dashed" />
+         <div className="absolute w-full top-1/2 border-t border-border border-dashed" />
         
         {sortedDays.map(([day, count]) => {
           const height = Math.max((count / maxCount) * 100, 2);
@@ -838,7 +838,7 @@ function DailyChart({ dayCounts }: { dayCounts: Record<string, number> }) {
                 className="w-full bg-[#3d82f6] transition-all duration-300 hover:bg-[#3d82f6]/80"
                 style={{ height: `${height}%` }}
               />
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white border border-gray-200 text-gray-800 text-[10px] font-medium rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-neutral border border-border text-text-base text-[10px] font-medium rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
                 {day} — <span className="text-blue-600">{count}</span> IOCs
               </div>
             </div>
@@ -866,23 +866,23 @@ function ResearchersGrid({ researchers, onUserClick }: {
   return (
     <div>
       {/* Filter */}
-      <div className="flex items-center gap-4 mb-6 border-b border-gray-100 pb-4">
+      <div className="flex items-center gap-4 mb-6 border-b border-border pb-4">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Filter researchers..."
-            className="w-full bg-white border border-gray-200 rounded-md text-sm text-gray-900 placeholder-gray-400 pl-10 pr-4 py-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50"
+            className="w-full bg-neutral border border-border rounded-md text-sm text-text-base placeholder:text-text-muted pl-10 pr-4 py-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50"
           />
         </div>
       </div>
 
       {/* Table view for researchers to match Wazuh style */}
-      <div className="overflow-x-auto border border-gray-200 rounded-md">
-        <table className="w-full text-left text-sm text-gray-600">
-          <thead className="text-[11px] font-semibold text-gray-500 bg-gray-50 border-b border-gray-200">
+      <div className="overflow-x-auto border border-border rounded-md">
+        <table className="w-full text-left text-sm text-text-muted">
+          <thead className="text-[11px] font-semibold text-text-muted bg-surface border-b border-border">
             <tr>
               <th className="px-4 py-3">Researcher</th>
               <th className="px-4 py-3">IOC Count</th>
@@ -892,13 +892,13 @@ function ResearchersGrid({ researchers, onUserClick }: {
           </thead>
           <tbody className="divide-y divide-gray-100">
             {filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((r) => (
-              <tr key={r.user} className="hover:bg-gray-50 transition-colors">
+              <tr key={r.user} className="hover:bg-surface transition-colors">
                 <td className="px-4 py-3">
                   <button onClick={() => onUserClick(r.user)} className="flex items-center gap-2 group text-left">
                     <div className="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold border border-blue-200">
                       {r.user.charAt(0).toUpperCase()}
                     </div>
-                    <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">@{r.user}</span>
+                    <span className="font-medium text-text-base group-hover:text-blue-600 transition-colors">@{r.user}</span>
                   </button>
                 </td>
                 <td className="px-4 py-3 font-medium text-blue-600">{r.count}</td>
@@ -906,11 +906,11 @@ function ResearchersGrid({ researchers, onUserClick }: {
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1">
                     {r.tags.map((t) => (
-                      <span key={t} className="text-[10px] px-1.5 py-0.5 bg-gray-100 border border-gray-200 text-gray-600 rounded">
+                      <span key={t} className="text-[10px] px-1.5 py-0.5 bg-surface border border-border text-text-muted rounded">
                         #{t}
                       </span>
                     ))}
-                    {r.tags.length === 0 && <span className="text-[10px] text-gray-400 italic">No tags</span>}
+                    {r.tags.length === 0 && <span className="text-[10px] text-text-muted italic">No tags</span>}
                   </div>
                 </td>
               </tr>
@@ -918,22 +918,22 @@ function ResearchersGrid({ researchers, onUserClick }: {
           </tbody>
         </table>
         {filtered.length === 0 && (
-          <div className="text-center py-10 text-gray-500 text-sm">
+          <div className="text-center py-10 text-text-muted text-sm">
             No researchers matching &quot;{filter}&quot;
           </div>
         )}
       </div>
 
       {Math.ceil(filtered.length / itemsPerPage) > 1 && (
-        <div className="flex justify-between items-center mt-4 border-t border-gray-100 pt-4">
-          <div className="text-xs text-gray-500 font-medium">
+        <div className="flex justify-between items-center mt-4 border-t border-border pt-4">
+          <div className="text-xs text-text-muted font-medium">
             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length}
           </div>
           <div className="flex gap-1">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+              className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
             >
               Previous
             </button>
@@ -943,7 +943,7 @@ function ResearchersGrid({ researchers, onUserClick }: {
             <button
               onClick={() => setCurrentPage(p => Math.min(Math.ceil(filtered.length / itemsPerPage), p + 1))}
               disabled={currentPage === Math.ceil(filtered.length / itemsPerPage)}
-              className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+              className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
             >
               Next
             </button>
@@ -956,7 +956,7 @@ function ResearchersGrid({ researchers, onUserClick }: {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-20 gap-4 text-gray-500 bg-gray-50 border border-gray-200 rounded-md">
+    <div className="flex flex-col items-center justify-center py-20 gap-4 text-text-muted bg-surface border border-border rounded-md">
       <Shield className="w-10 h-10 opacity-30" />
       <p className="font-medium text-sm">{message}</p>
     </div>

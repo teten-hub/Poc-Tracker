@@ -218,7 +218,7 @@ export default function RansomwareClient() {
 
   /* ─── RENDER ─────────────────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-[#f5f6f8] text-gray-900 font-sans pb-12">
+    <div className="min-h-screen bg-base text-text-base font-sans pb-12">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         
         {/* Page Title Header */}
@@ -231,21 +231,21 @@ export default function RansomwareClient() {
 
         {/* ─── Stats Bar ─────────────────────────────────────────── */}
         {stats && !isLoading && (
-          <div className="bg-white rounded-md border border-gray-200 shadow-sm mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200">
+          <div className="bg-neutral rounded-md border border-border shadow-sm mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200">
             <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
-              <p className="text-xs font-medium text-gray-500 mb-1">Active Groups</p>
+              <p className="text-xs font-medium text-text-muted mb-1">Active Groups</p>
               <p className="text-3xl font-normal text-blue-500 tracking-tight">{stats.groups.toLocaleString()}</p>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
-              <p className="text-xs font-medium text-gray-500 mb-1">Total Victims</p>
+              <p className="text-xs font-medium text-text-muted mb-1">Total Victims</p>
               <p className="text-3xl font-normal text-red-500 tracking-tight">{stats.posts_total.toLocaleString()}</p>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
-              <p className="text-xs font-medium text-gray-500 mb-1">Victims (Last 24h)</p>
+              <p className="text-xs font-medium text-text-muted mb-1">Victims (Last 24h)</p>
               <p className="text-3xl font-normal text-orange-500 tracking-tight">{stats.posts_24h.toLocaleString()}</p>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center py-4 px-2 text-center">
-              <p className="text-xs font-medium text-gray-500 mb-1">{stats.posts_month_label || 'This Month'}</p>
+              <p className="text-xs font-medium text-text-muted mb-1">{stats.posts_month_label || 'This Month'}</p>
               <p className="text-3xl font-normal text-green-500 tracking-tight">{stats.posts_month.toLocaleString()}</p>
             </div>
           </div>
@@ -254,8 +254,8 @@ export default function RansomwareClient() {
         {/* ─── Search Bar ────────────────────────────────────────── */}
         <div className="mb-6">
           <form onSubmit={handleSearch} className="relative">
-            <div className="flex items-center bg-white border border-gray-200 rounded-md overflow-hidden focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 shadow-sm transition-all">
-              <div className="pl-4 text-gray-400">
+            <div className="flex items-center bg-neutral border border-border rounded-md overflow-hidden focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 shadow-sm transition-all">
+              <div className="pl-4 text-text-muted">
                 <Search className="w-4 h-4" />
               </div>
               <input
@@ -263,13 +263,13 @@ export default function RansomwareClient() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search victims, groups, leaks..."
-                className="flex-1 bg-transparent text-gray-900 placeholder-gray-400 px-4 py-2.5 text-sm outline-none"
+                className="flex-1 bg-transparent text-text-base placeholder:text-text-muted px-4 py-2.5 text-sm outline-none"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => { setSearchQuery(''); setSearchResults(null); setShowSearch(false); }}
-                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="p-2 text-text-muted hover:text-text-muted transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -277,7 +277,7 @@ export default function RansomwareClient() {
               <button
                 type="submit"
                 disabled={isSearching || searchQuery.length < 2}
-                className="px-6 py-2.5 bg-gray-50 border-l border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 transition-colors h-full"
+                className="px-6 py-2.5 bg-surface border-l border-border text-sm font-medium text-text-base hover:bg-surface disabled:opacity-50 transition-colors h-full"
               >
                 {isSearching ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Search'}
               </button>
@@ -288,18 +288,18 @@ export default function RansomwareClient() {
         {/* ─── Search Results (overlays main content) ────────────── */}
         {showSearch && searchResults && (
           <div className="mb-8">
-            <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-gray-50">
+            <div className="bg-neutral rounded-md border border-border shadow-sm overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-surface">
                 <div className="flex items-center gap-2">
                   <Search className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-text-base">
                     Search Results for &quot;{searchQuery}&quot;
                   </span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-text-muted">
                     ({(searchResults.posts?.length || 0) + (searchResults.groups?.length || 0)} results)
                   </span>
                 </div>
-                <button onClick={() => { setShowSearch(false); setSearchResults(null); setSearchQuery(''); }} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <button onClick={() => { setShowSearch(false); setSearchResults(null); setSearchQuery(''); }} className="text-text-muted hover:text-text-muted transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -307,19 +307,19 @@ export default function RansomwareClient() {
               {/* Search: Posts */}
               {searchResults.posts && searchResults.posts.length > 0 && (
                 <div className="p-5">
-                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
                     <Crosshair className="w-3.5 h-3.5" /> Victim Posts ({searchResults.posts.length})
                   </h4>
                   <div className="space-y-2 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
                     {searchResults.posts.map((p, i) => (
-                      <div key={i} className="flex items-center justify-between px-4 py-3 bg-white rounded-md border border-gray-200 hover:border-blue-300 transition-colors shadow-sm cursor-pointer" onClick={() => openGroupDetail(p.group)}>
+                      <div key={i} className="flex items-center justify-between px-4 py-3 bg-neutral rounded-md border border-border hover:border-blue-300 transition-colors shadow-sm cursor-pointer" onClick={() => openGroupDetail(p.group)}>
                         <div className="flex items-center gap-3 min-w-0">
                           <span className={`text-[10px] px-2 py-0.5 rounded border font-medium whitespace-nowrap uppercase ${getGroupColor(p.group)}`}>
                             {p.group}
                           </span>
-                          <span className="text-sm font-medium text-gray-800 truncate">{p.title}</span>
+                          <span className="text-sm font-medium text-text-base truncate">{p.title}</span>
                         </div>
-                        <span className="text-xs text-gray-500 whitespace-nowrap ml-3">{timeAgo(p.discovered)}</span>
+                        <span className="text-xs text-text-muted whitespace-nowrap ml-3">{timeAgo(p.discovered)}</span>
                       </div>
                     ))}
                   </div>
@@ -328,8 +328,8 @@ export default function RansomwareClient() {
 
               {/* Search: Groups */}
               {searchResults.groups && searchResults.groups.length > 0 && (
-                <div className="p-5 border-t border-gray-200">
-                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <div className="p-5 border-t border-border">
+                  <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
                     <Users className="w-3.5 h-3.5" /> Groups ({searchResults.groups.length})
                   </h4>
                   <div className="flex flex-wrap gap-2">
@@ -337,7 +337,7 @@ export default function RansomwareClient() {
                       <button
                         key={i}
                         onClick={() => { openGroupDetail(g.name || g); setShowSearch(false); }}
-                        className="px-3 py-1.5 bg-white border border-gray-200 rounded text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600 shadow-sm transition-colors"
+                        className="px-3 py-1.5 bg-neutral border border-border rounded text-sm font-medium text-text-base hover:border-blue-500 hover:text-blue-600 shadow-sm transition-colors"
                       >
                         {g.name || g}
                       </button>
@@ -347,7 +347,7 @@ export default function RansomwareClient() {
               )}
 
               {(!searchResults.posts || searchResults.posts.length === 0) && (!searchResults.groups || searchResults.groups.length === 0) && (
-                <div className="p-10 text-center text-gray-500 font-medium text-sm">
+                <div className="p-10 text-center text-text-muted font-medium text-sm">
                   No results found for &quot;{searchQuery}&quot;
                 </div>
               )}
@@ -364,7 +364,7 @@ export default function RansomwareClient() {
                   <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
                 </div>
               </div>
-              <p className="text-gray-500 font-medium text-sm">Loading ransomware intelligence...</p>
+              <p className="text-text-muted font-medium text-sm">Loading ransomware intelligence...</p>
             </div>
           </div>
         )}
@@ -387,22 +387,22 @@ export default function RansomwareClient() {
         {!isLoading && !error && (
           <div>
             {/* Tab Navigation */}
-            <div className="flex border-b border-gray-200 mb-6 bg-white rounded-t-md px-6">
+            <div className="flex border-b border-border mb-6 bg-neutral rounded-t-md px-6">
               <button 
                 onClick={() => setActiveTab('victims')}
-                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'victims' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'victims' ? 'border-blue-600 text-blue-600' : 'border-transparent text-text-muted hover:text-text-base'}`}
               >
-                Recent Victims <span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs ml-1">{recentVictims.length}</span>
+                Recent Victims <span className="bg-surface text-text-muted px-1.5 py-0.5 rounded text-xs ml-1">{recentVictims.length}</span>
               </button>
               <button 
                 onClick={() => setActiveTab('trending')}
-                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'trending' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'trending' ? 'border-blue-600 text-blue-600' : 'border-transparent text-text-muted hover:text-text-base'}`}
               >
-                Trending Groups <span className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs ml-1">{hotGroups.length}</span>
+                Trending Groups <span className="bg-surface text-text-muted px-1.5 py-0.5 rounded text-xs ml-1">{hotGroups.length}</span>
               </button>
               <button 
                 onClick={() => setActiveTab('groups')}
-                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'groups' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'groups' ? 'border-blue-600 text-blue-600' : 'border-transparent text-text-muted hover:text-text-base'}`}
               >
                 Groups Directory
               </button>
@@ -410,9 +410,9 @@ export default function RansomwareClient() {
 
             {/* ═══ Tab: Recent Victims ═══ */}
             {activeTab === 'victims' && (
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
-                <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                  <div className="flex items-center gap-2 text-gray-600 text-[11px] font-semibold uppercase tracking-wider">
+              <div className="bg-neutral rounded-md border border-border shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-border flex justify-between items-center bg-surface">
+                  <div className="flex items-center gap-2 text-text-muted text-[11px] font-semibold uppercase tracking-wider">
                     <Radio className="w-3.5 h-3.5 text-red-500 animate-pulse" />
                     <span>Live feed — last 50 disclosed victims</span>
                   </div>
@@ -422,8 +422,8 @@ export default function RansomwareClient() {
                   <EmptyState message="No recent victim data available" />
                 ) : (
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-gray-600">
-                      <thead className="text-[11px] font-semibold text-gray-500 bg-white border-b border-gray-200">
+                    <table className="w-full text-left text-sm text-text-muted">
+                      <thead className="text-[11px] font-semibold text-text-muted bg-neutral border-b border-border">
                         <tr>
                           <th className="px-5 py-3">Time</th>
                           <th className="px-5 py-3">Group</th>
@@ -434,7 +434,7 @@ export default function RansomwareClient() {
                       </thead>
                       <tbody className="divide-y divide-gray-100">
                         {recentVictims.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((v, i) => (
-                          <tr key={i} className="hover:bg-gray-50 transition-colors">
+                          <tr key={i} className="hover:bg-surface transition-colors">
                             <td className="px-5 py-3 whitespace-nowrap text-xs">
                               {timeAgo(v.discovered)}
                             </td>
@@ -446,7 +446,7 @@ export default function RansomwareClient() {
                                 {v.group}
                               </button>
                             </td>
-                            <td className="px-5 py-3 font-medium text-gray-800">
+                            <td className="px-5 py-3 font-medium text-text-base">
                               {v.title}
                             </td>
                             <td className="px-5 py-3 max-w-[250px] truncate" title={v.description}>
@@ -454,7 +454,7 @@ export default function RansomwareClient() {
                             </td>
                             <td className="px-5 py-3 text-right">
                               {v.website ? (
-                                <a href={v.website.startsWith('http') ? v.website : `https://${v.website}`} target="_blank" rel="noopener noreferrer" className="inline-flex p-1 text-gray-400 hover:text-blue-500 transition-colors" title={v.website}>
+                                <a href={v.website.startsWith('http') ? v.website : `https://${v.website}`} target="_blank" rel="noopener noreferrer" className="inline-flex p-1 text-text-muted hover:text-blue-500 transition-colors" title={v.website}>
                                   <ExternalLink className="w-4 h-4" />
                                 </a>
                               ) : '-'}
@@ -467,15 +467,15 @@ export default function RansomwareClient() {
                 )}
                 
                 {Math.ceil(recentVictims.length / itemsPerPage) > 1 && (
-                  <div className="px-5 py-3 border-t border-gray-200 flex justify-between items-center bg-gray-50">
-                    <div className="text-xs text-gray-500 font-medium">
+                  <div className="px-5 py-3 border-t border-border flex justify-between items-center bg-surface">
+                    <div className="text-xs text-text-muted font-medium">
                       Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, recentVictims.length)} of {recentVictims.length}
                     </div>
                     <div className="flex gap-1">
                       <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                        className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
                       >
                         Previous
                       </button>
@@ -485,7 +485,7 @@ export default function RansomwareClient() {
                       <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(recentVictims.length / itemsPerPage)))}
                         disabled={currentPage === Math.ceil(recentVictims.length / itemsPerPage)}
-                        className="px-3 py-1.5 text-xs font-medium bg-white border border-gray-200 rounded text-gray-600 disabled:opacity-50 hover:bg-gray-50"
+                        className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
                       >
                         Next
                       </button>
@@ -497,9 +497,9 @@ export default function RansomwareClient() {
 
             {/* ═══ Tab: Trending Groups ═══ */}
             {activeTab === 'trending' && (
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
-                <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                  <div className="flex items-center gap-2 text-gray-600 text-[11px] font-semibold uppercase tracking-wider">
+              <div className="bg-neutral rounded-md border border-border shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-border flex justify-between items-center bg-surface">
+                  <div className="flex items-center gap-2 text-text-muted text-[11px] font-semibold uppercase tracking-wider">
                     <Activity className="w-3.5 h-3.5 text-blue-500" />
                     <span>Ranked by activity — last {hotMeta.days} days • {hotMeta.total_posts} total posts</span>
                   </div>
@@ -509,8 +509,8 @@ export default function RansomwareClient() {
                   <EmptyState message="No trending group data available" />
                 ) : (
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-gray-600">
-                      <thead className="text-[11px] font-semibold text-gray-500 bg-white border-b border-gray-200">
+                    <table className="w-full text-left text-sm text-text-muted">
+                      <thead className="text-[11px] font-semibold text-text-muted bg-neutral border-b border-border">
                         <tr>
                           <th className="px-5 py-3 w-16 text-center">Rank</th>
                           <th className="px-5 py-3">Group</th>
@@ -524,13 +524,13 @@ export default function RansomwareClient() {
                           const maxCount = hotGroups[0]?.count || 1;
                           const barWidth = Math.max((hg.count / maxCount) * 100, 2);
                           return (
-                            <tr key={hg.group} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => openGroupDetail(hg.group)}>
+                            <tr key={hg.group} className="hover:bg-surface transition-colors cursor-pointer" onClick={() => openGroupDetail(hg.group)}>
                               <td className="px-5 py-3 text-center">
                                 <span className={`inline-flex items-center justify-center w-6 h-6 rounded text-xs font-bold ${
                                   i === 0 ? 'bg-yellow-100 text-yellow-700' :
-                                  i === 1 ? 'bg-gray-200 text-gray-700' :
+                                  i === 1 ? 'bg-surface text-text-base' :
                                   i === 2 ? 'bg-orange-100 text-orange-700' :
-                                  'bg-gray-50 text-gray-500 border border-gray-200'
+                                  'bg-surface text-text-muted border border-border'
                                 }`}>
                                   {i + 1}
                                 </span>
@@ -541,11 +541,11 @@ export default function RansomwareClient() {
                               <td className="px-5 py-3 text-xs">
                                 {timeAgo(hg.last_post)}
                               </td>
-                              <td className="px-5 py-3 font-medium text-gray-800">
+                              <td className="px-5 py-3 font-medium text-text-base">
                                 {hg.count}
                               </td>
                               <td className="px-5 py-3">
-                                <div className="w-full h-2 bg-gray-100 rounded-sm overflow-hidden flex">
+                                <div className="w-full h-2 bg-surface rounded-sm overflow-hidden flex">
                                   <div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                                 </div>
                               </td>
@@ -561,15 +561,15 @@ export default function RansomwareClient() {
 
             {/* ═══ Tab: Groups Directory ═══ */}
             {activeTab === 'groups' && (
-              <div className="bg-white rounded-md border border-gray-200 shadow-sm p-5">
+              <div className="bg-neutral rounded-md border border-border shadow-sm p-5">
                 {groupsLoading ? (
                   <div className="flex items-center justify-center py-20 gap-3">
                     <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
-                    <span className="text-gray-500 text-sm font-medium">Loading groups directory...</span>
+                    <span className="text-text-muted text-sm font-medium">Loading groups directory...</span>
                   </div>
                 ) : (
                   <>
-                    <div className="flex items-center gap-2 text-gray-500 text-[11px] font-semibold uppercase tracking-wider mb-4 border-b border-gray-100 pb-4">
+                    <div className="flex items-center gap-2 text-text-muted text-[11px] font-semibold uppercase tracking-wider mb-4 border-b border-border pb-4">
                       <Server className="w-3.5 h-3.5 text-blue-500" />
                       <span>{allGroups.length} ransomware groups tracked</span>
                     </div>
@@ -610,13 +610,13 @@ function GroupsGrid({ groups, onGroupClick }: { groups: any[]; onGroupClick: (na
     <div>
       {/* Filter Input */}
       <div className="relative mb-6 max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
         <input
           type="text"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           placeholder="Filter groups..."
-          className="w-full bg-white border border-gray-200 rounded-md text-sm text-gray-900 placeholder-gray-400 pl-10 pr-4 py-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 shadow-sm"
+          className="w-full bg-neutral border border-border rounded-md text-sm text-text-base placeholder:text-text-muted pl-10 pr-4 py-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 shadow-sm"
         />
       </div>
 
@@ -626,21 +626,21 @@ function GroupsGrid({ groups, onGroupClick }: { groups: any[]; onGroupClick: (na
           <button
             key={i}
             onClick={() => onGroupClick(g.name)}
-            className="px-4 py-3 bg-white border border-gray-200 rounded-md text-left hover:border-blue-400 hover:shadow-sm transition-all duration-200 group"
+            className="px-4 py-3 bg-neutral border border-border rounded-md text-left hover:border-blue-400 hover:shadow-sm transition-all duration-200 group"
           >
             <div className="flex items-center gap-2">
-              <Skull className="w-3.5 h-3.5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-              <span className="text-sm font-medium text-gray-800 group-hover:text-blue-600 transition-colors truncate">{g.name}</span>
+              <Skull className="w-3.5 h-3.5 text-text-muted group-hover:text-blue-500 transition-colors" />
+              <span className="text-sm font-medium text-text-base group-hover:text-blue-600 transition-colors truncate">{g.name}</span>
             </div>
             {g.description && (
-              <p className="text-[10px] text-gray-500 line-clamp-1 mt-1">{g.description}</p>
+              <p className="text-[10px] text-text-muted line-clamp-1 mt-1">{g.description}</p>
             )}
           </button>
         ))}
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-12 text-gray-500 text-sm font-medium">
+        <div className="text-center py-12 text-text-muted text-sm font-medium">
           No groups matching &quot;{filter}&quot;
         </div>
       )}
@@ -656,19 +656,19 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/20 backdrop-blur-sm">
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative w-full max-w-3xl max-h-[90vh] bg-white border border-gray-200 rounded-md overflow-hidden flex flex-col shadow-xl">
+      <div className="relative w-full max-w-3xl max-h-[90vh] bg-neutral border border-border rounded-md overflow-hidden flex flex-col shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded border border-red-200 bg-red-50 flex items-center justify-center shadow-sm">
               <Skull className="w-5 h-5 text-red-500" />
             </div>
             <div>
-              <h3 className="text-base font-medium text-gray-900">{loading ? 'Loading...' : group?.name || 'Group Detail'}</h3>
-              <p className="text-xs text-gray-500 mt-0.5">Ransomware Group Intelligence</p>
+              <h3 className="text-base font-medium text-text-base">{loading ? 'Loading...' : group?.name || 'Group Detail'}</h3>
+              <p className="text-xs text-text-muted mt-0.5">Ransomware Group Intelligence</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
+          <button onClick={onClose} className="p-1.5 text-text-muted hover:text-text-muted hover:bg-surface rounded transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -678,7 +678,7 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
           {loading ? (
             <div className="flex flex-col items-center justify-center py-16 gap-3">
               <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
-              <span className="text-gray-500 text-sm font-medium">Fetching group intelligence...</span>
+              <span className="text-text-muted text-sm font-medium">Fetching group intelligence...</span>
             </div>
           ) : group ? (
             <>
@@ -704,18 +704,18 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
               {/* Locations / Mirrors */}
               {group.locations.length > 0 && (
                 <div>
-                  <h4 className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <h4 className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
                     <Globe className="w-3.5 h-3.5" /> Mirrors & Locations ({group.locations.length})
                   </h4>
-                  <div className="border border-gray-200 rounded-md overflow-hidden">
-                    <table className="w-full text-left text-sm text-gray-600">
+                  <div className="border border-border rounded-md overflow-hidden">
+                    <table className="w-full text-left text-sm text-text-muted">
                       <tbody className="divide-y divide-gray-100">
                         {group.locations.map((loc, i) => (
-                          <tr key={i} className="hover:bg-gray-50 transition-colors">
+                          <tr key={i} className="hover:bg-surface transition-colors">
                             <td className="px-4 py-2 w-8">
                               <div className={`w-2 h-2 rounded-full ${loc.available ? 'bg-green-500' : 'bg-red-500'}`} />
                             </td>
-                            <td className="px-4 py-2 font-medium text-gray-800 break-all">
+                            <td className="px-4 py-2 font-medium text-text-base break-all">
                               {loc.slug}
                             </td>
                             <td className="px-4 py-2 text-xs">
@@ -737,15 +737,15 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
               {/* Recent Posts */}
               {posts.length > 0 && (
                 <div>
-                  <h4 className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <h4 className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3 flex items-center gap-2">
                     <Crosshair className="w-3.5 h-3.5" /> Recent Victims ({posts.length})
                   </h4>
-                  <div className="border border-gray-200 rounded-md overflow-hidden">
-                    <table className="w-full text-left text-sm text-gray-600">
+                  <div className="border border-border rounded-md overflow-hidden">
+                    <table className="w-full text-left text-sm text-text-muted">
                       <tbody className="divide-y divide-gray-100">
                         {displayedPosts.map((p, i) => (
-                          <tr key={i} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-4 py-3 font-medium text-gray-800 flex items-center gap-2">
+                          <tr key={i} className="hover:bg-surface transition-colors">
+                            <td className="px-4 py-3 font-medium text-text-base flex items-center gap-2">
                               <Crosshair className="w-3.5 h-3.5 text-red-400" />
                               {p.title}
                             </td>
@@ -770,7 +770,7 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
               )}
 
               {posts.length === 0 && group.locations.length === 0 && (
-                <div className="text-center py-10 text-gray-500 text-sm font-medium">
+                <div className="text-center py-10 text-text-muted text-sm font-medium">
                   No detailed information available for this group.
                 </div>
               )}
@@ -784,7 +784,7 @@ function GroupDetailModal({ group, posts, loading, onClose }: { group: GroupDeta
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-20 gap-4 text-gray-500 bg-gray-50 border border-gray-200 rounded-md">
+    <div className="flex flex-col items-center justify-center py-20 gap-4 text-text-muted bg-surface border border-border rounded-md">
       <Shield className="w-10 h-10 opacity-30" />
       <p className="font-medium text-sm">{message}</p>
     </div>
