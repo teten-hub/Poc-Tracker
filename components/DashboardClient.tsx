@@ -157,7 +157,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
         {/* Table Section (Wazuh Style) */}
         <div className="bg-neutral rounded-md border border-border shadow-sm overflow-hidden mb-6">
           <div className="px-5 py-4 border-b border-border flex justify-between items-center">
-            <h2 className="text-base font-medium text-text-base">Security alerts ({filteredAndSortedData.length} total)</h2>
+            <h2 className="text-base font-medium text-text-base">PoC Lists ({filteredAndSortedData.length} total)</h2>
           </div>
           
           <div className="overflow-x-auto min-h-[400px]">
@@ -170,12 +170,12 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
               <table className="w-full text-left text-sm text-text-muted">
                 <thead className="text-[11px] font-semibold text-text-muted bg-neutral border-b border-border sticky top-0">
                   <tr>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap">Time <ChevronDown className="w-3 h-3 inline text-blue-500" /></th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap">Time</th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">CVE(s)</th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">Description</th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">CVSS</th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">Stars</th>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap text-right">Actions</th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap text-right">GitHub</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
