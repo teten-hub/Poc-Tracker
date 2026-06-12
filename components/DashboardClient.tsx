@@ -69,7 +69,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
   useEffect(() => {
     const cvesToFetch = Array.from(new Set(
       currentData
-        .filter(p => p.cve_id && p.cvss_score === null && enrichedData[p.cve_id] === undefined)
+        .filter(p => p.cve_id && (p.cvss_score === null || p.cvss_score === undefined) && enrichedData[p.cve_id] === undefined)
         .map(p => p.cve_id)
     ));
 

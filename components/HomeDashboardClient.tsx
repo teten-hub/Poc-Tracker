@@ -34,7 +34,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   useEffect(() => {
     const cvesToFetch = Array.from(new Set(
       latestPocs
-        .filter(p => p.cve_id && p.cvss_score === null && enrichedPocsMap[p.cve_id] === undefined)
+        .filter(p => p.cve_id && (p.cvss_score === null || p.cvss_score === undefined) && enrichedPocsMap[p.cve_id] === undefined)
         .map(p => p.cve_id)
     )).slice(0, 50);
 
@@ -383,7 +383,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
             <div className="bg-neutral rounded-md border border-border shadow-sm transition-colors">
               <div className="px-5 py-4 border-b border-border flex items-center justify-between">
                 <h2 className="text-base font-medium text-text-base flex items-center gap-2">
-                  <Bug className="w-4 h-4 text-text-muted dark:text-text-muted" /> Latest Security Alerts
+                  <Bug className="w-4 h-4 text-text-muted dark:text-text-muted" /> Latest PoC Lists
                 </h2>
                 <Link href="/pocs" className="text-xs text-blue-600 dark:text-blue-400 font-medium hover:underline">View all</Link>
               </div>
