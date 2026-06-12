@@ -28,7 +28,8 @@ async function fetchCvssScores(cveIds: string[]) {
           const allMetrics = [...adpMetrics, ...cnaMetrics];
           
           for (const m of allMetrics) {
-            if (m.cvssV3_1) { cvss = m.cvssV3_1.baseScore; break; }
+            if (m.cvssV4_0) { cvss = m.cvssV4_0.baseScore; break; }
+            else if (m.cvssV3_1) { cvss = m.cvssV3_1.baseScore; break; }
             else if (m.cvssV3_0) { cvss = m.cvssV3_0.baseScore; break; }
             else if (m.cvssV3) { cvss = m.cvssV3.baseScore; break; }
             else if (m.cvssV2_0) { cvss = m.cvssV2_0.baseScore; break; }
