@@ -127,11 +127,23 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   // TweetFeed Calculations
   const totalIocs = tweetFeedData.length;
   const typeCounts: Record<string, number> = { url: 0, domain: 0, ip: 0, sha256: 0, md5: 0 };
+  const tagCounts: Record<string, number> = {};
+
   tweetFeedData.forEach(ioc => {
     if (typeCounts[ioc.type] !== undefined) {
       typeCounts[ioc.type]++;
     }
+    if (ioc.tags && Array.isArray(ioc.tags)) {
+      ioc.tags.forEach((tag: string) => {
+        const clean = tag.replace('#', '').toLowerCase();
+        tagCounts[clean] = (tagCounts[clean] || 0) + 1;
+      });
+    }
   });
+
+  const topTags = Object.entries(tagCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
 
   const pctUrl = totalIocs > 0 ? (typeCounts.url / totalIocs) * 100 : 0;
   const pctDomain = totalIocs > 0 ? (typeCounts.domain / totalIocs) * 100 : 0;
@@ -204,36 +216,65 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
         {/* Charts Split Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           
-          {/* Chart 1: Donut Chart (Vulnerability Severities) */}
+          {/* Chart 1: Bar Chart (Vulnerability Severities) */}
           <div className="bg-neutral rounded-md border border-border shadow-sm flex flex-col transition-colors">
             <div className="flex items-center justify-between px-5 py-3 border-b border-border ">
               <h3 className="text-[13px] font-medium text-text-base ">PoC Severity Distribution</h3>
             </div>
-            <div className="p-5 flex-1 flex items-center justify-center gap-8">
-              <div className="relative w-36 h-36 rounded-full flex items-center justify-center shrink-0 transition-all" style={{ background: conicGradient }}>
-                <div className="w-24 h-24 bg-neutral rounded-full flex items-center justify-center shadow-inner flex-col transition-colors">
-                  <span className="text-2xl font-bold text-text-base ">{totalPocs}</span>
-                  <span className="text-[10px] text-text-muted dark:text-text-muted font-medium uppercase tracking-wider">Total</span>
+            <div className="p-5 flex-1 flex flex-col justify-center gap-4">
+              
+              {/* Critical */}
+              <div className="flex flex-col gap-1.5 group">
+                <div className="flex items-center justify-between text-xs text-text-muted">
+                  <span className="font-medium flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-sm bg-[#d64545]"></div> Critical (9.0+)
+                  </span>
+                  <span className="font-mono font-bold text-text-base">{countCritical}</span>
+                </div>
+                <div className="w-full h-2.5 bg-surface rounded-sm overflow-hidden flex">
+                  <div className="h-full bg-[#d64545] transition-all duration-500" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
                 </div>
               </div>
-              <div className="flex flex-col gap-3 text-[12px] text-text-muted dark:text-text-muted flex-1">
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#d64545]"></div> Critical</span>
-                  <span className="font-bold">{countCritical}</span>
+
+              {/* High */}
+              <div className="flex flex-col gap-1.5 group">
+                <div className="flex items-center justify-between text-xs text-text-muted">
+                  <span className="font-medium flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-sm bg-[#ffeb6d]"></div> High (7.0 - 8.9)
+                  </span>
+                  <span className="font-mono font-bold text-text-base">{countHigh}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#ffeb6d]"></div> High</span>
-                  <span className="font-bold">{countHigh}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#3d82f6]"></div> Medium</span>
-                  <span className="font-bold">{countMedium}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm" style={{ backgroundColor: donutTrackBg }}></div> Low/Unknown</span>
-                  <span className="font-bold">{countLowOrUnknown}</span>
+                <div className="w-full h-2.5 bg-surface rounded-sm overflow-hidden flex">
+                  <div className="h-full bg-[#ffeb6d] transition-all duration-500" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
                 </div>
               </div>
+
+              {/* Medium */}
+              <div className="flex flex-col gap-1.5 group">
+                <div className="flex items-center justify-between text-xs text-text-muted">
+                  <span className="font-medium flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-sm bg-[#3d82f6]"></div> Medium (4.0 - 6.9)
+                  </span>
+                  <span className="font-mono font-bold text-text-base">{countMedium}</span>
+                </div>
+                <div className="w-full h-2.5 bg-surface rounded-sm overflow-hidden flex">
+                  <div className="h-full bg-[#3d82f6] transition-all duration-500" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
+                </div>
+              </div>
+
+              {/* Low / Unknown */}
+              <div className="flex flex-col gap-1.5 group">
+                <div className="flex items-center justify-between text-xs text-text-muted">
+                  <span className="font-medium flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: donutTrackBg }}></div> Low / Unknown
+                  </span>
+                  <span className="font-mono font-bold text-text-base">{countLowOrUnknown}</span>
+                </div>
+                <div className="w-full h-2.5 bg-surface rounded-sm overflow-hidden flex">
+                  <div className="h-full transition-all duration-500" style={{ backgroundColor: donutTrackBg, width: `${totalPocs > 0 ? Math.max((countLowOrUnknown / totalPocs) * 100, 1) : 0}%` }} />
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -274,32 +315,33 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
             </div>
           </div>
 
-          {/* Chart 3: Top High Risk Vulnerabilities Bar Chart */}
+          {/* Chart 3: Top Threat Tags Bar Chart */}
           <div className="bg-neutral rounded-md border border-border shadow-sm flex flex-col transition-colors">
             <div className="flex items-center justify-between px-5 py-3 border-b border-border ">
-              <h3 className="text-[13px] font-medium text-text-base ">Top 5 High Risk Vulnerabilities (CVSS)</h3>
+              <h3 className="text-[13px] font-medium text-text-base ">Top Threat Tags</h3>
             </div>
             <div className="p-5 flex-1 flex flex-col justify-center gap-4">
-              {highRiskPocs.map((poc, i) => {
-                const barWidth = Math.max(((poc.cvss_score || 0) / 10) * 100, 2);
+              {topTags.map(([tag, count], i) => {
+                const maxCount = topTags.length > 0 ? topTags[0][1] : 1;
+                const barWidth = Math.max((count / maxCount) * 100, 2);
                 return (
-                  <div key={i} className="flex flex-col gap-1.5 group">
-                    <div className="flex items-center justify-between text-xs text-text-muted dark:text-text-muted">
-                      <span className="font-medium truncate max-w-[250px]" title={poc.cve_id || poc.repo_name}>
-                        {poc.cve_id || (poc.repo_name ? poc.repo_name.split('/')[1] : 'Unknown')}
+                  <div key={tag} className="flex flex-col gap-1.5 group">
+                    <div className="flex items-center justify-between text-xs text-text-muted">
+                      <span className="font-medium uppercase tracking-wider group-hover:text-blue-600 transition-colors">
+                        #{tag}
                       </span>
-                      <span className="font-mono text-text-muted dark:text-text-muted group-hover:text-red-500 transition-colors flex items-center gap-1">
-                        <AlertTriangle className="w-3 h-3 text-[#d64545]" /> {poc.cvss_score?.toFixed(1)}
+                      <span className="font-mono font-bold text-text-base">
+                        {count}
                       </span>
                     </div>
-                    <div className="w-full h-2.5 bg-[#f5f5f5] rounded-sm overflow-hidden flex transition-colors">
-                      <div className="h-full bg-[#d64545] transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                    <div className="w-full h-2.5 bg-surface rounded-sm overflow-hidden flex transition-colors">
+                      <div className="h-full bg-[#3d82f6] transition-all duration-500" style={{ width: `${barWidth}%` }} />
                     </div>
                   </div>
                 );
               })}
-              {highRiskPocs.length === 0 && (
-                <div className="text-center text-text-muted dark:text-text-muted text-xs py-10">No data available.</div>
+              {topTags.length === 0 && (
+                <div className="text-center text-text-muted text-xs py-10">No tags found.</div>
               )}
             </div>
           </div>
@@ -321,10 +363,9 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                   <thead className="text-[11px] font-semibold text-text-muted dark:text-text-muted bg-surface border-b border-border transition-colors">
                     <tr>
                       <th className="px-5 py-3 font-medium whitespace-nowrap">Time</th>
-                      <th className="px-5 py-3 font-medium whitespace-nowrap">Repository</th>
                       <th className="px-5 py-3 font-medium whitespace-nowrap">CVE(s)</th>
                       <th className="px-5 py-3 font-medium whitespace-nowrap">Description</th>
-                      <th className="px-5 py-3 font-medium whitespace-nowrap">Level</th>
+                      <th className="px-5 py-3 font-medium whitespace-nowrap">CVSS</th>
                       <th className="px-5 py-3 font-medium whitespace-nowrap text-right">Stars</th>
                     </tr>
                   </thead>
@@ -336,12 +377,6 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                           <td className="px-5 py-2 whitespace-nowrap text-xs">
                             {new Date(poc.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                           </td>
-                          <td className="px-5 py-2">
-                            <a href={poc.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 max-w-[150px] truncate hover:text-blue-600 transition-colors font-medium">
-                              <GitBranch className="w-3.5 h-3.5 text-text-muted dark:text-text-muted" />
-                              {poc.repo_name ? (poc.repo_name.split('/')[1] || poc.repo_name) : 'Unknown'}
-                            </a>
-                          </td>
                           <td className="px-5 py-2 font-medium text-text-base ">
                             {poc.cve_id || '-'}
                           </td>
@@ -350,11 +385,11 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                           </td>
                           <td className="px-5 py-2">
                             <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${
-                              level >= 10 ? 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20' :
-                              level >= 7 ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-[#ffeb6d] border-orange-200 dark:border-orange-500/20' :
-                              'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'
+                              (poc.cvss_score || 0) >= 9.0 ? 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20' :
+                              (poc.cvss_score || 0) >= 7.0 ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-[#ffeb6d] border-orange-200 dark:border-orange-500/20' :
+                              poc.cvss_score ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20' : 'bg-neutral text-text-muted border-border'
                             }`}>
-                              Lvl {level}
+                              {poc.cvss_score ? poc.cvss_score.toFixed(1) : '-'}
                             </span>
                           </td>
                           <td className="px-5 py-2 text-right">

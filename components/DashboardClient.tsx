@@ -171,10 +171,9 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
                 <thead className="text-[11px] font-semibold text-text-muted bg-neutral border-b border-border sticky top-0">
                   <tr>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">Time <ChevronDown className="w-3 h-3 inline text-blue-500" /></th>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap">Agent name</th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">CVE(s)</th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">Description</th>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap">Level</th>
+                    <th className="px-5 py-3 font-medium whitespace-nowrap">CVSS</th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap">Stars</th>
                     <th className="px-5 py-3 font-medium whitespace-nowrap text-right">Actions</th>
                   </tr>
@@ -190,12 +189,6 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
                           <span className="text-text-muted mr-1">&gt;</span> 
                           {new Date(poc.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                         </td>
-                        <td className="px-5 py-3">
-                          <span className="flex items-center gap-1.5 max-w-[150px] truncate" title={poc.repo_name}>
-                            <GitBranch className="w-3.5 h-3.5 text-text-muted" />
-                            {poc.repo_name ? (poc.repo_name.split('/')[1] || poc.repo_name) : 'Unknown'}
-                          </span>
-                        </td>
                         <td className="px-5 py-3 font-medium text-blue-500">
                           {poc.cve_id || '-'}
                         </td>
@@ -204,11 +197,11 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
                         </td>
                         <td className="px-5 py-3">
                           <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                            level >= 10 ? 'bg-red-50 text-red-600' :
-                            level >= 7 ? 'bg-orange-50 text-orange-600' :
-                            'bg-blue-50 text-blue-600'
+                            (poc.cvss_score || 0) >= 9.0 ? 'bg-red-50 text-red-600 border border-red-200' :
+                            (poc.cvss_score || 0) >= 7.0 ? 'bg-orange-50 text-orange-600 border border-orange-200' :
+                            poc.cvss_score ? 'bg-blue-50 text-blue-600 border border-blue-200' : 'bg-neutral text-text-muted border border-border'
                           }`}>
-                            {level} {poc.cvss_score ? `(${poc.cvss_score})` : ''}
+                            {poc.cvss_score ? poc.cvss_score.toFixed(1) : '-'}
                           </span>
                         </td>
                         <td className="px-5 py-3">

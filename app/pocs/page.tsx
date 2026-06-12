@@ -14,7 +14,10 @@ async function fetchCvssScores(cveIds: string[]) {
     
     await Promise.all(batch.map(async (cve) => {
       try {
-        const response = await fetch(`https://cve.circl.lu/api/cve/${cve}`, { next: { revalidate: 3600 } });
+        const response = await fetch(`https://cve.circl.lu/api/cve/${cve}`, { 
+          next: { revalidate: 3600 },
+          signal: AbortSignal.timeout(4000)
+        });
         if (!response.ok) throw new Error('Failed');
         const data = await response.json();
         
@@ -83,9 +86,9 @@ export default async function Page() {
       cvss_score: cvssData[poc.cve_id]?.cvss_score ?? null,
       severity: cvssData[poc.cve_id]?.severity ?? 'UNKNOWN',
     }));
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching data:', error);
-    errorMsgContent = 'Upstream API is unavailable. Please try again later.';
+    errorMsgContent = `Upstream API is unavailable. Please try again later. (${error?.message || 'Unknown Error'})`;
   }
 
   return (
