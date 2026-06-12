@@ -9,7 +9,7 @@ async function fetchCvssScores(cveIds: string[]) {
     
     await Promise.all(batch.map(async (cve) => {
       try {
-        const response = await fetch(`https://cve.circl.lu/api/cve/${cve}`, { 
+        const response = await fetch(`https://cveawg.mitre.org/api/cve/${cve}`, { 
           next: { revalidate: 3600 },
           signal: AbortSignal.timeout(4000)
         });
