@@ -9,9 +9,10 @@ import { PocData } from '@/types';
 
 interface HomeDashboardClientProps {
   latestPocs?: PocData[];
+  totalPocsCount?: number;
 }
 
-export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardClientProps) {
+export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 0 }: HomeDashboardClientProps) {
   const router = useRouter();
   const [ipAddress, setIpAddress] = useState('');
   const [tweetFeedData, setTweetFeedData] = useState<any[]>([]);
@@ -102,7 +103,7 @@ export default function HomeDashboardClient({ latestPocs = [] }: HomeDashboardCl
   };
 
   // Stats Calculations
-  const totalPocs = latestPocs.length;
+  const totalPocs = totalPocsCount > 0 ? totalPocsCount : latestPocs.length;
   const countCritical = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 9.0).length;
   const countHigh = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 7.0 && p.cvss_score < 9.0).length;
   const countMedium = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 4.0 && p.cvss_score < 7.0).length;

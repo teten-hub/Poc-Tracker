@@ -21,12 +21,15 @@ export default async function Page() {
       // Sort by date created desc
       pocs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       
-      latestPocs = pocs.slice(0, 3);
+      const totalCount = pocs.length;
+      latestPocs = pocs.slice(0, 500);
+      
+      return <HomeDashboardClient latestPocs={latestPocs} totalPocsCount={totalCount} />;
     }
   } catch (error) {
     console.error('Error fetching latest pocs:', error);
   }
 
-  return <HomeDashboardClient latestPocs={latestPocs} />;
+  return <HomeDashboardClient latestPocs={latestPocs} totalPocsCount={0} />;
 }
 
