@@ -16,7 +16,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   const router = useRouter();
   const [ipAddress, setIpAddress] = useState('');
   const [tweetFeedData, setTweetFeedData] = useState<any[]>([]);
-  // Removed dark mode logic to adhere to DESIGN.md
+  const [enrichedPocsMap, setEnrichedPocsMap] = useState<Record<string, { cvss_score: number | null, severity: string }>>({});
 
   useEffect(() => {
     const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -30,6 +30,29 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
       })
       .catch(err => console.error("Failed to load TweetFeed:", err));
   }, []);
+
+  useEffect(() => {
+    const cvesToFetch = Array.from(new Set(
+      latestPocs
+        .filter(p => p.cve_id && p.cvss_score === null && enrichedPocsMap[p.cve_id] === undefined)
+        .map(p => p.cve_id)
+    )).slice(0, 50);
+
+    if (cvesToFetch.length > 0) {
+      fetch('/api/cvss', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cves: cvesToFetch })
+      })
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data) {
+          setEnrichedPocsMap(prev => ({ ...prev, ...json.data }));
+        }
+      })
+      .catch(console.error);
+    }
+  }, [latestPocs, enrichedPocsMap]);
 
   const handleIpSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,10 +126,16 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   };
 
   // Stats Calculations
-  const totalPocs = totalPocsCount > 0 ? totalPocsCount : latestPocs.length;
-  const countCritical = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 9.0).length;
-  const countHigh = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 7.0 && p.cvss_score < 9.0).length;
-  const countMedium = latestPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 4.0 && p.cvss_score < 7.0).length;
+  const displayPocs = latestPocs.map(poc => {
+    const enriched = enrichedPocsMap[poc.cve_id];
+    if (enriched) return { ...poc, cvss_score: enriched.cvss_score, severity: enriched.severity };
+    return poc;
+  });
+
+  const totalPocs = totalPocsCount > 0 ? totalPocsCount : displayPocs.length;
+  const countCritical = displayPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 9.0).length;
+  const countHigh = displayPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 7.0 && p.cvss_score < 9.0).length;
+  const countMedium = displayPocs.filter(p => p.cvss_score !== null && p.cvss_score >= 4.0 && p.cvss_score < 7.0).length;
   const countLowOrUnknown = totalPocs - countCritical - countHigh - countMedium;
 
   const pctCritical = totalPocs > 0 ? (countCritical / totalPocs) * 100 : 0;
@@ -116,8 +145,8 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   const donutTrackBg = '#b7c6d7';
   const conicGradient = `conic-gradient(#d64545 0% ${pctCritical}%, #ffeb6d ${pctCritical}% ${pctCritical + pctHigh}%, #3d82f6 ${pctCritical + pctHigh}% ${pctCritical + pctHigh + pctMedium}%, ${donutTrackBg} ${pctCritical + pctHigh + pctMedium}% 100%)`;
 
-  // For Chart 3: Top High Risk Vulnerabilities
-  const highRiskPocs = [...latestPocs]
+  // For Chart 3: Top High Risk Vulnerabilities (used to be here, keeping data logic if needed)
+  const highRiskPocs = [...displayPocs]
     .filter(p => p.cvss_score && p.cvss_score >= 7.0)
     .sort((a, b) => (b.cvss_score || 0) - (a.cvss_score || 0))
     .slice(0, 5);
@@ -370,7 +399,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 ">
-                    {latestPocs.slice(0, 10).map((poc) => {
+                    {displayPocs.slice(0, 10).map((poc) => {
                       const level = getSeverityLevel(poc.cvss_score);
                       return (
                         <tr key={poc.id} className="hover:bg-surface dark:hover:bg-[#2a2a2a] transition-colors">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, ShieldAlert, Star, ExternalLink, GitBranch, Clock, Activity, Shield, AlertTriangle, Bug, Radar, ChevronDown, FileText, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { PocData } from '@/types';
@@ -14,9 +14,15 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
   const [sortBy, setSortBy] = useState({ field: 'date', order: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15; // Increased for table view
+  const [enrichedData, setEnrichedData] = useState<Record<string, { cvss_score: number | null, severity: string }>>({});
 
   const filteredAndSortedData = useMemo(() => {
-    let result = [...initialData];
+    let result = initialData.map(item => {
+      if (item.cve_id && enrichedData[item.cve_id]) {
+        return { ...item, cvss_score: enrichedData[item.cve_id].cvss_score, severity: enrichedData[item.cve_id].severity as 'CRITICAL'|'HIGH'|'MEDIUM'|'LOW'|'UNKNOWN' };
+      }
+      return item;
+    });
 
     if (searchTerm) {
       const lowerSearch = searchTerm.toLowerCase();
@@ -59,6 +65,29 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
   const totalItems = filteredAndSortedData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
   const currentData = filteredAndSortedData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    const cvesToFetch = Array.from(new Set(
+      currentData
+        .filter(p => p.cve_id && p.cvss_score === null && enrichedData[p.cve_id] === undefined)
+        .map(p => p.cve_id)
+    ));
+
+    if (cvesToFetch.length > 0) {
+      fetch('/api/cvss', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cves: cvesToFetch })
+      })
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data) {
+          setEnrichedData(prev => ({ ...prev, ...json.data }));
+        }
+      })
+      .catch(console.error);
+    }
+  }, [currentData, enrichedData]);
 
   const getSeverityLevel = (score: number | null) => {
     if (score === null) return 0;
