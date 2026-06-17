@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-
-const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+import net from 'net';
 
 export async function GET(request: Request) {
   try {
@@ -14,12 +13,14 @@ export async function GET(request: Request) {
       );
     }
 
-    if (!ipRegex.test(ip)) {
+    if (!net.isIP(ip)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid IPv4 address format' },
+        { success: false, error: 'Invalid IP address format' },
         { status: 400 }
       );
     }
+
+    const ipType = net.isIPv6(ip) ? 'IPv6' : 'IPv4';
 
     const vtApiKey = process.env.VIRUSTOTAL_API_KEY;
     const otxApiKey = process.env.OTX_API_KEY;
@@ -70,7 +71,7 @@ export async function GET(request: Request) {
       // 2. AlienVault OTX Lookup
       (async () => {
         // AlienVault general info indicator lookup
-        const url = `https://otx.alienvault.com/api/v1/indicators/IPv4/${ip}/general`;
+        const url = `https://otx.alienvault.com/api/v1/indicators/${ipType}/${ip}/general`;
         const headers: Record<string, string> = {};
         if (otxApiKey && otxApiKey !== 'your_otx_api_key_here') {
           headers['X-OTX-API-KEY'] = otxApiKey;
