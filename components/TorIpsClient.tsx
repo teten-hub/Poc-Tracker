@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Search, Loader2, Radio, Shield, Activity, ShieldAlert, AlertTriangle, Crosshair, FileText, Globe, ExternalLink, Activity as ActivityIcon } from 'lucide-react';
+import { Search, Loader2, Radio, ShieldAlert, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import TorIcon from './TorIcon';
 
@@ -53,107 +53,114 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
 
   return (
     <div className="min-h-screen bg-base text-text-base font-sans pb-12">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         
-        {/* Page Title Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-             <TorIcon className="w-6 h-6 fill-current text-tertiary" />
-             <h1 className="text-3xl font-semibold text-text-base tracking-tight">Tor Exit Node Directory</h1>
+        {/* Page Header */}
+        <div className="page-header">
+          <div className="page-icon">
+            <TorIcon className="w-5 h-5 fill-current" />
+          </div>
+          <div>
+            <h1>Tor Exit Node Directory</h1>
+            <p className="text-sm text-text-muted mt-0.5">Known Tor exit node IP addresses</p>
           </div>
         </div>
 
-        {/* Global Overview Stats - Single Strip Card */}
-        <div className="bg-neutral rounded-md border border-border shadow-sm mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200">
-           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-xs font-medium text-text-muted mb-1">Total Tracked IPs</p>
-             <p className="text-3xl font-normal text-green-500 tracking-tight">{initialData.total.toLocaleString()}</p>
+        {/* Inline Metrics — NO CARD */}
+        <div className="metric-row flex-wrap">
+           <div className="metric-item">
+             <span className="metric-label">Total Tracked</span>
+             <span className="metric-value text-success">{initialData.total.toLocaleString()}</span>
            </div>
-           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-xs font-medium text-text-muted mb-1">Listed IPs</p>
-             <p className="text-3xl font-normal text-blue-500 tracking-tight">{ips.length.toLocaleString()}</p>
+           <div className="metric-item">
+             <span className="metric-label">Listed IPs</span>
+             <span className="metric-value text-tertiary">{ips.length.toLocaleString()}</span>
            </div>
-           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-xs font-medium text-text-muted mb-1">Status</p>
-             <p className="text-3xl font-normal text-text-base tracking-tight flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div> Active</p>
+           <div className="metric-item">
+             <span className="metric-label">Status</span>
+             <span className="flex items-center gap-2 mt-1">
+               <span className="relative flex h-2.5 w-2.5">
+                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success"></span>
+               </span>
+               <span className="text-sm font-semibold text-text-base">Active</span>
+             </span>
            </div>
-           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-xs font-medium text-text-muted mb-1">Data Source</p>
-             <a href="https://github.com/teten-hub/ip_list/blob/main/tor_ips.txt" target="_blank" rel="noopener noreferrer" className="text-base font-medium text-blue-500 hover:underline mt-1">teten-hub/ip_list</a>
+           <div className="metric-item">
+             <span className="metric-label">Data Source</span>
+             <a href="https://github.com/teten-hub/ip_list/blob/main/tor_ips.txt" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-tertiary hover:underline mt-1">teten-hub/ip_list</a>
            </div>
         </div>
 
-        {/* Search Bar */}
+        {/* Search — floating */}
         <div className="mb-6">
-          <div className="flex items-center bg-neutral rounded-md border border-border focus-within:border-blue-500 px-4 py-2 shadow-sm transition-all">
-            <Search className="h-4 w-4 text-text-muted shrink-0 mr-3" />
+          <div className="floating-input flex items-center gap-3">
+            <Search className="h-4 w-4 text-text-muted shrink-0" />
             <input
               type="text"
-              className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-text-muted text-text-base py-1"
-              placeholder={`Search across all ${totalCount.toLocaleString()} IPs in repo...`}
+              className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-text-muted text-text-base py-0.5"
+              placeholder={`Search across all ${totalCount.toLocaleString()} IPs...`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            {isSearching && <Loader2 className="w-4 h-4 text-blue-500 animate-spin shrink-0 ml-3" />}
+            {isSearching && <Loader2 className="w-4 h-4 text-tertiary animate-spin shrink-0" />}
           </div>
         </div>
 
-        {/* Info Header */}
-        <div className="flex items-center justify-between mb-4 bg-neutral px-5 py-3 rounded-md border border-border shadow-sm">
-          <div className="flex items-center gap-2 text-text-muted text-[11px] font-semibold uppercase tracking-wider">
-            <Radio className="w-3.5 h-3.5 text-green-500 animate-pulse" />
-            <span>
-              {searchTerm 
-                ? `Found ${matchedCount.toLocaleString()} matches · Showing ${ips.length}`
-                : `Showing up to 100 latest IPs added to repo (out of ${totalCount.toLocaleString()} total)`}
-            </span>
-          </div>
+        {/* Info line — no card */}
+        <div className="flex items-center gap-2 text-text-muted text-[11px] font-semibold uppercase tracking-wider mb-4">
+          <Radio className="w-3.5 h-3.5 text-success animate-pulse" />
+          <span>
+            {searchTerm 
+              ? `Found ${matchedCount.toLocaleString()} matches · Showing ${ips.length}`
+              : `Showing up to 100 latest IPs (out of ${totalCount.toLocaleString()} total)`}
+          </span>
         </div>
 
         {/* Error State */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-6 text-center mb-6">
-            <AlertTriangle className="w-8 h-8 text-red-500 mx-auto mb-3" />
-            <p className="text-red-700 font-medium">{error}</p>
+          <div className="bg-error/10 border border-error/20 rounded-lg p-6 text-center mb-6">
+            <AlertTriangle className="w-8 h-8 text-error mx-auto mb-3" />
+            <p className="text-error font-medium">{error}</p>
           </div>
         )}
 
-        {/* List Section (Wazuh Table Style) */}
-        <div className="bg-neutral rounded-md border border-border shadow-sm overflow-hidden mb-6">
+        {/* Table — section panel */}
+        <div className="section-panel mb-6">
           <div className="overflow-x-auto min-h-[300px]">
             {ips.length === 0 && !isSearching && !error ? (
               <div className="flex flex-col items-center justify-center py-20 text-text-muted">
-                <ShieldAlert className="h-10 w-10 mb-4 opacity-50" />
-                <p className="text-sm">No IPs found matching your search.</p>
+                <ShieldAlert className="h-10 w-10 mb-4 opacity-30" />
+                <p className="text-sm font-medium">No IPs found matching your search.</p>
               </div>
             ) : (
-              <table className="w-full text-left text-sm text-text-muted">
-                <thead className="text-[11px] font-semibold text-text-muted bg-surface border-b border-border">
+              <table className="clean-table">
+                <thead>
                   <tr>
-                    <th className="px-5 py-3 w-16 text-center">#</th>
-                    <th className="px-5 py-3">IP Address</th>
-                    <th className="px-5 py-3">Type</th>
-                    <th className="px-5 py-3 text-right">Actions</th>
+                    <th className="px-4 py-3 w-16 text-center">#</th>
+                    <th className="px-4 py-3">IP Address</th>
+                    <th className="px-4 py-3">Type</th>
+                    <th className="px-4 py-3 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody>
                   {ips.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((ip, index) => (
-                    <tr key={`${ip}-${index}`} className="hover:bg-surface transition-colors group">
-                      <td className="px-5 py-3 text-center text-xs text-text-muted">
+                    <tr key={`${ip}-${index}`} className="group">
+                      <td className="px-4 py-3 text-center text-xs text-text-muted">
                         {((currentPage - 1) * itemsPerPage) + index + 1}
                       </td>
-                      <td className="px-5 py-3 font-mono text-text-base font-medium">
+                      <td className="px-4 py-3 font-mono text-text-base font-medium text-sm">
                         {ip}
                       </td>
-                      <td className="px-5 py-3">
-                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 border border-green-200">
+                      <td className="px-4 py-3">
+                        <span className="badge badge-success">
                           Tor Exit Node
                         </span>
                       </td>
-                      <td className="px-5 py-3 text-right">
+                      <td className="px-4 py-3 text-right">
                         <Link 
                           href={`/ip-analyzer?ip=${ip}`}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral text-xs font-medium text-text-muted rounded border border-border hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors opacity-0 group-hover:opacity-100 uppercase tracking-wider"
+                          className="opacity-0 group-hover:opacity-100 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-tertiary rounded-md border border-tertiary/20 hover:bg-tertiary/10 transition-all"
                         >
                           Analyze
                         </Link>
@@ -165,27 +172,27 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
             )}
           </div>
           
-          {/* Pagination Footer */}
+          {/* Pagination */}
           {Math.ceil(ips.length / itemsPerPage) > 1 && (
-            <div className="px-5 py-3 border-t border-border flex justify-between items-center bg-surface">
+            <div className="px-5 py-3 border-t border-border flex justify-between items-center">
               <div className="text-xs text-text-muted font-medium">
                 Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, ips.length)} of {ips.length}
               </div>
-              <div className="flex gap-1">
+              <div className="flex gap-1.5">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
+                  className="pagination-btn"
                 >
                   Previous
                 </button>
-                <div className="px-3 py-1.5 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200 rounded">
+                <div className="pagination-current">
                   {currentPage}
                 </div>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(ips.length / itemsPerPage)))}
                   disabled={currentPage === Math.ceil(ips.length / itemsPerPage)}
-                  className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
+                  className="pagination-btn"
                 >
                   Next
                 </button>

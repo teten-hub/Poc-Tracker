@@ -4,8 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { 
   Search, Loader2, Shield, AlertTriangle, AlertCircle, CheckCircle2, 
-  Lock, Sparkles, Network, Calendar, HelpCircle, User, Activity, 
-  FileText, ExternalLink, Globe, HardDrive, ShieldAlert, BadgeInfo,
+  Lock, Network, Calendar, User, 
+  FileText, ExternalLink, Globe, ShieldAlert,
   MoreVertical, Crosshair
 } from 'lucide-react';
 
@@ -76,7 +76,6 @@ export default function IpAnalyzerClient() {
     }
   }, []);
 
-  // Auto-analyze if ?ip= query param is present (e.g. from Tor Exit Nodes dashboard)
   useEffect(() => {
     const ipParam = searchParams.get('ip');
     if (ipParam) {
@@ -99,50 +98,39 @@ export default function IpAnalyzerClient() {
     let isMalicious = false;
     let isSuspicious = false;
 
-    // Check VirusTotal
     if (results.vt?.success && results.vt?.configured) {
-      if (results.vt.malicious > 5) {
-        isMalicious = true;
-      } else if (results.vt.malicious > 0 || results.vt.suspicious > 0) {
-        isSuspicious = true;
-      }
+      if (results.vt.malicious > 5) isMalicious = true;
+      else if (results.vt.malicious > 0 || results.vt.suspicious > 0) isSuspicious = true;
     }
 
-    // Check AbuseIPDB
     if (results.abuseipdb?.success && results.abuseipdb?.configured) {
       const score = parseInt(results.abuseipdb.confidence_score) || 0;
-      if (score > 40) {
-        isMalicious = true;
-      } else if (score > 10) {
-        isSuspicious = true;
-      }
+      if (score > 40) isMalicious = true;
+      else if (score > 10) isSuspicious = true;
     }
 
-    // Check AlienVault OTX
-    if (results.otx?.success && results.otx?.pulses > 0) {
-      isSuspicious = true;
-    }
+    if (results.otx?.success && results.otx?.pulses > 0) isSuspicious = true;
 
     if (isMalicious) {
       return {
-        label: 'Level 12',
-        colorClass: 'bg-red-50 text-red-600 border-red-200',
-        icon: <ShieldAlert className="w-5 h-5 shrink-0 text-red-500 animate-pulse" />
+        label: 'Malicious',
+        className: 'badge-critical',
+        icon: <ShieldAlert className="w-4 h-4 animate-pulse" />
       };
     }
 
     if (isSuspicious) {
       return {
-        label: 'Level 7',
-        colorClass: 'bg-orange-50 text-orange-600 border-orange-200',
-        icon: <AlertCircle className="w-5 h-5 shrink-0 text-orange-500" />
+        label: 'Suspicious',
+        className: 'badge-high',
+        icon: <AlertCircle className="w-4 h-4" />
       };
     }
 
     return {
-      label: 'Level 3',
-      colorClass: 'bg-blue-50 text-blue-600 border-blue-200',
-      icon: <CheckCircle2 className="w-5 h-5 shrink-0 text-blue-500" />
+      label: 'Clean',
+      className: 'badge-success',
+      icon: <CheckCircle2 className="w-4 h-4" />
     };
   };
 
@@ -150,24 +138,27 @@ export default function IpAnalyzerClient() {
 
   return (
     <div className="min-h-screen bg-base text-text-base font-sans pb-12">
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         
-        {/* Page Title Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-             <Crosshair className="w-6 h-6 text-tertiary" />
-             <h1 className="text-3xl font-semibold text-text-base tracking-tight">IP Threat Analyzer</h1>
+        {/* Page Header */}
+        <div className="page-header">
+          <div className="page-icon">
+            <Crosshair className="w-5 h-5" />
+          </div>
+          <div>
+            <h1>IP Threat Analyzer</h1>
+            <p className="text-sm text-text-muted mt-0.5">Multi-source intelligence analysis</p>
           </div>
         </div>
 
-        {/* Search Bar */}
+        {/* Search — floating */}
         <div className="mb-8">
-          <form onSubmit={handleAnalyze} className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-1 items-center bg-neutral border border-border rounded-md focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 px-4 py-2 shadow-sm transition-all">
-              <Search className="h-4 w-4 text-text-muted shrink-0 mr-3" />
+          <form onSubmit={handleAnalyze} className="flex flex-col md:flex-row gap-3">
+            <div className="floating-input flex items-center gap-3 flex-1">
+              <Search className="h-4 w-4 text-text-muted shrink-0" />
               <input
                 type="text"
-                className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-text-muted text-text-base font-mono py-1"
+                className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-text-muted text-text-base font-mono py-0.5"
                 placeholder="Enter IPv4 or IPv6 Address..."
                 value={ipAddress}
                 onChange={(e) => setIpAddress(e.target.value)}
@@ -176,30 +167,30 @@ export default function IpAnalyzerClient() {
             <button
               type="submit"
               disabled={isAnalyzing || !ipAddress}
-              className="px-6 py-2.5 bg-blue-50 text-blue-600 font-medium rounded-md border border-blue-200 hover:bg-blue-100 disabled:opacity-50 transition-colors shadow-sm"
+              className="btn-primary px-6 shrink-0 disabled:opacity-50"
             >
               {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : 'Scan IP'}
             </button>
           </form>
-          {error && <p className="text-red-500 text-sm mt-4 font-medium flex items-center gap-1.5"><AlertCircle className="w-4 h-4" />{error}</p>}
+          {error && <p className="text-error text-sm mt-3 font-medium flex items-center gap-1.5"><AlertCircle className="w-4 h-4" />{error}</p>}
         </div>
 
         {/* Results Area */}
         {results && (
-          <div className="space-y-6">
+          <div className="space-y-8 animate-fade-in-up">
             
-            {/* Overview Card */}
-            <div className="bg-neutral rounded-md border border-border shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            {/* Overview — inline, no card */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-border">
               <div>
                 <div className="flex items-center gap-3">
-                  <h3 className="text-2xl font-mono font-medium tracking-tight text-text-base">{results.ip}</h3>
+                  <h3 className="text-2xl font-mono font-bold tracking-tight text-text-base">{results.ip}</h3>
                   {alertLevel && (
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border ${alertLevel.colorClass}`}>
+                    <span className={`badge ${alertLevel.className} text-xs`}>
                       {alertLevel.icon} {alertLevel.label}
                     </span>
                   )}
                 </div>
-                <p className="text-sm font-medium text-text-muted mt-2 flex items-center gap-2">
+                <p className="text-sm text-text-muted mt-1.5 flex items-center gap-2">
                   <Globe className="w-4 h-4" />
                   {results.location.city !== 'N/A' ? results.location.city + ', ' : ''}
                   {results.location.country} • {results.location.isp}
@@ -207,73 +198,62 @@ export default function IpAnalyzerClient() {
               </div>
             </div>
 
-            {/* Providers Details Section */}
+            {/* Providers — section panels */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
-              {/* 1. VirusTotal Section */}
-              <div className="bg-neutral rounded-md border border-border shadow-sm flex flex-col">
-                <div className="p-5 border-b border-border flex items-center justify-between">
+              {/* VirusTotal */}
+              <div className="section-panel">
+                <div className="section-panel-header">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-200">
-                      <Shield className="w-4 h-4" />
+                    <div className="w-7 h-7 rounded-md bg-tertiary/10 flex items-center justify-center text-tertiary border border-tertiary/20">
+                      <Shield className="w-3.5 h-3.5" />
                     </div>
-                    <div>
-                      <h4 className="font-medium text-[13px] text-text-base">VirusTotal Analysis</h4>
-                    </div>
+                    <h3 className="!text-sm">VirusTotal Analysis</h3>
                   </div>
-                  {!results.vt.configured ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-surface text-text-muted border border-border font-semibold uppercase tracking-wider flex items-center gap-1">
+                  {!results.vt.configured && (
+                    <span className="badge badge-low text-[9px] flex items-center gap-1">
                       <Lock className="w-3 h-3" /> Key Missing
                     </span>
-                  ) : (
-                    <MoreVertical className="w-4 h-4 text-text-muted" />
                   )}
                 </div>
 
-                <div className="p-5 flex-1">
+                <div className="p-5">
                   {!results.vt.configured ? (
-                    <div className="text-sm text-text-muted leading-relaxed text-center py-10">
-                      <p>API Key not configured.</p>
-                    </div>
+                    <div className="text-sm text-text-muted text-center py-10">API Key not configured.</div>
                   ) : !results.vt.success ? (
-                    <div className="text-sm text-red-500 text-center py-10">
-                      <p>Request Failed: {results.vt.error || 'Failed to query VT.'}</p>
-                    </div>
+                    <div className="text-sm text-error text-center py-10">Request Failed: {results.vt.error || 'Failed to query VT.'}</div>
                   ) : (
                     <div className="flex flex-col gap-6">
-                      {/* Donut Chart for Engines */}
-                      <div className="flex items-center justify-center gap-8 py-4">
+                      {/* Donut */}
+                      <div className="flex items-center justify-center gap-6 py-2">
                         {(() => {
                           const total = results.vt.engineCount;
                           const malicious = results.vt.malicious;
                           const suspicious = results.vt.suspicious;
                           const clean = total - malicious - suspicious;
-                          
                           const malPct = total > 0 ? (malicious / total) * 100 : 0;
                           const susPct = total > 0 ? (suspicious / total) * 100 : 0;
-                          
-                          const conic = `conic-gradient(#d64545 0% ${malPct}%, #ffeb6d ${malPct}% ${malPct + susPct}%, #2f9e44 ${malPct + susPct}% 100%)`;
+                          const conic = `conic-gradient(#d64545 0% ${malPct}%, #f59e0b ${malPct}% ${malPct + susPct}%, #2f9e44 ${malPct + susPct}% 100%)`;
 
                           return (
                             <>
-                              <div className="relative w-32 h-32 rounded-full flex items-center justify-center" style={{ background: conic }}>
-                                <div className="w-24 h-24 bg-neutral rounded-full flex items-center justify-center shadow-inner flex-col">
-                                  <span className="text-2xl font-bold text-text-base">{malicious + suspicious}</span>
-                                  <span className="text-[10px] text-text-muted font-medium uppercase tracking-wider">Flags</span>
+                              <div className="relative w-28 h-28 rounded-full flex items-center justify-center" style={{ background: conic }}>
+                                <div className="w-20 h-20 bg-neutral rounded-full flex items-center justify-center flex-col">
+                                  <span className="text-xl font-bold text-text-base">{malicious + suspicious}</span>
+                                  <span className="text-[9px] text-text-muted font-semibold uppercase tracking-wider">Flags</span>
                                 </div>
                               </div>
-                              
-                              <div className="flex flex-col gap-3 text-[12px] text-text-muted">
+                              <div className="flex flex-col gap-2.5 text-[11px] text-text-muted">
                                 <div className="flex items-center justify-between gap-4">
-                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#d64545]"></div> Malicious</div>
+                                  <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#d64545]"></div> Malicious</div>
                                   <span className="font-bold text-text-base">{malicious}</span>
                                 </div>
                                 <div className="flex items-center justify-between gap-4">
-                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#ffeb6d]"></div> Suspicious</div>
+                                  <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#f59e0b]"></div> Suspicious</div>
                                   <span className="font-bold text-text-base">{suspicious}</span>
                                 </div>
                                 <div className="flex items-center justify-between gap-4">
-                                  <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#2f9e44]"></div> Clean/Unrated</div>
+                                  <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#2f9e44]"></div> Clean</div>
                                   <span className="font-bold text-text-base">{clean}</span>
                                 </div>
                               </div>
@@ -282,28 +262,23 @@ export default function IpAnalyzerClient() {
                         })()}
                       </div>
 
-                      {/* Network & Registry Details */}
+                      {/* Network Metadata */}
                       <div>
-                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-3 border-b border-border pb-2">
+                        <h5 className="metric-label mb-3 pb-2 border-b border-border flex items-center gap-1.5">
                           Network Metadata
                         </h5>
-                        <div className="space-y-1.5 text-xs text-text-muted">
-                          <div className="flex justify-between py-1">
-                            <span className="text-text-muted">IP Network Block</span>
-                            <span className="font-mono font-medium">{results.vt.network || 'Unknown'}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-text-muted">ASN Number</span>
-                            <span className="font-mono font-medium">{results.vt.asn ? `AS${results.vt.asn}` : 'N/A'}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-text-muted">Autonomous System Owner</span>
-                            <span className="font-medium truncate max-w-[200px] text-right">{results.vt.as_owner || 'N/A'}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-text-muted">Internet Registry</span>
-                            <span className="font-medium uppercase">{results.vt.regional_internet_registry || 'N/A'}</span>
-                          </div>
+                        <div className="space-y-2 text-xs text-text-muted">
+                          {[
+                            ['IP Network Block', results.vt.network || 'Unknown'],
+                            ['ASN Number', results.vt.asn ? `AS${results.vt.asn}` : 'N/A'],
+                            ['AS Owner', results.vt.as_owner || 'N/A'],
+                            ['Registry', results.vt.regional_internet_registry || 'N/A'],
+                          ].map(([label, value]) => (
+                            <div key={label} className="flex justify-between py-1">
+                              <span>{label}</span>
+                              <span className="font-mono font-medium text-text-base text-right max-w-[200px] truncate">{value}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -311,58 +286,49 @@ export default function IpAnalyzerClient() {
                 </div>
               </div>
 
-              {/* 2. AbuseIPDB Section */}
-              <div className="bg-neutral rounded-md border border-border shadow-sm flex flex-col">
-                <div className="p-5 border-b border-border flex items-center justify-between">
+              {/* AbuseIPDB */}
+              <div className="section-panel">
+                <div className="section-panel-header">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-purple-50 flex items-center justify-center text-purple-600 border border-purple-200">
-                      <AlertTriangle className="w-4 h-4" />
+                    <div className="w-7 h-7 rounded-md bg-purple-500/10 flex items-center justify-center text-purple-500 border border-purple-500/20">
+                      <AlertTriangle className="w-3.5 h-3.5" />
                     </div>
-                    <div>
-                      <h4 className="font-medium text-[13px] text-text-base">AbuseIPDB Threat Check</h4>
-                    </div>
+                    <h3 className="!text-sm">AbuseIPDB Threat Check</h3>
                   </div>
-                  {!results.abuseipdb.configured ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-surface text-text-muted border border-border font-semibold uppercase tracking-wider flex items-center gap-1">
+                  {!results.abuseipdb.configured && (
+                    <span className="badge badge-low text-[9px] flex items-center gap-1">
                       <Lock className="w-3 h-3" /> Key Missing
                     </span>
-                  ) : (
-                    <MoreVertical className="w-4 h-4 text-text-muted" />
                   )}
                 </div>
 
-                <div className="p-5 flex-1">
+                <div className="p-5">
                   {!results.abuseipdb.configured ? (
-                    <div className="text-sm text-text-muted leading-relaxed text-center py-10">
-                      <p>API Key not configured.</p>
-                    </div>
+                    <div className="text-sm text-text-muted text-center py-10">API Key not configured.</div>
                   ) : !results.abuseipdb.success ? (
-                    <div className="text-sm text-red-500 text-center py-10">
-                      <p>Request Failed: {results.abuseipdb.error || 'Failed to query AbuseIPDB.'}</p>
-                    </div>
+                    <div className="text-sm text-error text-center py-10">Request Failed: {results.abuseipdb.error || 'Failed to query AbuseIPDB.'}</div>
                   ) : (
                     <div className="flex flex-col gap-6">
-                      {/* Score Circle / Reports */}
-                      <div className="flex items-center justify-center gap-8 py-4">
+                      <div className="flex items-center justify-center gap-6 py-2">
                         {(() => {
                           const score = parseInt(results.abuseipdb.confidence_score) || 0;
-                          const color = score > 40 ? '#d64545' : score > 10 ? '#ffeb6d' : '#2f9e44';
-                          const conic = `conic-gradient(${color} 0% ${score}%, #b7c6d7 ${score}% 100%)`;
+                          const color = score > 40 ? '#d64545' : score > 10 ? '#f59e0b' : '#2f9e44';
+                          const conic = `conic-gradient(${color} 0% ${score}%, var(--muted) ${score}% 100%)`;
                           return (
                             <>
-                              <div className="relative w-32 h-32 rounded-full flex items-center justify-center" style={{ background: conic }}>
-                                <div className="w-24 h-24 bg-neutral rounded-full flex items-center justify-center shadow-inner flex-col">
-                                  <span className="text-2xl font-bold text-text-base">{score}%</span>
-                                  <span className="text-[10px] text-text-muted font-medium uppercase tracking-wider">Confidence</span>
+                              <div className="relative w-28 h-28 rounded-full flex items-center justify-center" style={{ background: conic }}>
+                                <div className="w-20 h-20 bg-neutral rounded-full flex items-center justify-center flex-col">
+                                  <span className="text-xl font-bold text-text-base">{score}%</span>
+                                  <span className="text-[9px] text-text-muted font-semibold uppercase tracking-wider">Score</span>
                                 </div>
                               </div>
-                              <div className="flex flex-col gap-3 text-[12px] text-text-muted">
+                              <div className="flex flex-col gap-2.5 text-[11px] text-text-muted">
                                 <div className="flex items-center justify-between gap-4">
-                                  <span className="text-text-muted">Total Reports</span>
+                                  <span>Total Reports</span>
                                   <span className="font-bold text-text-base">{results.abuseipdb.reported_times}</span>
                                 </div>
                                 <div className="flex items-center justify-between gap-4">
-                                  <span className="text-text-muted">Unique Reporters</span>
+                                  <span>Unique Reporters</span>
                                   <span className="font-bold text-text-base">{results.abuseipdb.num_distinct_users}</span>
                                 </div>
                               </div>
@@ -371,28 +337,20 @@ export default function IpAnalyzerClient() {
                         })()}
                       </div>
 
-                      {/* Meta Details */}
                       <div>
-                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-3 border-b border-border pb-2">
-                          Host & Usage Metadata
-                        </h5>
-                        <div className="space-y-1.5 text-xs text-text-muted">
-                          <div className="flex justify-between py-1">
-                            <span className="text-text-muted">Usage Classification</span>
-                            <span className="font-medium">{results.abuseipdb.usage_type || 'Unknown'}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-text-muted">IP Primary Domain</span>
-                            <span className="font-mono font-medium text-blue-600">{results.abuseipdb.domain || 'N/A'}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-text-muted">ISP Provider</span>
-                            <span className="font-medium truncate max-w-[200px] text-right">{results.abuseipdb.isp || 'N/A'}</span>
-                          </div>
-                          <div className="flex justify-between py-1">
-                            <span className="text-text-muted">Last Reported Incident</span>
-                            <span className="font-medium">{results.abuseipdb.last_reported_at ? formatDate(results.abuseipdb.last_reported_at) : 'No incidents reported'}</span>
-                          </div>
+                        <h5 className="metric-label mb-3 pb-2 border-b border-border">Host & Usage Metadata</h5>
+                        <div className="space-y-2 text-xs text-text-muted">
+                          {[
+                            ['Usage Classification', results.abuseipdb.usage_type || 'Unknown'],
+                            ['Primary Domain', results.abuseipdb.domain || 'N/A'],
+                            ['ISP Provider', results.abuseipdb.isp || 'N/A'],
+                            ['Last Reported', results.abuseipdb.last_reported_at ? formatDate(results.abuseipdb.last_reported_at) : 'No incidents'],
+                          ].map(([label, value]) => (
+                            <div key={label} className="flex justify-between py-1">
+                              <span>{label}</span>
+                              <span className="font-medium text-text-base text-right max-w-[200px] truncate">{value}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -400,41 +358,36 @@ export default function IpAnalyzerClient() {
                 </div>
               </div>
 
-              {/* 3. AlienVault OTX Section */}
-              <div className="bg-neutral rounded-md border border-border shadow-sm lg:col-span-2 flex flex-col">
-                <div className="p-5 border-b border-border flex items-center justify-between">
+              {/* AlienVault OTX — spans full width */}
+              <div className="section-panel lg:col-span-2">
+                <div className="section-panel-header">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-sky-50 flex items-center justify-center text-sky-600 border border-sky-200">
-                      <AlertCircle className="w-4 h-4" />
+                    <div className="w-7 h-7 rounded-md bg-sky-500/10 flex items-center justify-center text-sky-500 border border-sky-500/20">
+                      <AlertCircle className="w-3.5 h-3.5" />
                     </div>
-                    <div>
-                      <h4 className="font-medium text-[13px] text-text-base">AlienVault OTX</h4>
-                    </div>
+                    <h3 className="!text-sm">AlienVault OTX</h3>
                   </div>
-                  <MoreVertical className="w-4 h-4 text-text-muted" />
                 </div>
 
-                <div className="p-5 flex-1">
+                <div className="p-5">
                   {!results.otx.success ? (
-                    <div className="text-sm text-red-500 py-10 text-center">
-                      <p>Request Failed: {results.otx.error || 'Failed to query OTX.'}</p>
-                    </div>
+                    <div className="text-sm text-error py-10 text-center">Request Failed: {results.otx.error || 'Failed to query OTX.'}</div>
                   ) : (
                     <>
-                      {/* Top metrics */}
-                      <div className="flex items-center gap-6 mb-6">
-                        <div className="flex flex-col items-center justify-center px-6 py-4 bg-surface rounded border border-border min-w-[150px]">
-                          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-1">Active Pulses</span>
-                          <span className={`text-3xl font-normal ${results.otx.pulses > 0 ? 'text-red-500' : 'text-text-base'}`}>
+                      {/* Top metrics — inline, not card */}
+                      <div className="flex items-center gap-8 mb-6 pb-6 border-b border-border">
+                        <div className="flex flex-col">
+                          <span className="metric-label mb-1">Active Pulses</span>
+                          <span className={`text-3xl font-bold ${results.otx.pulses > 0 ? 'text-error' : 'text-text-base'}`}>
                             {results.otx.pulses}
                           </span>
                         </div>
-                        <div className="flex flex-col justify-center flex-1">
-                          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-2">Correlated Malware Families</span>
+                        <div className="flex flex-col flex-1">
+                          <span className="metric-label mb-2">Correlated Malware Families</span>
                           {results.otx.malware_family && results.otx.malware_family.length > 0 ? (
                             <div className="flex flex-wrap gap-1.5">
                               {results.otx.malware_family.map((mf: string) => (
-                                <span key={mf} className="px-2 py-0.5 bg-red-50 text-red-600 rounded text-[10px] font-bold border border-red-200 uppercase tracking-wider">
+                                <span key={mf} className="badge badge-critical">
                                   {mf}
                                 </span>
                               ))}
@@ -445,49 +398,49 @@ export default function IpAnalyzerClient() {
                         </div>
                       </div>
 
-                      {/* Detailed Pulse List Table View */}
+                      {/* Pulse List */}
                       <div>
-                        <h5 className="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-3 border-b border-border pb-2 flex items-center gap-2">
-                          <FileText className="w-3.5 h-3.5" /> Correlated Intelligence Pulses ({results.otx.pulses_details?.length || 0} shown)
+                        <h5 className="metric-label mb-3 flex items-center gap-1.5">
+                          <FileText className="w-3.5 h-3.5" /> Intelligence Pulses ({results.otx.pulses_details?.length || 0})
                         </h5>
 
                         {results.otx.pulses_details && results.otx.pulses_details.length > 0 ? (
-                          <div className="border border-border rounded-md overflow-hidden mt-3">
-                            <table className="w-full text-left text-sm text-text-muted">
-                              <thead className="text-[11px] font-semibold text-text-muted bg-surface border-b border-border">
+                          <div className="overflow-hidden rounded-lg border border-border mt-3">
+                            <table className="clean-table">
+                              <thead>
                                 <tr>
-                                  <th className="px-4 py-3">Pulse Name</th>
-                                  <th className="px-4 py-3">Adversary</th>
-                                  <th className="px-4 py-3">Tags</th>
-                                  <th className="px-4 py-3 text-right">Date</th>
+                                  <th className="px-4 py-2.5">Pulse Name</th>
+                                  <th className="px-4 py-2.5">Adversary</th>
+                                  <th className="px-4 py-2.5">Tags</th>
+                                  <th className="px-4 py-2.5 text-right">Date</th>
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-gray-100">
+                              <tbody>
                                 {results.otx.pulses_details.map((pulse: PulseDetail, index: number) => (
-                                  <tr key={pulse.id} className="hover:bg-surface transition-colors">
-                                    <td className="px-4 py-3 font-medium text-text-base min-w-[200px]">
+                                  <tr key={pulse.id}>
+                                    <td className="px-4 py-2.5 font-medium text-text-base min-w-[200px]">
                                       <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                                        <div className="w-1.5 h-1.5 rounded-full bg-tertiary shrink-0" />
                                         <span className="truncate max-w-[300px]" title={pulse.name}>{pulse.name}</span>
                                       </div>
                                     </td>
-                                    <td className="px-4 py-3 whitespace-nowrap">
+                                    <td className="px-4 py-2.5 whitespace-nowrap">
                                       {pulse.adversary ? (
-                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold rounded bg-red-50 text-red-600 border border-red-200 uppercase tracking-wider">
+                                        <span className="badge badge-critical">
                                           <User className="w-3 h-3" /> {pulse.adversary}
                                         </span>
                                       ) : '-'}
                                     </td>
-                                    <td className="px-4 py-3">
+                                    <td className="px-4 py-2.5">
                                       <div className="flex flex-wrap gap-1">
                                         {pulse.tags && pulse.tags.slice(0, 3).map((tag: string) => (
-                                          <span key={tag} className="px-1.5 py-0.5 bg-surface border border-border text-text-muted rounded text-[10px] font-medium">
+                                          <span key={tag} className="badge badge-low text-[9px]">
                                             #{tag}
                                           </span>
                                         ))}
                                       </div>
                                     </td>
-                                    <td className="px-4 py-3 text-right text-xs whitespace-nowrap">
+                                    <td className="px-4 py-2.5 text-right text-xs whitespace-nowrap">
                                       {formatDate(pulse.created)}
                                     </td>
                                   </tr>
@@ -496,8 +449,8 @@ export default function IpAnalyzerClient() {
                             </table>
                           </div>
                         ) : (
-                          <div className="bg-surface rounded-md p-8 border border-border text-center text-sm text-text-muted italic">
-                            No related threat pulses found in the database. This IP address is not associated with active security campaigns.
+                          <div className="bg-surface rounded-lg p-8 text-center text-sm text-text-muted italic">
+                            No related threat pulses found. This IP is not associated with active campaigns.
                           </div>
                         )}
                       </div>

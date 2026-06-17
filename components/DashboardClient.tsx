@@ -13,7 +13,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState({ field: 'date', order: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15; // Increased for table view
+  const itemsPerPage = 15;
   const [enrichedData, setEnrichedData] = useState<Record<string, { cvss_score: number | null, severity: string }>>({});
 
   const filteredAndSortedData = useMemo(() => {
@@ -91,7 +91,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
 
   const getSeverityLevel = (score: number | null) => {
     if (score === null) return 0;
-    if (score >= 9.0) return 12; // Map to Wazuh high level
+    if (score >= 9.0) return 12;
     if (score >= 7.0) return 10;
     if (score >= 4.0) return 7;
     return 3;
@@ -99,44 +99,47 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
 
   return (
     <div className="min-h-screen bg-base text-text-base font-sans pb-12">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         
-        {/* Page Title Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-             <Radar className="w-6 h-6 text-tertiary" />
-             <h1 className="text-3xl font-semibold text-text-base tracking-tight">Proof of Concept (PoC) Tracker</h1>
+        {/* Page Header */}
+        <div className="page-header">
+          <div className="page-icon">
+            <Radar className="w-5 h-5" />
+          </div>
+          <div>
+            <h1>Proof of Concept Tracker</h1>
+            <p className="text-sm text-text-muted mt-0.5">Aggregated exploits from global repositories</p>
           </div>
         </div>
 
-        {/* Global Overview Stats - Single Strip Card */}
-        <div className="bg-neutral rounded-md border border-border shadow-sm mb-6 flex flex-col md:flex-row md:divide-x divide-gray-200">
-           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-sm font-medium text-text-muted mb-1">Total PoCs Tracked</p>
-             <p className="text-3xl font-normal text-blue-500 tracking-tight">{initialData.length.toLocaleString()}</p>
+        {/* Inline Metrics — NO CARD */}
+        <div className="metric-row flex-wrap">
+           <div className="metric-item">
+             <span className="metric-label">Total PoCs</span>
+             <span className="metric-value text-tertiary">{initialData.length.toLocaleString()}</span>
            </div>
-           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-sm font-medium text-text-muted mb-1">Trending PoCs (30+ Stars)</p>
-             <p className="text-3xl font-normal text-red-500 tracking-tight">
+           <div className="metric-item">
+             <span className="metric-label">Trending (30+ ★)</span>
+             <span className="metric-value text-error">
                {initialData.filter(p => p.stargazers_count >= 30).length.toLocaleString()}
-             </p>
+             </span>
            </div>
-           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-sm font-medium text-text-muted mb-1">Critical Severities</p>
-             <p className="text-3xl font-normal text-orange-500 tracking-tight">
+           <div className="metric-item">
+             <span className="metric-label">Critical Severities</span>
+             <span className="metric-value text-orange-500">
                {initialData.filter(p => p.severity === 'CRITICAL').length.toLocaleString()}
-             </p>
+             </span>
            </div>
-           <div className="flex-1 flex flex-col items-center justify-center py-5 px-4 text-center">
-             <p className="text-sm font-medium text-text-muted mb-1">Data Source</p>
-             <a href="https://poc-in-github.motikan2010.net" target="_blank" rel="noopener noreferrer" className="text-base font-medium text-blue-500 hover:underline mt-1 truncate max-w-[200px]">poc-in-github</a>
+           <div className="metric-item">
+             <span className="metric-label">Data Source</span>
+             <a href="https://poc-in-github.motikan2010.net" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-tertiary hover:underline mt-1">poc-in-github</a>
            </div>
         </div>
         
-        {/* Controls Section */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
-          <div className="flex flex-1 items-center bg-neutral rounded-md border border-border focus-within:border-blue-500 px-4 py-2 shadow-sm">
-            <Search className="h-4 w-4 text-text-muted shrink-0 mr-3" />
+        {/* Controls — Search + Sort, no card */}
+        <div className="flex flex-col md:flex-row gap-3 mb-6 items-center">
+          <div className="floating-input flex items-center gap-3 flex-1 w-full">
+            <Search className="h-4 w-4 text-text-muted shrink-0" />
             <input
               type="text"
               className="w-full bg-transparent border-0 outline-none text-sm placeholder:text-text-muted text-text-base"
@@ -149,102 +152,87 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
             />
           </div>
 
-          <div className="flex bg-neutral rounded-md border border-border shadow-sm overflow-hidden text-sm">
-            <button
-              onClick={() => handleSort('date')}
-              className={`px-4 py-2 font-medium transition-colors border-r border-border ${
-                sortBy.field === 'date' 
-                  ? 'bg-blue-50 text-blue-600' 
-                  : 'text-text-muted hover:bg-surface'
-              }`}
-            >
-              Time {sortBy.field === 'date' && (sortBy.order === 'desc' ? '↓' : '↑')}
-            </button>
-            <button
-              onClick={() => handleSort('score')}
-              className={`px-4 py-2 font-medium transition-colors border-r border-border ${
-                sortBy.field === 'score' 
-                  ? 'bg-blue-50 text-blue-600' 
-                  : 'text-text-muted hover:bg-surface'
-              }`}
-            >
-              CVSS {sortBy.field === 'score' && (sortBy.order === 'desc' ? '↓' : '↑')}
-            </button>
-            <button
-              onClick={() => handleSort('stars')}
-              className={`px-4 py-2 font-medium transition-colors ${
-                sortBy.field === 'stars' 
-                  ? 'bg-blue-50 text-blue-600' 
-                  : 'text-text-muted hover:bg-surface'
-              }`}
-            >
-              Stars {sortBy.field === 'stars' && (sortBy.order === 'desc' ? '↓' : '↑')}
-            </button>
+          <div className="flex rounded-lg border border-border overflow-hidden text-xs shrink-0">
+            {[
+              { field: 'date', label: 'Time' },
+              { field: 'score', label: 'CVSS' },
+              { field: 'stars', label: 'Stars' },
+            ].map((btn) => (
+              <button
+                key={btn.field}
+                onClick={() => handleSort(btn.field)}
+                className={`px-4 py-2 font-medium transition-all border-r border-border last:border-r-0 ${
+                  sortBy.field === btn.field 
+                    ? 'bg-tertiary/10 text-tertiary' 
+                    : 'text-text-muted hover:bg-surface hover:text-text-base'
+                }`}
+              >
+                {btn.label} {sortBy.field === btn.field && (sortBy.order === 'desc' ? '↓' : '↑')}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Table Section (Wazuh Style) */}
-        <div className="bg-neutral rounded-md border border-border shadow-sm overflow-hidden mb-6">
-          <div className="px-5 py-4 border-b border-border flex justify-between items-center">
-            <h2 className="text-base font-medium text-text-base">PoC Lists ({filteredAndSortedData.length} total)</h2>
+        {/* Table — Section panel, not heavy card */}
+        <div className="section-panel mb-6">
+          <div className="section-panel-header">
+            <h3>PoC Lists ({filteredAndSortedData.length} total)</h3>
           </div>
           
           <div className="overflow-x-auto min-h-[400px]">
             {currentData.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-text-muted">
-                <Bug className="h-10 w-10 mb-4 opacity-50" />
-                <p>No vulnerabilities found matching your search.</p>
+                <Bug className="h-10 w-10 mb-4 opacity-30" />
+                <p className="text-sm font-medium">No vulnerabilities found matching your search.</p>
               </div>
             ) : (
-              <table className="w-full text-left text-sm text-text-muted">
-                <thead className="text-[11px] font-semibold text-text-muted bg-neutral border-b border-border sticky top-0">
+              <table className="clean-table">
+                <thead>
                   <tr>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap">Time</th>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap">CVE(s)</th>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap">Description</th>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap">CVSS</th>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap">Stars</th>
-                    <th className="px-5 py-3 font-medium whitespace-nowrap text-right">GitHub</th>
+                    <th className="px-4 py-3">Time</th>
+                    <th className="px-4 py-3">CVE(s)</th>
+                    <th className="px-4 py-3">Description</th>
+                    <th className="px-4 py-3">CVSS</th>
+                    <th className="px-4 py-3">Stars</th>
+                    <th className="px-4 py-3 text-right">GitHub</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody>
                   {currentData.map((poc) => {
                     const isViral = poc.stargazers_count >= 30;
-                    const level = getSeverityLevel(poc.cvss_score);
                     
                     return (
-                      <tr key={poc.id} className="hover:bg-surface transition-colors group">
-                        <td className="px-5 py-3 whitespace-nowrap">
-                          <span className="text-text-muted mr-1">&gt;</span> 
+                      <tr key={poc.id}>
+                        <td className="px-4 py-3 whitespace-nowrap text-xs">
                           {new Date(poc.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                         </td>
-                        <td className="px-5 py-3 font-medium text-blue-500">
+                        <td className="px-4 py-3 font-medium text-tertiary text-sm">
                           {poc.cve_id || '-'}
                         </td>
-                        <td className="px-5 py-3 max-w-[300px] truncate" title={poc.description}>
+                        <td className="px-4 py-3 max-w-[300px] truncate text-xs" title={poc.description}>
                           {poc.description || 'No description provided.'}
                         </td>
-                        <td className="px-5 py-3">
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                            (poc.cvss_score || 0) >= 9.0 ? 'bg-red-50 text-red-600 border border-red-200' :
-                            (poc.cvss_score || 0) >= 7.0 ? 'bg-orange-50 text-orange-600 border border-orange-200' :
-                            poc.cvss_score ? 'bg-blue-50 text-blue-600 border border-blue-200' : 'bg-neutral text-text-muted border border-border'
+                        <td className="px-4 py-3">
+                          <span className={`badge ${
+                            (poc.cvss_score || 0) >= 9.0 ? 'badge-critical' :
+                            (poc.cvss_score || 0) >= 7.0 ? 'badge-high' :
+                            poc.cvss_score ? 'badge-medium' : 'badge-low'
                           }`}>
                             {poc.cvss_score ? poc.cvss_score.toFixed(1) : '-'}
                           </span>
                         </td>
-                        <td className="px-5 py-3">
-                          <span className={`flex items-center gap-1 font-medium ${isViral ? 'text-orange-500' : 'text-text-muted'}`}>
-                            <Star className={`w-3.5 h-3.5 ${isViral ? 'fill-orange-500' : ''}`} />
+                        <td className="px-4 py-3">
+                          <span className={`flex items-center gap-1 font-medium text-xs ${isViral ? 'text-amber-500' : 'text-text-muted'}`}>
+                            <Star className={`w-3.5 h-3.5 ${isViral ? 'fill-amber-500' : ''}`} />
                             {poc.stargazers_count}
                           </span>
                         </td>
-                        <td className="px-5 py-3 text-right">
+                        <td className="px-4 py-3 text-right">
                           <a
                             href={poc.html_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center p-1.5 text-text-muted hover:text-blue-500 hover:bg-blue-50 rounded transition-colors"
+                            className="inline-flex items-center justify-center p-1.5 text-text-muted hover:text-tertiary rounded-md transition-colors"
                             title="View Repository"
                           >
                             <ExternalLink className="w-4 h-4" />
@@ -258,27 +246,27 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
             )}
           </div>
           
-          {/* Pagination Footer */}
+          {/* Pagination */}
           {totalPages > 1 && (
-            <div className="px-5 py-3 border-t border-border flex justify-between items-center bg-surface">
+            <div className="px-5 py-3 border-t border-border flex justify-between items-center">
               <div className="text-xs text-text-muted font-medium">
                 Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}
               </div>
-              <div className="flex gap-1">
+              <div className="flex gap-1.5">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
+                  className="pagination-btn"
                 >
                   Previous
                 </button>
-                <div className="px-3 py-1.5 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200 rounded">
+                <div className="pagination-current">
                   {currentPage}
                 </div>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1.5 text-xs font-medium bg-neutral border border-border rounded text-text-muted disabled:opacity-50 hover:bg-surface"
+                  className="pagination-btn"
                 >
                   Next
                 </button>
