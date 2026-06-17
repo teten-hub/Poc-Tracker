@@ -243,26 +243,25 @@ export default function HibpClient() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         
         {/* Page Header */}
-        <div className="page-header">
-          <div className="page-icon">
-            <UserX className="w-5 h-5" />
-          </div>
-          <div>
-            <h1>Data Breach Intelligence</h1>
-            <p className="text-sm text-text-muted mt-0.5">Check if your credentials have been compromised</p>
-          </div>
+        <div className="mb-16">
+          <h1 className="text-headline-display text-text-base mb-4">
+            Data Breach Intelligence
+          </h1>
+          <p className="text-body-lg text-text-muted">
+            Check if your credentials have been compromised
+          </p>
         </div>
 
         {/* Search Container */}
         <div className="mb-8">
           
           {/* Tabs — underline style */}
-          <div className="flex gap-1 mb-6 border-b border-border">
+          <div className="flex gap-1 mb-8 border-b border-border">
             <button
               onClick={() => handleTabChange('account')}
-              className={`flex items-center gap-2 px-4 py-3 font-medium text-sm transition-all border-b-2 ${
+              className={`flex items-center gap-2 px-6 py-4 text-label-md transition-all border-b-2 ${
                 activeTab === 'account' 
-                  ? 'border-tertiary text-tertiary' 
+                  ? 'border-tertiary text-tertiary font-bold' 
                   : 'border-transparent text-text-muted hover:text-text-base'
               }`}
             >
@@ -271,9 +270,9 @@ export default function HibpClient() {
             </button>
             <button
               onClick={() => handleTabChange('password')}
-              className={`flex items-center gap-2 px-4 py-3 font-medium text-sm transition-all border-b-2 ${
+              className={`flex items-center gap-2 px-6 py-4 text-label-md transition-all border-b-2 ${
                 activeTab === 'password' 
-                  ? 'border-tertiary text-tertiary' 
+                  ? 'border-tertiary text-tertiary font-bold' 
                   : 'border-transparent text-text-muted hover:text-text-base'
               }`}
             >
@@ -366,23 +365,23 @@ export default function HibpClient() {
             {/* ACCOUNT / EMAIL RESULTS */}
             {results.type === 'account' && results.breached && (
               <>
-                {/* Summary — inline metrics, no cards */}
-                <div className="metric-row flex-wrap">
-                  <div className="metric-item">
-                    <span className="metric-label">Breaches</span>
-                    <span className="metric-value text-error">{results.breaches.length}</span>
+                {/* Summary */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                  <div className="section-panel !p-6 flex flex-col justify-center">
+                    <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Breaches</span>
+                    <span className="text-headline-md font-mono text-error">{results.breaches.length}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Total Records</span>
-                    <span className="metric-value text-tertiary">{formatNumber(totalRecords)}</span>
+                  <div className="section-panel !p-6 flex flex-col justify-center">
+                    <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Total Records</span>
+                    <span className="text-headline-md font-mono text-tertiary">{formatNumber(totalRecords)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Industries</span>
-                    <span className="metric-value text-sky-500">{uniqueIndustries.length}</span>
+                  <div className="section-panel !p-6 flex flex-col justify-center">
+                    <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Industries</span>
+                    <span className="text-headline-md font-mono text-sky-500">{uniqueIndustries.length}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Pastes</span>
-                    <span className="metric-value text-purple-500">
+                  <div className="section-panel !p-6 flex flex-col justify-center">
+                    <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Pastes</span>
+                    <span className="text-headline-md font-mono text-purple-500">
                       {results.pastes?.details?.length || 0}
                     </span>
                   </div>

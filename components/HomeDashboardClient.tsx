@@ -61,12 +61,12 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   };
 
   const tools = [
-    { title: 'PoC Tracker', href: '/pocs', icon: <Radar className="w-4 h-4" />, color: 'text-blue-500' },
-    { title: 'Threat Intel', href: '/tweetfeed', icon: <Rss className="w-4 h-4" />, color: 'text-teal-500' },
-    { title: 'IP Analyzer', href: '/ip-analyzer', icon: <Search className="w-4 h-4" />, color: 'text-indigo-500' },
-    { title: 'Data Breach', href: '/hibp', icon: <UserX className="w-4 h-4" />, color: 'text-red-500' },
-    { title: 'Ransomware', href: '/ransomware', icon: <Skull className="w-4 h-4" />, color: 'text-purple-500' },
-    { title: 'Tor Nodes', href: '/tor-ips', icon: <TorIcon className="w-3.5 h-3.5 fill-current" />, color: 'text-green-500' },
+    { title: 'PoC Tracker', href: '/pocs', icon: <Radar className="w-5 h-5" />, color: 'text-tertiary' },
+    { title: 'Threat Intel', href: '/tweetfeed', icon: <Rss className="w-5 h-5" />, color: 'text-tertiary' },
+    { title: 'IP Analyzer', href: '/ip-analyzer', icon: <Search className="w-5 h-5" />, color: 'text-tertiary' },
+    { title: 'Data Breach', href: '/hibp', icon: <UserX className="w-5 h-5" />, color: 'text-tertiary' },
+    { title: 'Ransomware', href: '/ransomware', icon: <Skull className="w-5 h-5" />, color: 'text-tertiary' },
+    { title: 'Tor Nodes', href: '/tor-ips', icon: <TorIcon className="w-4 h-4 fill-current" />, color: 'text-tertiary' },
   ];
 
   const getSeverityLevel = (score: number | null) => {
@@ -95,12 +95,6 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   const pctMedium = totalPocs > 0 ? (countMedium / totalPocs) * 100 : 0;
 
   const donutTrackBg = '#b7c6d7';
-  const conicGradient = `conic-gradient(#d64545 0% ${pctCritical}%, #ffeb6d ${pctCritical}% ${pctCritical + pctHigh}%, #3d82f6 ${pctCritical + pctHigh}% ${pctCritical + pctHigh + pctMedium}%, ${donutTrackBg} ${pctCritical + pctHigh + pctMedium}% 100%)`;
-
-  const highRiskPocs = [...displayPocs]
-    .filter(p => p.cvss_score && p.cvss_score >= 7.0)
-    .sort((a, b) => (b.cvss_score || 0) - (a.cvss_score || 0))
-    .slice(0, 5);
   
   const trendingPocsCount = latestPocs.filter(p => p.stargazers_count >= 10).length;
 
@@ -141,270 +135,275 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   const iocConicGradient = iocGradients.length > 0 ? `conic-gradient(${iocGradients.join(', ')})` : `conic-gradient(${donutTrackBg} 0% 100%)`;
 
   return (
-    <div className="min-h-screen bg-base text-text-base font-sans pb-12 transition-colors duration-300">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
+    <div className="min-h-screen bg-base text-text-base font-sans pb-24">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 md:pt-16">
         
-        {/* Page Header */}
-        <div className="page-header">
-          <div className="page-icon">
-            <Activity className="w-5 h-5" />
+        {/* Page Header (Hero style) */}
+        <div className="flex flex-col md:flex-row gap-10 items-start justify-between mb-16">
+          <div className="max-w-2xl">
+            <h1 className="text-headline-display text-text-base mb-4">
+              Global Threat Overview
+            </h1>
+            <p className="text-body-lg text-text-muted">
+              Real-time monitoring of active exploits, OSINT intelligence, and network threats across global sources.
+            </p>
           </div>
-          <div>
-            <h1>Global Threat Overview</h1>
-            <p className="text-sm text-text-muted mt-0.5">Real-time security intelligence across all sources</p>
-          </div>
-        </div>
-
-        {/* Inline Metric Row — NO CARD */}
-        <div className="metric-row flex-wrap">
-          <div className="metric-item">
-            <span className="metric-label">Tracked Exploits</span>
-            <span className="metric-value text-tertiary">{totalPocs.toLocaleString()}</span>
-          </div>
-          <div className="metric-item">
-            <span className="metric-label">Critical</span>
-            <span className="metric-value text-error">{countCritical}</span>
-          </div>
-          <div className="metric-item">
-            <span className="metric-label">High</span>
-            <span className="metric-value text-orange-500 dark:text-[#ffeb6d]">{countHigh}</span>
-          </div>
-          <div className="metric-item">
-            <span className="metric-label">Trending (10+ ★)</span>
-            <span className="metric-value text-success">{trendingPocsCount}</span>
-          </div>
-        </div>
-
-        {/* IP Search — Floating, no card */}
-        <div className="mb-8">
-          <form onSubmit={handleIpSearch} className="flex gap-3">
-            <div className="floating-input flex items-center gap-3 flex-1">
-              <Search className="w-4 h-4 text-text-muted shrink-0" />
+          
+          <div className="w-full md:w-[400px]">
+            <form onSubmit={handleIpSearch} className="flex gap-2 w-full">
               <input
                 type="text"
-                className="flex-1 bg-transparent border-0 outline-none text-sm font-mono text-text-base placeholder:text-text-muted"
-                placeholder="Quick IP Analysis — enter address (e.g. 8.8.8.8)..."
+                className="floating-input flex-1"
+                placeholder="Analyze IP Address..."
                 value={ipAddress}
                 onChange={(e) => setIpAddress(e.target.value)}
               />
-            </div>
-            <button type="submit" className="btn-primary px-6 shrink-0">
-              Analyze
-            </button>
-          </form>
+              <button type="submit" className="btn-primary shrink-0">
+                Analyze
+              </button>
+            </form>
+          </div>
         </div>
 
-        {/* Charts Row — Section panels */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
-          
-          {/* Chart 1: Severity Distribution */}
-          <div className="section-panel">
-            <div className="section-panel-header">
-              <h3>PoC Severity Distribution</h3>
-            </div>
-            <div className="p-5 flex flex-col gap-4">
-              {/* Critical */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-text-muted flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-sm bg-[#d64545]"></div> Critical (9.0+)
-                  </span>
-                  <span className="font-mono font-bold text-text-base">{countCritical}</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-red-500 to-[#d64545] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
-                </div>
+        {/* Main Content */}
+        <div>
+            {/* Metrics Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              <div className="section-panel !p-8">
+                <span className="text-label-md text-text-muted mb-2 block">Tracked Exploits</span>
+                <span className="text-headline-display font-mono text-tertiary">{totalPocs.toLocaleString()}</span>
               </div>
-              {/* High */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-text-muted flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-sm bg-[#f59e0b]"></div> High (7.0 - 8.9)
-                  </span>
-                  <span className="font-mono font-bold text-text-base">{countHigh}</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-orange-400 to-[#f59e0b] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
-                </div>
+              <div className="section-panel !p-8">
+                <span className="text-label-md text-text-muted mb-2 block">Critical CVSS</span>
+                <span className="text-headline-display font-mono text-error">{countCritical}</span>
               </div>
-              {/* Medium */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-text-muted flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-sm bg-[#3d82f6]"></div> Medium (4.0 - 6.9)
-                  </span>
-                  <span className="font-mono font-bold text-text-base">{countMedium}</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-blue-400 to-[#3d82f6] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
-                </div>
+              <div className="section-panel !p-8">
+                <span className="text-label-md text-text-muted mb-2 block">Trending (10+ ★)</span>
+                <span className="text-headline-display font-mono text-success">{trendingPocsCount}</span>
               </div>
-              {/* Low / Unknown */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-text-muted flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: donutTrackBg }}></div> Low / Unknown
-                  </span>
-                  <span className="font-mono font-bold text-text-base">{countLowOrUnknown}</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <div className="h-full rounded-full transition-all duration-700" style={{ backgroundColor: donutTrackBg, width: `${totalPocs > 0 ? Math.max((countLowOrUnknown / totalPocs) * 100, 1) : 0}%` }} />
-                </div>
+              <div className="section-panel !p-8">
+                <span className="text-label-md text-text-muted mb-2 block">Total IOCs (7d)</span>
+                <span className="text-headline-display font-mono text-on-surface">{totalIocs.toLocaleString()}</span>
               </div>
             </div>
-          </div>
 
-          {/* Chart 2: IOC Types Donut */}
-          <div className="section-panel">
-            <div className="section-panel-header">
-              <h3>7-Day IOC Types</h3>
-              <span className="text-[10px] text-text-muted font-medium">TweetFeed</span>
-            </div>
-            <div className="p-5 flex items-center justify-center gap-6">
-              <div className="relative w-32 h-32 rounded-full flex items-center justify-center shrink-0" style={{ background: iocConicGradient }}>
-                <div className="w-[88px] h-[88px] bg-neutral rounded-full flex items-center justify-center flex-col transition-colors">
-                  <span className="text-xl font-bold text-text-base">{totalIocs}</span>
-                  <span className="text-[9px] text-text-muted font-semibold uppercase tracking-wider">Total</span>
+            {/* Charts Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
+              
+              {/* Chart 1: Severity Distribution */}
+              <div className="section-panel">
+                <div className="section-panel-header flex items-center justify-between">
+                  <h3 className="text-headline-sm">PoC Severity Distribution</h3>
+                  <Link href="/pocs" className="btn-secondary !h-auto !py-1.5 !px-3 text-xs flex items-center gap-1.5">
+                    View Details <ArrowRight className="w-3 h-3" />
+                  </Link>
                 </div>
-              </div>
-              <div className="flex flex-col gap-2.5 text-[11px] text-text-muted flex-1">
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-sm bg-[#3d82f6]"></div> URL</span>
-                  <span className="font-bold text-text-base">{typeCounts.url}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-sm bg-[#8b5cf6]"></div> Domain</span>
-                  <span className="font-bold text-text-base">{typeCounts.domain}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-sm bg-[#2f9e44]"></div> IP</span>
-                  <span className="font-bold text-text-base">{typeCounts.ip}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-sm bg-[#f59e0b]"></div> SHA256</span>
-                  <span className="font-bold text-text-base">{typeCounts.sha256}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-sm bg-[#d64545]"></div> MD5</span>
-                  <span className="font-bold text-text-base">{typeCounts.md5}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Chart 3: Top Tags */}
-          <div className="section-panel">
-            <div className="section-panel-header">
-              <h3>Top Threat Tags</h3>
-            </div>
-            <div className="p-5 flex flex-col gap-4">
-              {topTags.map(([tag, count], i) => {
-                const maxCount = topTags.length > 0 ? topTags[0][1] : 1;
-                const barWidth = Math.max((count / maxCount) * 100, 2);
-                return (
-                  <div key={tag} className="flex flex-col gap-1.5 group">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-medium text-text-muted uppercase tracking-wider group-hover:text-tertiary transition-colors">
-                        #{tag}
+                <div className="flex flex-col gap-6">
+                  {/* Critical */}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-label-sm text-text-muted flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-sm bg-[#d64545]"></div> Critical (9.0+)
                       </span>
-                      <span className="font-mono font-bold text-text-base">
-                        {count}
-                      </span>
+                      <span className="text-label-md font-mono">{countCritical}</span>
                     </div>
-                    <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-blue-400 to-tertiary rounded-full transition-all duration-700" style={{ width: `${barWidth}%` }} />
+                    <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-red-500 to-[#d64545] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
                     </div>
                   </div>
-                );
-              })}
-              {topTags.length === 0 && (
-                <div className="text-center text-text-muted text-xs py-10">No tags found.</div>
-              )}
-            </div>
-          </div>
+                  {/* High */}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-label-sm text-text-muted flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-sm bg-[#f59e0b]"></div> High (7.0 - 8.9)
+                      </span>
+                      <span className="text-label-md font-mono">{countHigh}</span>
+                    </div>
+                    <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-orange-400 to-[#f59e0b] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
+                    </div>
+                  </div>
+                  {/* Medium */}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-label-sm text-text-muted flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-sm bg-[#3d82f6]"></div> Medium (4.0 - 6.9)
+                      </span>
+                      <span className="text-label-md font-mono">{countMedium}</span>
+                    </div>
+                    <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-blue-400 to-[#3d82f6] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
+                    </div>
+                  </div>
+                  {/* Low / Unknown */}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-label-sm text-text-muted flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: donutTrackBg }}></div> Low / Unknown
+                      </span>
+                      <span className="text-label-md font-mono">{countLowOrUnknown}</span>
+                    </div>
+                    <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-700" style={{ backgroundColor: donutTrackBg, width: `${totalPocs > 0 ? Math.max((countLowOrUnknown / totalPocs) * 100, 1) : 0}%` }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-        </div>
+              {/* Chart 2: IOC Types Donut */}
+              <div className="section-panel">
+                <div className="section-panel-header flex items-center justify-between">
+                  <h3 className="text-headline-sm">7-Day IOC Types</h3>
+                  <Link href="/tweetfeed" className="btn-secondary !h-auto !py-1.5 !px-3 text-xs flex items-center gap-1.5">
+                    View Details <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+                <div className="flex items-center justify-center gap-8 py-4">
+                  <div className="relative w-36 h-36 rounded-full flex items-center justify-center shrink-0 shadow-sm" style={{ background: iocConicGradient }}>
+                    <div className="w-28 h-28 bg-neutral rounded-full flex items-center justify-center flex-col">
+                      <span className="text-headline-md">{totalIocs}</span>
+                      <span className="text-caption text-text-muted uppercase tracking-widest">Total</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#3d82f6]"></div> URL</span>
+                      <span className="text-label-md">{typeCounts.url}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#8b5cf6]"></div> Domain</span>
+                      <span className="text-label-md">{typeCounts.domain}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#2f9e44]"></div> IP</span>
+                      <span className="text-label-md">{typeCounts.ip}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#f59e0b]"></div> SHA256</span>
+                      <span className="text-label-md">{typeCounts.sha256}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-        {/* Latest PoCs Table — Clean, no outer card */}
-        {latestPocs.length > 0 && (
-          <div className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-text-base flex items-center gap-2">
-                <Bug className="w-4 h-4 text-text-muted" /> Latest PoC Exploits
-              </h2>
-              <Link href="/pocs" className="text-xs text-tertiary font-medium hover:underline flex items-center gap-1">
-                View all <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
+              {/* Chart 3: Top Tags */}
+              <div className="section-panel">
+                <div className="section-panel-header flex items-center justify-between">
+                  <h3 className="text-headline-sm">Top Threat Tags</h3>
+                  <Link href="/tweetfeed" className="btn-secondary !h-auto !py-1.5 !px-3 text-xs flex items-center gap-1.5">
+                    View Details <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+                <div className="flex flex-col gap-5">
+                  {topTags.map(([tag, count], i) => {
+                    const maxCount = topTags.length > 0 ? topTags[0][1] : 1;
+                    const barWidth = Math.max((count / maxCount) * 100, 2);
+                    return (
+                      <div key={tag} className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-label-sm text-text-muted uppercase tracking-wider">
+                            #{tag}
+                          </span>
+                          <span className="text-label-md font-mono">
+                            {count}
+                          </span>
+                        </div>
+                        <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-blue-400 to-tertiary rounded-full transition-all duration-700" style={{ width: `${barWidth}%` }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {topTags.length === 0 && (
+                    <div className="text-center text-text-muted py-10">No tags found.</div>
+                  )}
+                </div>
+              </div>
+
             </div>
-            <div className="section-panel">
-              <div className="overflow-x-auto">
-                <table className="clean-table">
-                  <thead>
-                    <tr>
-                      <th className="px-4 py-3">Time</th>
-                      <th className="px-4 py-3">CVE(s)</th>
-                      <th className="px-4 py-3">Description</th>
-                      <th className="px-4 py-3">CVSS</th>
-                      <th className="px-4 py-3 text-right">Stars</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {displayPocs.slice(0, 10).map((poc) => {
-                      return (
-                        <tr key={poc.id}>
-                          <td className="px-4 py-3 whitespace-nowrap text-xs">
-                            {new Date(poc.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                          </td>
-                          <td className="px-4 py-3 font-medium text-text-base text-sm">
-                            {poc.cve_id || '-'}
-                          </td>
-                          <td className="px-4 py-3 max-w-[300px] truncate text-xs" title={poc.description}>
-                            {poc.description || 'No description provided.'}
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className={`badge ${
-                              (poc.cvss_score || 0) >= 9.0 ? 'badge-critical' :
-                              (poc.cvss_score || 0) >= 7.0 ? 'badge-high' :
-                              poc.cvss_score ? 'badge-medium' : 'badge-low'
-                            }`}>
-                              {poc.cvss_score ? poc.cvss_score.toFixed(1) : '-'}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-right">
-                            <span className="inline-flex items-center gap-1 font-mono text-xs text-text-base">
-                              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" /> {poc.stargazers_count}
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+
+            {/* Latest PoCs Table */}
+            {latestPocs.length > 0 && (
+              <div className="section-panel">
+                <div className="section-panel-header">
+                  <h3 className="text-headline-sm flex items-center gap-3">
+                    <Bug className="w-6 h-6 text-tertiary" /> Latest Vulnerabilities
+                  </h3>
+                  <Link href="/pocs" className="btn-secondary !h-auto !py-2 !px-4 text-sm flex items-center gap-2">
+                    View Directory <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+                <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+                  <table className="clean-table w-full">
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        <th>CVE ID</th>
+                        <th>Description</th>
+                        <th>CVSS</th>
+                        <th className="text-right">Stars</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {displayPocs.slice(0, 10).map((poc) => {
+                        return (
+                          <tr key={poc.id}>
+                            <td className="whitespace-nowrap">
+                              {new Date(poc.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </td>
+                            <td className="font-bold text-text-base">
+                              {poc.cve_id || '-'}
+                            </td>
+                            <td className="max-w-[400px] truncate" title={poc.description}>
+                              {poc.description || 'No description provided.'}
+                            </td>
+                            <td>
+                              <span className={`badge ${
+                                (poc.cvss_score || 0) >= 9.0 ? 'badge-critical' :
+                                (poc.cvss_score || 0) >= 7.0 ? 'badge-high' :
+                                poc.cvss_score ? 'badge-medium' : 'badge-low'
+                              }`}>
+                                {poc.cvss_score ? poc.cvss_score.toFixed(1) : '-'}
+                              </span>
+                            </td>
+                            <td className="text-right font-mono">
+                              <span className="inline-flex items-center gap-1.5 justify-end w-full">
+                                <Star className="w-4 h-4 text-amber-400 fill-amber-400" /> {poc.stargazers_count}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+            {/* Intelligence Tools Row (Bottom) */}
+            <div className="mt-8 mb-8 pt-8 border-t border-border">
+              <h3 className="text-label-sm text-text-muted uppercase tracking-widest mb-4">
+                Intelligence Tools
+              </h3>
+              <div className="flex flex-wrap items-center gap-4">
+                {tools.map((tool, idx) => (
+                  <Link 
+                    key={idx} 
+                    href={tool.href} 
+                    className="flex items-center gap-3 px-5 py-3.5 rounded-lg hover:bg-surface transition-colors group flex-1 min-w-[180px]"
+                  >
+                    <div className={`${tool.color} transition-transform group-hover:scale-110`}>
+                      {tool.icon}
+                    </div>
+                    <span className="text-sm font-medium text-text-base group-hover:text-tertiary transition-colors flex-1">
+                      {tool.title}
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-border group-hover:text-tertiary transition-colors opacity-0 group-hover:opacity-100" />
+                  </Link>
+                ))}
               </div>
             </div>
-          </div>
-        )}
 
-        {/* Intelligence Modules — Compact ribbon style, no cards */}
-        <div className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <h2 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">Intelligence Modules</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-            {tools.map((tool, idx) => (
-              <Link 
-                key={idx} 
-                href={tool.href} 
-                className="group flex flex-col items-center gap-2 py-4 px-3 rounded-lg border border-border hover:border-tertiary/40 hover:bg-tertiary/5 transition-all duration-200 text-center"
-              >
-                <div className={`${tool.color} transition-transform group-hover:scale-110 duration-200`}>
-                  {tool.icon}
-                </div>
-                <span className="text-xs font-medium text-text-base group-hover:text-tertiary transition-colors">
-                  {tool.title}
-                </span>
-              </Link>
-            ))}
           </div>
-        </div>
 
       </main>
     </div>

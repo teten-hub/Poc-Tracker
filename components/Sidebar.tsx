@@ -37,8 +37,8 @@ export default function Sidebar({
       {/* Top Navbar with Hamburger (Mobile Only) */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-neutral/80 backdrop-blur-lg flex items-center justify-between px-5 z-40 border-b border-border/50">
         <Link href="/" onClick={closeSidebar} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-          <Image src="/logo.png" alt="SOC-Core" width={28} height={28} className="rounded-lg" />
-          <h1 className="text-base font-bold tracking-tight text-text-base">SOC-Core</h1>
+          <Image src="/logo.png" alt="Threathunt" width={28} height={28} className="rounded-lg" />
+          <h1 className="text-base font-bold tracking-tight text-text-base">Threathunt</h1>
         </Link>
         <button onClick={toggleMobileSidebar} className="p-2 -mr-2 text-text-muted hover:text-text-base transition-colors">
           <Menu className="w-5 h-5" />
@@ -62,9 +62,9 @@ export default function Sidebar({
         {/* Header */}
         <div className="h-16 flex items-center px-4 justify-between md:justify-center md:group-hover:justify-between overflow-hidden">
           <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-            <Image src="/logo.png" alt="SOC-Core" width={28} height={28} className="rounded-lg shrink-0" />
+            <Image src="/logo.png" alt="Threathunt" width={28} height={28} className="rounded-lg shrink-0" />
             <h1 className="text-base font-bold tracking-tight text-text-base truncate md:w-0 md:opacity-0 md:group-hover:w-auto md:group-hover:opacity-100 transition-all duration-300">
-              SOC-Core
+              Threathunt
             </h1>
           </Link>
           

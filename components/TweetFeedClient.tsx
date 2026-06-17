@@ -202,14 +202,13 @@ export default function TweetFeedClient() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         
         {/* Page Header */}
-        <div className="page-header">
-          <div className="page-icon !bg-teal-500/10 !border-teal-500/20 !text-teal-500">
-            <Rss className="w-5 h-5" />
-          </div>
-          <div>
-            <h1>OSINT Threat Feed</h1>
-            <p className="text-sm text-text-muted mt-0.5">Real-time IOCs from security researchers</p>
-          </div>
+        <div className="mb-16">
+          <h1 className="text-headline-display text-text-base mb-4">
+            OSINT Threat Feed
+          </h1>
+          <p className="text-body-lg text-text-muted">
+            Real-time IOCs from security researchers
+          </p>
         </div>
 
         {/* Period Selector */}
@@ -232,28 +231,28 @@ export default function TweetFeedClient() {
             </div>
           </div>
 
-          {/* Stats Row — NO CARD */}
+          {/* Stats Row */}
           {!isLoading && !error && (
             <>
-              <div className="metric-row flex-wrap mb-6">
-                <div className="metric-item">
-                  <span className="metric-label">Total IOCs</span>
-                  <span className="metric-value text-tertiary">{stats.total.toLocaleString()}</span>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
+                <div className="section-panel !p-6 flex flex-col justify-center">
+                  <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Total IOCs</span>
+                  <span className="text-headline-md font-mono text-tertiary">{stats.total.toLocaleString()}</span>
                 </div>
                 {Object.entries(IOC_TYPE_CONFIG).map(([type, cfg]) => (
-                  <div key={type} className="metric-item">
-                    <span className="metric-label">{cfg.label}s</span>
-                    <span className="metric-value" style={{ color: cfg.rawColor }}>{(stats.typeCounts[type] || 0).toLocaleString()}</span>
+                  <div key={type} className="section-panel !p-6 flex flex-col justify-center">
+                    <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">{cfg.label}s</span>
+                    <span className="text-headline-md font-mono" style={{ color: cfg.rawColor }}>{(stats.typeCounts[type] || 0).toLocaleString()}</span>
                   </div>
                 ))}
               </div>
 
               {/* Analytics Charts — section panels */}
-              <div className="space-y-5">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              <div className="space-y-8 mb-16">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   {/* Donut */}
                   <div className="section-panel">
-                    <div className="section-panel-header"><h3>IOC Types</h3></div>
+                    <div className="section-panel-header"><h3 className="text-headline-sm">IOC Types</h3></div>
                     <div className="p-5 flex-1 flex flex-col items-center justify-center gap-6">
                       {(() => {
                         let currentPct = 0;
@@ -291,8 +290,7 @@ export default function TweetFeedClient() {
                   {/* Timeline */}
                   <div className="section-panel lg:col-span-2 flex flex-col">
                     <div className="section-panel-header">
-                      <h3>{fromDate === toDate ? 'Hourly Activity' : 'Daily Activity'}</h3>
-                      <span className="text-[10px] text-text-muted font-medium bg-surface px-2 py-0.5 rounded-md">per {fromDate === toDate ? '60 mins' : 'day'}</span>
+                      <h3 className="text-headline-sm">{fromDate === toDate ? 'Hourly Activity' : 'Daily Activity'}</h3>
                     </div>
                     <div className="p-5 flex-1 flex flex-col">
                       {fromDate === toDate ? <HourlyChart hourCounts={stats.hourCounts} /> : <DailyChart dayCounts={stats.dayCounts} />}
@@ -302,7 +300,7 @@ export default function TweetFeedClient() {
 
                 {/* Top Tags — section panel */}
                 <div className="section-panel">
-                  <div className="section-panel-header"><h3>Top Threat Tags</h3></div>
+                  <div className="section-panel-header"><h3 className="text-headline-sm">Top Threat Tags</h3></div>
                   <div className="p-5 overflow-y-auto max-h-[250px]">
                     {stats.topTags.length === 0 ? (
                       <p className="text-sm text-text-muted text-center py-6">No tagged IOCs in this period</p>
@@ -354,18 +352,18 @@ export default function TweetFeedClient() {
         {!isLoading && !error && (
           <div>
             {/* Tabs — underline */}
-            <div className="flex border-b border-border mb-6">
+            <div className="flex border-b border-border mb-8">
               <button 
                 onClick={() => setActiveTab('feed')}
-                className={`px-5 py-3.5 text-sm font-medium border-b-2 transition-colors ${activeTab === 'feed' ? 'border-tertiary text-tertiary' : 'border-transparent text-text-muted hover:text-text-base'}`}
+                className={`px-6 py-4 text-label-md transition-colors border-b-2 ${activeTab === 'feed' ? 'border-tertiary text-tertiary font-bold' : 'border-transparent text-text-muted hover:text-text-base'}`}
               >
                 Live Feed
               </button>
               <button 
                 onClick={() => setActiveTab('researchers')}
-                className={`px-5 py-3.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'researchers' ? 'border-tertiary text-tertiary' : 'border-transparent text-text-muted hover:text-text-base'}`}
+                className={`px-6 py-4 text-label-md transition-colors border-b-2 flex items-center gap-2 ${activeTab === 'researchers' ? 'border-tertiary text-tertiary font-bold' : 'border-transparent text-text-muted hover:text-text-base'}`}
               >
-                Researchers <span className="text-[10px] font-bold bg-surface px-1.5 py-0.5 rounded text-text-muted">{stats.topResearchers.length}</span>
+                Researchers <span className="text-[10px] font-bold bg-surface px-2 py-1 rounded-full text-text-muted">{stats.topResearchers.length}</span>
               </button>
             </div>
 

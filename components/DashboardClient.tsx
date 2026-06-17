@@ -102,37 +102,36 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         
         {/* Page Header */}
-        <div className="page-header">
-          <div className="page-icon">
-            <Radar className="w-5 h-5" />
-          </div>
-          <div>
-            <h1>Proof of Concept Tracker</h1>
-            <p className="text-sm text-text-muted mt-0.5">Aggregated exploits from global repositories</p>
-          </div>
+        <div className="mb-16">
+          <h1 className="text-headline-display text-text-base mb-4">
+            Proof of Concept Tracker
+          </h1>
+          <p className="text-body-lg text-text-muted">
+            Aggregated exploits from global repositories
+          </p>
         </div>
 
-        {/* Inline Metrics — NO CARD */}
-        <div className="metric-row flex-wrap">
-           <div className="metric-item">
-             <span className="metric-label">Total PoCs</span>
-             <span className="metric-value text-tertiary">{initialData.length.toLocaleString()}</span>
+        {/* Inline Metrics */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Total PoCs</span>
+             <span className="text-headline-md font-mono text-tertiary">{initialData.length.toLocaleString()}</span>
            </div>
-           <div className="metric-item">
-             <span className="metric-label">Trending (30+ ★)</span>
-             <span className="metric-value text-error">
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Trending (30+ ★)</span>
+             <span className="text-headline-md font-mono text-error">
                {initialData.filter(p => p.stargazers_count >= 30).length.toLocaleString()}
              </span>
            </div>
-           <div className="metric-item">
-             <span className="metric-label">Critical Severities</span>
-             <span className="metric-value text-orange-500">
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Critical Severities</span>
+             <span className="text-headline-md font-mono text-orange-500">
                {initialData.filter(p => p.severity === 'CRITICAL').length.toLocaleString()}
              </span>
            </div>
-           <div className="metric-item">
-             <span className="metric-label">Data Source</span>
-             <a href="https://poc-in-github.motikan2010.net" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-tertiary hover:underline mt-1">poc-in-github</a>
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Data Source</span>
+             <a href="https://poc-in-github.motikan2010.net" target="_blank" rel="noopener noreferrer" className="text-body-md font-medium text-tertiary hover:underline">poc-in-github</a>
            </div>
         </div>
         
@@ -173,10 +172,10 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
           </div>
         </div>
 
-        {/* Table — Section panel, not heavy card */}
+        {/* Table — Section panel */}
         <div className="section-panel mb-6">
           <div className="section-panel-header">
-            <h3>PoC Lists ({filteredAndSortedData.length} total)</h3>
+            <h3 className="text-headline-sm">PoC Lists ({filteredAndSortedData.length} total)</h3>
           </div>
           
           <div className="overflow-x-auto min-h-[400px]">

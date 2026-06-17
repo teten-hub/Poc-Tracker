@@ -48,6 +48,12 @@
       "namedRegex": "^/api/analyze\\-ip(?:/)?$"
     },
     {
+      "page": "/api/cvss",
+      "regex": "^/api/cvss(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cvss(?:/)?$"
+    },
+    {
       "page": "/api/hibp",
       "regex": "^/api/hibp(?:/)?$",
       "routeKeys": {},

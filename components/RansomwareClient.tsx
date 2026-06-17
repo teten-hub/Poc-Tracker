@@ -190,34 +190,33 @@ export default function RansomwareClient() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         
         {/* Page Header */}
-        <div className="page-header">
-          <div className="page-icon !bg-error/10 !border-error/20 !text-error">
-            <Skull className="w-5 h-5" />
-          </div>
-          <div>
-            <h1>Ransomware Threat Landscape</h1>
-            <p className="text-sm text-text-muted mt-0.5">Live monitoring of ransomware group activities</p>
-          </div>
+        <div className="mb-16">
+          <h1 className="text-headline-display text-text-base mb-4">
+            Ransomware Threat Landscape
+          </h1>
+          <p className="text-body-lg text-text-muted">
+            Live monitoring of ransomware group activities
+          </p>
         </div>
 
-        {/* Inline Metrics — NO CARD */}
+        {/* Inline Metrics */}
         {stats && !isLoading && (
-          <div className="metric-row flex-wrap">
-            <div className="metric-item">
-              <span className="metric-label">Active Groups</span>
-              <span className="metric-value text-tertiary">{stats.groups.toLocaleString()}</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+            <div className="section-panel !p-6 flex flex-col justify-center">
+              <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Active Groups</span>
+              <span className="text-headline-md font-mono text-tertiary">{stats.groups.toLocaleString()}</span>
             </div>
-            <div className="metric-item">
-              <span className="metric-label">Total Victims</span>
-              <span className="metric-value text-error">{stats.posts_total.toLocaleString()}</span>
+            <div className="section-panel !p-6 flex flex-col justify-center">
+              <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Total Victims</span>
+              <span className="text-headline-md font-mono text-error">{stats.posts_total.toLocaleString()}</span>
             </div>
-            <div className="metric-item">
-              <span className="metric-label">Last 24h</span>
-              <span className="metric-value text-orange-500">{stats.posts_24h.toLocaleString()}</span>
+            <div className="section-panel !p-6 flex flex-col justify-center">
+              <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Last 24h</span>
+              <span className="text-headline-md font-mono text-orange-500">{stats.posts_24h.toLocaleString()}</span>
             </div>
-            <div className="metric-item">
-              <span className="metric-label">{stats.posts_month_label || 'This Month'}</span>
-              <span className="metric-value text-success">{stats.posts_month.toLocaleString()}</span>
+            <div className="section-panel !p-6 flex flex-col justify-center">
+              <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">{stats.posts_month_label || 'This Month'}</span>
+              <span className="text-headline-md font-mono text-success">{stats.posts_month.toLocaleString()}</span>
             </div>
           </div>
         )}
@@ -239,7 +238,7 @@ export default function RansomwareClient() {
                   <X className="w-4 h-4" />
                 </button>
               )}
-              <button type="submit" disabled={isSearching || searchQuery.length < 2} className="px-4 py-1.5 text-xs font-medium text-tertiary border border-tertiary/20 rounded-md hover:bg-tertiary/10 disabled:opacity-50 transition-colors">
+              <button type="submit" disabled={isSearching || searchQuery.length < 2} className="btn-primary !h-10 !py-1 !px-4 !text-xs disabled:opacity-50">
                 {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
               </button>
             </div>
@@ -318,7 +317,7 @@ export default function RansomwareClient() {
         {!isLoading && !error && (
           <div>
             {/* Tab Navigation — underline style */}
-            <div className="flex border-b border-border mb-6">
+            <div className="flex border-b border-border mb-8">
               {[
                 { key: 'victims' as TabKey, label: 'Recent Victims', count: recentVictims.length },
                 { key: 'trending' as TabKey, label: 'Trending Groups', count: hotGroups.length },
@@ -327,11 +326,11 @@ export default function RansomwareClient() {
                 <button 
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`px-5 py-3.5 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.key ? 'border-tertiary text-tertiary' : 'border-transparent text-text-muted hover:text-text-base'}`}
+                  className={`px-6 py-4 text-label-md transition-colors border-b-2 flex items-center gap-2 ${activeTab === tab.key ? 'border-tertiary text-tertiary font-bold' : 'border-transparent text-text-muted hover:text-text-base'}`}
                 >
                   {tab.label}
                   {tab.count !== undefined && (
-                    <span className="ml-1.5 text-[10px] font-bold bg-surface px-1.5 py-0.5 rounded text-text-muted">{tab.count}</span>
+                    <span className="ml-1.5 text-[10px] font-bold bg-surface px-2 py-1 rounded-full text-text-muted">{tab.count}</span>
                   )}
                 </button>
               ))}
@@ -342,8 +341,8 @@ export default function RansomwareClient() {
               <div className="section-panel">
                 <div className="section-panel-header">
                   <div className="flex items-center gap-2 text-text-muted">
-                    <Radio className="w-3.5 h-3.5 text-error animate-pulse" />
-                    <span className="metric-label">Live feed — last 50 disclosed victims</span>
+                    <Radio className="w-4 h-4 text-error animate-pulse" />
+                    <h3 className="text-headline-sm">Live feed — last 50 disclosed victims</h3>
                   </div>
                 </div>
                 
@@ -406,8 +405,8 @@ export default function RansomwareClient() {
               <div className="section-panel">
                 <div className="section-panel-header">
                   <div className="flex items-center gap-2 text-text-muted">
-                    <Activity className="w-3.5 h-3.5 text-tertiary" />
-                    <span className="metric-label">Ranked by activity — last {hotMeta.days} days • {hotMeta.total_posts} posts</span>
+                    <Activity className="w-5 h-5 text-tertiary" />
+                    <h3 className="text-headline-sm">Ranked by activity — last {hotMeta.days} days • {hotMeta.total_posts} posts</h3>
                   </div>
                 </div>
                 

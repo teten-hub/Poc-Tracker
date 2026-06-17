@@ -77,6 +77,9 @@
     --text-negative: var(--error);
 
     --accent-glow: rgba(61, 130, 246, 0.08);
+
+    --font-manrope: 'Manrope', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
   }
 
   .dark {
@@ -98,6 +101,9 @@
     --text-negative: var(--error);
 
     --accent-glow: rgba(91, 156, 246, 0.06);
+
+    --font-manrope: 'Manrope', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
   }
 
   body {
@@ -248,29 +254,33 @@
   .btn-primary {
     background-color: var(--color-tertiary);
     color: #ffffff;
-    @apply text-label-md transition-all hover:brightness-110;
-    border-radius: var(--radius-md);
-    padding: 10px 24px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.01em;
-  }
-
-  .btn-secondary {
-    background-color: transparent;
-    color: var(--color-on-surface);
-    border: 1px solid var(--color-border);
-    @apply text-label-md transition-all hover:bg-surface;
-    border-radius: var(--radius-md);
-    padding: 10px 24px;
+    @apply text-label-md transition-all hover:opacity-90;
+    border-radius: var(--radius-sm);
+    padding: 21px 29px;
+    height: 57px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-weight: 500;
-    font-size: 14px;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-tertiary);
+    color: #ffffff;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-tertiary);
+    border: 1px solid var(--color-tertiary);
+    @apply text-label-md transition-all hover:bg-tertiary hover:text-white;
+    border-radius: var(--radius-sm);
+    padding: 21px 29px;
+    height: 57px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
   }
 
   .btn-link {
@@ -287,12 +297,12 @@
   .floating-input {
     background-color: var(--color-neutral);
     color: var(--color-on-surface);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
-    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-muted);
+    padding: 12px;
     outline: none;
-    @apply focus-within:border-tertiary focus-within:ring-2 focus-within:ring-tertiary/10 transition-all text-body-sm;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    @apply focus-within:ring-2 focus-within:ring-tertiary/10 transition-all text-body-sm;
+    box-shadow: none;
   }
 
   /* Section Divider */
@@ -323,14 +333,18 @@
   /* Section panel — lightweight container replacing heavy cards */
   .section-panel {
     background-color: var(--color-neutral);
+    color: var(--color-on-surface);
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
+    padding: 30px 36px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     overflow: hidden;
     @apply transition-all duration-200;
   }
 
   .section-panel-header {
-    padding: 14px 20px;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
     border-bottom: 1px solid var(--color-border);
     display: flex;
     align-items: center;
@@ -346,10 +360,10 @@
 
   /* Glass surface for highlighted sections */
   .glass-surface {
-    background: var(--accent-glow);
+    background: transparent;
     backdrop-filter: blur(8px);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border: none;
+    border-radius: 0;
   }
 
   /* Page header styling */
@@ -441,7 +455,7 @@
   }
 
   .clean-table tbody tr:hover {
-    background-color: var(--accent-glow);
+    background-color: transparent;
   }
 
   .clean-table tbody td {
@@ -533,20 +547,20 @@
 
   /* Legacy compat — kept but restyled */
   .wazuh-card {
-    background-color: var(--color-neutral);
+    background-color: transparent;
     color: var(--color-on-surface);
-    border-radius: var(--radius-lg);
-    padding: 20px 24px;
-    border: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: 20px 0px;
+    border: none;
     @apply transition-all duration-200;
   }
 
   .splunk-card {
-    background-color: var(--color-neutral);
+    background-color: transparent;
     color: var(--color-on-surface);
-    border-radius: var(--radius-lg);
-    padding: 20px 24px;
-    border: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: 20px 0px;
+    border: none;
     @apply transition-all duration-200;
   }
 

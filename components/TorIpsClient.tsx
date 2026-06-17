@@ -56,39 +56,38 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         
         {/* Page Header */}
-        <div className="page-header">
-          <div className="page-icon">
-            <TorIcon className="w-5 h-5 fill-current" />
-          </div>
-          <div>
-            <h1>Tor Exit Node Directory</h1>
-            <p className="text-sm text-text-muted mt-0.5">Known Tor exit node IP addresses</p>
-          </div>
+        <div className="mb-16">
+          <h1 className="text-headline-display text-text-base mb-4">
+            Tor Exit Node Directory
+          </h1>
+          <p className="text-body-lg text-text-muted">
+            Known Tor exit node IP addresses
+          </p>
         </div>
 
-        {/* Inline Metrics — NO CARD */}
-        <div className="metric-row flex-wrap">
-           <div className="metric-item">
-             <span className="metric-label">Total Tracked</span>
-             <span className="metric-value text-success">{initialData.total.toLocaleString()}</span>
+        {/* Inline Metrics */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Total Tracked</span>
+             <span className="text-headline-md font-mono text-success">{initialData.total.toLocaleString()}</span>
            </div>
-           <div className="metric-item">
-             <span className="metric-label">Listed IPs</span>
-             <span className="metric-value text-tertiary">{ips.length.toLocaleString()}</span>
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Listed IPs</span>
+             <span className="text-headline-md font-mono text-tertiary">{ips.length.toLocaleString()}</span>
            </div>
-           <div className="metric-item">
-             <span className="metric-label">Status</span>
-             <span className="flex items-center gap-2 mt-1">
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Status</span>
+             <span className="flex items-center gap-2">
                <span className="relative flex h-2.5 w-2.5">
                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success"></span>
                </span>
-               <span className="text-sm font-semibold text-text-base">Active</span>
+               <span className="text-headline-sm font-semibold text-text-base">Active</span>
              </span>
            </div>
-           <div className="metric-item">
-             <span className="metric-label">Data Source</span>
-             <a href="https://github.com/teten-hub/ip_list/blob/main/tor_ips.txt" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-tertiary hover:underline mt-1">teten-hub/ip_list</a>
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Data Source</span>
+             <a href="https://github.com/teten-hub/ip_list/blob/main/tor_ips.txt" target="_blank" rel="noopener noreferrer" className="text-body-md font-medium text-tertiary hover:underline">teten-hub/ip_list</a>
            </div>
         </div>
 

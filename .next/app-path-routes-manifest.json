@@ -2,6 +2,7 @@
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
   "/api/analyze-ip/route": "/api/analyze-ip",
+  "/api/cvss/route": "/api/cvss",
   "/api/hibp/route": "/api/hibp",
   "/api/pocs/route": "/api/pocs",
   "/api/ransomware/route": "/api/ransomware",
