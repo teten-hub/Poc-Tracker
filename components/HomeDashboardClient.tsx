@@ -212,7 +212,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                   <span className="font-mono font-bold text-text-base">{countCritical}</span>
                 </div>
                 <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <div className="h-full bg-[#d64545] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
+                  <div className="h-full bg-gradient-to-r from-red-500 to-[#d64545] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
                 </div>
               </div>
               {/* High */}
@@ -224,7 +224,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                   <span className="font-mono font-bold text-text-base">{countHigh}</span>
                 </div>
                 <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <div className="h-full bg-[#f59e0b] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
+                  <div className="h-full bg-gradient-to-r from-orange-400 to-[#f59e0b] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
                 </div>
               </div>
               {/* Medium */}
@@ -236,7 +236,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                   <span className="font-mono font-bold text-text-base">{countMedium}</span>
                 </div>
                 <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <div className="h-full bg-[#3d82f6] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
+                  <div className="h-full bg-gradient-to-r from-blue-400 to-[#3d82f6] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
                 </div>
               </div>
               {/* Low / Unknown */}
@@ -312,7 +312,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                       </span>
                     </div>
                     <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-tertiary rounded-full transition-all duration-700" style={{ width: `${barWidth}%` }} />
+                      <div className="h-full bg-gradient-to-r from-blue-400 to-tertiary rounded-full transition-all duration-700" style={{ width: `${barWidth}%` }} />
                     </div>
                   </div>
                 );

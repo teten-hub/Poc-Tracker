@@ -318,7 +318,7 @@ export default function TweetFeedClient() {
                                 <span className="text-sm font-bold text-text-base">{count}</span>
                               </div>
                               <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                                <div className="h-full bg-tertiary rounded-full transition-all duration-700" style={{ width: `${barW}%` }} />
+                                <div className="h-full bg-gradient-to-r from-blue-400 to-tertiary rounded-full transition-all duration-700" style={{ width: `${barW}%` }} />
                               </div>
                             </div>
                           );
@@ -587,7 +587,7 @@ function HourlyChart({ hourCounts }: { hourCounts: Record<number, number> }) {
           const height = count > 0 ? Math.max((count / maxCount) * 100, 2) : 0;
           return (
             <div key={h} className="flex-1 flex flex-col items-center justify-end group relative h-full">
-              <div className="w-full bg-tertiary rounded-t-sm transition-all duration-300 hover:bg-tertiary/70" style={{ height: `${height}%` }} />
+              <div className="w-full bg-gradient-to-t from-[#3d82f6]/80 to-tertiary rounded-t-sm transition-all duration-300 hover:opacity-80" style={{ height: `${height}%` }} />
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-neutral border border-border text-text-base text-[10px] font-medium rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
                 {h}:00 — <span className="text-tertiary">{count}</span> IOCs
               </div>
@@ -616,7 +616,7 @@ function DailyChart({ dayCounts }: { dayCounts: Record<string, number> }) {
           const height = Math.max((count / maxCount) * 100, 2);
           return (
             <div key={day} className="flex-1 flex flex-col items-center justify-end group relative h-full">
-              <div className="w-full bg-tertiary rounded-t-sm transition-all duration-300 hover:bg-tertiary/70" style={{ height: `${height}%` }} />
+              <div className="w-full bg-gradient-to-t from-[#3d82f6]/80 to-tertiary rounded-t-sm transition-all duration-300 hover:opacity-80" style={{ height: `${height}%` }} />
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-neutral border border-border text-text-base text-[10px] font-medium rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
                 {day} — <span className="text-tertiary">{count}</span> IOCs
               </div>
