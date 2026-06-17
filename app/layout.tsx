@@ -3,6 +3,7 @@ import { Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import ClientLayout from '@/components/ClientLayout';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { Analytics } from '@vercel/analytics/next';
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
@@ -25,6 +26,7 @@ export default function RootLayout({
             {children}
           </ClientLayout>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
