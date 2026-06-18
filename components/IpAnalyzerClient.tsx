@@ -219,15 +219,62 @@ export default function IpAnalyzerClient() {
                       <div className="flex flex-col items-center justify-center py-6">
                         {(() => {
                           const malicious = results.vt.malicious;
-                          const total = results.vt.engineCount;
+                          const total = results.vt.engineCount || 1;
                           const isMalicious = malicious > 0;
                           
+                          const radius = 70;
+                          const strokeWidth = 8;
+                          const normalizedRadius = radius - strokeWidth / 2;
+                          const circumference = normalizedRadius * 2 * Math.PI;
+                          
+                          const ratio = malicious / total;
+                          const strokeDashoffset = circumference - (ratio * circumference);
+
                           return (
-                            <div className="text-center">
-                              <div className={`text-headline-display font-bold ${isMalicious ? 'text-error' : 'text-success'}`}>
-                                {malicious} <span className="text-headline-sm text-text-muted font-normal">/ {total}</span>
+                            <div className="flex flex-col items-center">
+                              <div className="relative flex items-center justify-center mb-6">
+                                <svg
+                                  height={radius * 2}
+                                  width={radius * 2}
+                                  className="transform -rotate-90"
+                                >
+                                  {/* Background Ring */}
+                                  <circle
+                                    stroke="var(--color-border)"
+                                    fill="transparent"
+                                    strokeWidth={strokeWidth}
+                                    r={normalizedRadius}
+                                    cx={radius}
+                                    cy={radius}
+                                  />
+                                  {/* Colored Ring */}
+                                  <circle
+                                    stroke={isMalicious ? "#f87171" : "#4ade80"}
+                                    fill="transparent"
+                                    strokeWidth={strokeWidth}
+                                    strokeLinecap="round"
+                                    strokeDasharray={circumference + ' ' + circumference}
+                                    style={{ 
+                                      strokeDashoffset: isMalicious ? strokeDashoffset : 0,
+                                      transition: "stroke-dashoffset 1s ease-in-out"
+                                    }}
+                                    r={normalizedRadius}
+                                    cx={radius}
+                                    cy={radius}
+                                  />
+                                </svg>
+                                
+                                {/* Inner Text */}
+                                <div className="absolute flex flex-col items-center justify-center">
+                                  <span className={`text-5xl font-medium tracking-tight ${isMalicious ? 'text-[#f87171]' : 'text-[#4ade80]'}`}>
+                                    {malicious}
+                                  </span>
+                                  <span className="text-body-sm text-text-muted font-medium">
+                                    / {total}
+                                  </span>
+                                </div>
                               </div>
-                              <p className="text-body-md text-text-muted mt-2">
+                              <p className="text-body-md text-text-muted">
                                 Security vendors flagged this IP as malicious
                               </p>
                             </div>
