@@ -219,18 +219,16 @@ export default function IpAnalyzerClient() {
                       <div className="flex flex-col items-center justify-center py-6">
                         {(() => {
                           const malicious = results.vt.malicious;
-                          const suspicious = results.vt.suspicious;
                           const total = results.vt.engineCount;
-                          const flagged = malicious + suspicious;
-                          const isMalicious = flagged > 0;
+                          const isMalicious = malicious > 0;
                           
                           return (
                             <div className="text-center">
                               <div className={`text-headline-display font-bold ${isMalicious ? 'text-error' : 'text-success'}`}>
-                                {flagged} <span className="text-headline-sm text-text-muted font-normal">/ {total}</span>
+                                {malicious} <span className="text-headline-sm text-text-muted font-normal">/ {total}</span>
                               </div>
                               <p className="text-body-md text-text-muted mt-2">
-                                Security vendors flagged this IP
+                                Security vendors flagged this IP as malicious
                               </p>
                             </div>
                           );
