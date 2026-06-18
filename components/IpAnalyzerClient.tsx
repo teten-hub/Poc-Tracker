@@ -215,40 +215,24 @@ export default function IpAnalyzerClient() {
                     <div className="text-body-sm text-error text-center py-10">Request Failed: {results.vt.error || 'Failed to query VT.'}</div>
                   ) : (
                     <div className="flex flex-col gap-8">
-                      {/* Donut */}
-                      <div className="flex items-center justify-center gap-10">
+                      {/* Security Vendor Flagged */}
+                      <div className="flex flex-col items-center justify-center py-6">
                         {(() => {
-                          const total = results.vt.engineCount;
                           const malicious = results.vt.malicious;
                           const suspicious = results.vt.suspicious;
-                          const clean = total - malicious - suspicious;
-                          const malPct = total > 0 ? (malicious / total) * 100 : 0;
-                          const susPct = total > 0 ? (suspicious / total) * 100 : 0;
-                          const conic = `conic-gradient(#d64545 0% ${malPct}%, #f59e0b ${malPct}% ${malPct + susPct}%, #2f9e44 ${malPct + susPct}% 100%)`;
-
+                          const total = results.vt.engineCount;
+                          const flagged = malicious + suspicious;
+                          const isMalicious = flagged > 0;
+                          
                           return (
-                            <>
-                              <div className="relative w-36 h-36 rounded-full flex items-center justify-center" style={{ background: conic }}>
-                                <div className="w-28 h-28 bg-neutral rounded-full flex items-center justify-center flex-col">
-                                  <span className="text-headline-md font-bold text-text-base">{malicious + suspicious}</span>
-                                  <span className="text-caption text-text-muted uppercase tracking-wider">Flags</span>
-                                </div>
+                            <div className="text-center">
+                              <div className={`text-headline-display font-bold ${isMalicious ? 'text-error' : 'text-success'}`}>
+                                {flagged} <span className="text-headline-sm text-text-muted font-normal">/ {total}</span>
                               </div>
-                              <div className="flex flex-col gap-4 text-label-sm">
-                                <div className="flex items-center justify-between gap-6">
-                                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#d64545]"></div> Malicious</div>
-                                  <span className="font-bold text-label-md">{malicious}</span>
-                                </div>
-                                <div className="flex items-center justify-between gap-6">
-                                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#f59e0b]"></div> Suspicious</div>
-                                  <span className="font-bold text-label-md">{suspicious}</span>
-                                </div>
-                                <div className="flex items-center justify-between gap-6">
-                                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-[#2f9e44]"></div> Clean</div>
-                                  <span className="font-bold text-label-md">{clean}</span>
-                                </div>
-                              </div>
-                            </>
+                              <p className="text-body-md text-text-muted mt-2">
+                                Security vendors flagged this IP
+                              </p>
+                            </div>
                           );
                         })()}
                       </div>

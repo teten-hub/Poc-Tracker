@@ -126,7 +126,7 @@ export async function GET(request: Request) {
         if (!abuseApiKey || abuseApiKey === 'your_abuseipdb_api_key_here') {
           return { configured: false, error: 'API key not configured' };
         }
-        const url = `https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}&maxAgeInDays=90`;
+        const url = `https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}&maxAgeInDays=30`;
         const res = await fetch(url, {
           headers: {
             'Key': abuseApiKey,
