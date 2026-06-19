@@ -8,7 +8,7 @@ export async function GET(request: Request) {
 
     if (query) {
       // Search across ALL IPs in the repo
-      const { matched, totalTracked } = await searchAllTorIps(query);
+      const { matched, totalTracked, latestUpdate } = await searchAllTorIps(query);
       const limitedResults = matched.slice(0, 100);
 
       return NextResponse.json({
@@ -17,11 +17,12 @@ export async function GET(request: Request) {
         matched: matched.length,
         limit: 100,
         query,
-        ips: limitedResults
+        ips: limitedResults,
+        latestUpdate
       });
     } else {
       // Default view: show the latest new IPs from the last commit
-      const { newIps, totalTracked } = await getNewTorIps();
+      const { newIps, totalTracked, latestUpdate } = await getNewTorIps();
       const limitedResults = newIps.slice(0, 100);
 
       return NextResponse.json({
@@ -30,7 +31,8 @@ export async function GET(request: Request) {
         matched: newIps.length,
         limit: 100,
         query: null,
-        ips: limitedResults
+        ips: limitedResults,
+        latestUpdate
       });
     }
 

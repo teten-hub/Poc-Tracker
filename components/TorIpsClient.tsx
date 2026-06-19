@@ -9,6 +9,7 @@ interface TorIpsClientProps {
   initialData: {
     total: number;
     ips: string[];
+    latestUpdate?: string;
   };
 }
 
@@ -17,6 +18,7 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
   const [ips, setIps] = useState<string[]>(initialData.ips);
   const [totalCount, setTotalCount] = useState(initialData.total);
   const [matchedCount, setMatchedCount] = useState(0);
+  const [latestUpdate, setLatestUpdate] = useState(initialData.latestUpdate);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,6 +45,7 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
       setIps(data.ips);
       setTotalCount(data.total);
       setMatchedCount(data.matched || data.ips.length);
+      if (data.latestUpdate) setLatestUpdate(data.latestUpdate);
     } catch (err: any) {
       console.error('Search error:', err);
       setError(err.message || 'An error occurred during search.');
@@ -66,7 +69,7 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
         </div>
 
         {/* Inline Metrics */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 mb-16">
            <div className="section-panel !p-6 flex flex-col justify-center">
              <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Total Tracked</span>
              <span className="text-headline-md font-mono text-success">{initialData.total.toLocaleString()}</span>
@@ -88,6 +91,12 @@ export default function TorIpsClient({ initialData }: TorIpsClientProps) {
            <div className="section-panel !p-6 flex flex-col justify-center">
              <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Data Source</span>
              <a href="https://github.com/teten-hub/ip_list/blob/main/tor_ips.txt" target="_blank" rel="noopener noreferrer" className="text-body-md font-medium text-tertiary hover:underline">teten-hub/ip_list</a>
+           </div>
+           <div className="section-panel !p-6 flex flex-col justify-center">
+             <span className="text-label-sm text-text-muted mb-2 uppercase tracking-widest">Latest Update</span>
+             <span className="text-body-md font-medium text-text-base">
+               {latestUpdate ? new Date(latestUpdate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) : 'Unknown'}
+             </span>
            </div>
         </div>
 

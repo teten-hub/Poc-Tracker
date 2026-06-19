@@ -4,15 +4,16 @@ import { getNewTorIps } from '@/lib/torIps';
 export const revalidate = 3600; // Cache the response for 1 hour
 
 export default async function Page() {
-  let initialData = { total: 0, ips: [] as string[] };
+  let initialData: { total: number; ips: string[]; latestUpdate?: string } = { total: 0, ips: [] };
   let errorMsgContent = null;
 
   try {
-    const { newIps, totalTracked } = await getNewTorIps();
+    const { newIps, totalTracked, latestUpdate } = await getNewTorIps();
     
     initialData = {
       total: totalTracked,
-      ips: newIps.slice(0, 100)
+      ips: newIps.slice(0, 100),
+      latestUpdate
     };
 
   } catch (error) {

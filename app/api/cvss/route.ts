@@ -35,6 +35,39 @@ async function fetchCvssScores(cveIds: string[]) {
           cvss = data?.cvss3 || data?.cvss || null;
         }
 
+        if (cvss === null) {
+          try {
+            const ghRes = await fetch(`https://api.github.com/advisories?cve_id=${cve}`, {
+              signal: AbortSignal.timeout(3000),
+              headers: { 'Accept': 'application/vnd.github+json' }
+            });
+            if (ghRes.ok) {
+              const ghData = await ghRes.json();
+              if (ghData && ghData.length > 0 && ghData[0].cvss?.score) {
+                cvss = ghData[0].cvss.score;
+              }
+            }
+          } catch (e) {
+            // silent fail
+          }
+        }
+
+        if (cvss === null) {
+          try {
+            const circlRes = await fetch(`https://cve.circl.lu/api/cve/${cve}`, {
+              signal: AbortSignal.timeout(3000)
+            });
+            if (circlRes.ok) {
+              const circlData = await circlRes.json();
+              if (circlData && circlData.cvss) {
+                cvss = parseFloat(circlData.cvss);
+              }
+            }
+          } catch(e) {
+            // silent fail
+          }
+        }
+
         if (typeof cvss === 'string') cvss = parseFloat(cvss);
         
         let severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'UNKNOWN' = 'UNKNOWN';

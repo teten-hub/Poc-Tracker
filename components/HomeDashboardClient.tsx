@@ -203,48 +203,48 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <span className="text-label-sm text-text-muted flex items-center gap-2">
-                        <div className="w-2.5 h-2.5 rounded-sm bg-[#d64545]"></div> Critical (9.0+)
+                        <div className="w-2.5 h-2.5 rounded-sm bg-red-800"></div> Critical (9.0+)
                       </span>
                       <span className="text-label-md font-mono">{countCritical}</span>
                     </div>
                     <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-red-500 to-[#d64545] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
+                      <div className="h-full bg-gradient-to-r from-red-700 to-red-900 rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
                     </div>
                   </div>
                   {/* High */}
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <span className="text-label-sm text-text-muted flex items-center gap-2">
-                        <div className="w-2.5 h-2.5 rounded-sm bg-[#f59e0b]"></div> High (7.0 - 8.9)
+                        <div className="w-2.5 h-2.5 rounded-sm bg-red-500"></div> High (7.0 - 8.9)
                       </span>
                       <span className="text-label-md font-mono">{countHigh}</span>
                     </div>
                     <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-orange-400 to-[#f59e0b] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
+                      <div className="h-full bg-gradient-to-r from-red-400 to-red-600 rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
                     </div>
                   </div>
                   {/* Medium */}
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <span className="text-label-sm text-text-muted flex items-center gap-2">
-                        <div className="w-2.5 h-2.5 rounded-sm bg-[#3d82f6]"></div> Medium (4.0 - 6.9)
+                        <div className="w-2.5 h-2.5 rounded-sm bg-yellow-400"></div> Medium (4.0 - 6.9)
                       </span>
                       <span className="text-label-md font-mono">{countMedium}</span>
                     </div>
                     <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-blue-400 to-[#3d82f6] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
+                      <div className="h-full bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
                     </div>
                   </div>
                   {/* Low / Unknown */}
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <span className="text-label-sm text-text-muted flex items-center gap-2">
-                        <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: donutTrackBg }}></div> Low / Unknown
+                        <div className="w-2.5 h-2.5 rounded-sm bg-green-500"></div> Low / Unknown
                       </span>
                       <span className="text-label-md font-mono">{countLowOrUnknown}</span>
                     </div>
                     <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-700" style={{ backgroundColor: donutTrackBg, width: `${totalPocs > 0 ? Math.max((countLowOrUnknown / totalPocs) * 100, 1) : 0}%` }} />
+                      <div className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countLowOrUnknown / totalPocs) * 100, 1) : 0}%` }} />
                     </div>
                   </div>
                 </div>

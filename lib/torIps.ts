@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache';
 
 // Helper: fetch commit SHAs (small JSON, safe to cache)
-async function getCommitShas(): Promise<{ headSha: string; baseSha: string | null }> {
+async function getCommitShas(): Promise<{ headSha: string; baseSha: string | null; latestUpdate: string }> {
   const commitsRes = await fetch('https://api.github.com/repos/teten-hub/ip_list/commits?path=tor_ips.txt&per_page=2', {
     next: { revalidate: 3600 }
   });
@@ -13,7 +13,8 @@ async function getCommitShas(): Promise<{ headSha: string; baseSha: string | nul
   const commits = await commitsRes.json();
   return {
     headSha: commits[0].sha,
-    baseSha: commits.length >= 2 ? commits[1].sha : null
+    baseSha: commits.length >= 2 ? commits[1].sha : null,
+    latestUpdate: commits[0].commit.author.date
   };
 }
 
@@ -33,7 +34,7 @@ async function fetchIpFile(sha: string): Promise<string[]> {
  */
 export const getNewTorIps = unstable_cache(
   async () => {
-    const { headSha, baseSha } = await getCommitShas();
+    const { headSha, baseSha, latestUpdate } = await getCommitShas();
     const headLines = await fetchIpFile(headSha);
     const totalTracked = headLines.length;
 
@@ -43,11 +44,12 @@ export const getNewTorIps = unstable_cache(
       const newIps = headLines.filter(ip => !baseSet.has(ip));
       return {
         newIps: newIps.length > 0 ? newIps : headLines.slice(-100),
-        totalTracked
+        totalTracked,
+        latestUpdate
       };
     }
 
-    return { newIps: headLines.slice(-100), totalTracked };
+    return { newIps: headLines.slice(-100), totalTracked, latestUpdate };
   },
   ['tor-new-ips'],
   { revalidate: 3600 }
@@ -57,12 +59,12 @@ export const getNewTorIps = unstable_cache(
  * Search across ALL IPs in the repo (on-demand, not cached via unstable_cache).
  * Fetches the full file and filters server-side, returns max 100 results.
  */
-export async function searchAllTorIps(query: string): Promise<{ matched: string[]; totalTracked: number }> {
-  const { headSha } = await getCommitShas();
+export async function searchAllTorIps(query: string): Promise<{ matched: string[]; totalTracked: number; latestUpdate: string }> {
+  const { headSha, latestUpdate } = await getCommitShas();
   const allIps = await fetchIpFile(headSha);
   const lowerQuery = query.toLowerCase();
   const matched = allIps.filter(ip => ip.includes(lowerQuery));
-  return { matched, totalTracked: allIps.length };
+  return { matched, totalTracked: allIps.length, latestUpdate };
 }
 
 
