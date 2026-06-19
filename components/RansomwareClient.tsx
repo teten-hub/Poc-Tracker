@@ -443,7 +443,7 @@ export default function RansomwareClient() {
                               <td className="px-4 py-3 font-bold text-text-base text-sm">{hg.count}</td>
                               <td className="px-4 py-3">
                                 <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                                  <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-700" style={{ width: `${barWidth}%` }} />
+                                  <div className="h-full bg-gradient-to-r from-blue-500 to-yellow-400 rounded-full transition-all duration-700" style={{ width: `${barWidth}%` }} />
                                 </div>
                               </td>
                             </tr>

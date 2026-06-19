@@ -127,11 +127,11 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
 
   let iocGradients: string[] = [];
   let curPct = 0;
-  if (pctUrl > 0) { iocGradients.push(`#3d82f6 ${curPct}% ${curPct + pctUrl}%`); curPct += pctUrl; }
-  if (pctDomain > 0) { iocGradients.push(`#8b5cf6 ${curPct}% ${curPct + pctDomain}%`); curPct += pctDomain; }
-  if (pctIp > 0) { iocGradients.push(`#2f9e44 ${curPct}% ${curPct + pctIp}%`); curPct += pctIp; }
-  if (pctSha256 > 0) { iocGradients.push(`#f59e0b ${curPct}% ${curPct + pctSha256}%`); curPct += pctSha256; }
-  if (pctMd5 > 0) { iocGradients.push(`#d64545 ${curPct}% ${curPct + pctMd5}%`); curPct += pctMd5; }
+  if (pctUrl > 0) { iocGradients.push(`#3b82f6 ${curPct}% ${curPct + pctUrl}%`); curPct += pctUrl; }
+  if (pctDomain > 0) { iocGradients.push(`#60a5fa ${curPct}% ${curPct + pctDomain}%`); curPct += pctDomain; }
+  if (pctIp > 0) { iocGradients.push(`#93c5fd ${curPct}% ${curPct + pctIp}%`); curPct += pctIp; }
+  if (pctSha256 > 0) { iocGradients.push(`#facc15 ${curPct}% ${curPct + pctSha256}%`); curPct += pctSha256; }
+  if (pctMd5 > 0) { iocGradients.push(`#eab308 ${curPct}% ${curPct + pctMd5}%`); curPct += pctMd5; }
   const iocConicGradient = iocGradients.length > 0 ? `conic-gradient(${iocGradients.join(', ')})` : `conic-gradient(${donutTrackBg} 0% 100%)`;
 
   return (
@@ -208,7 +208,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                       <span className="text-label-md font-mono">{countCritical}</span>
                     </div>
                     <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-red-500 to-[#d64545] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
+                      <div className="h-full bg-gradient-to-r from-blue-500 to-yellow-400 rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countCritical / totalPocs) * 100, 1) : 0}%` }} />
                     </div>
                   </div>
                   {/* High */}
@@ -220,7 +220,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                       <span className="text-label-md font-mono">{countHigh}</span>
                     </div>
                     <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-orange-400 to-[#f59e0b] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
+                      <div className="h-full bg-gradient-to-r from-blue-500 to-yellow-400 rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countHigh / totalPocs) * 100, 1) : 0}%` }} />
                     </div>
                   </div>
                   {/* Medium */}
@@ -232,7 +232,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                       <span className="text-label-md font-mono">{countMedium}</span>
                     </div>
                     <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-blue-400 to-[#3d82f6] rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
+                      <div className="h-full bg-gradient-to-r from-blue-500 to-yellow-400 rounded-full transition-all duration-700" style={{ width: `${totalPocs > 0 ? Math.max((countMedium / totalPocs) * 100, 1) : 0}%` }} />
                     </div>
                   </div>
                   {/* Low / Unknown */}
@@ -267,20 +267,24 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                   </div>
                   <div className="flex flex-col gap-3 flex-1">
                     <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#3d82f6]"></div> URL</span>
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#3b82f6]"></div> URL</span>
                       <span className="text-label-md">{typeCounts.url}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#8b5cf6]"></div> Domain</span>
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#60a5fa]"></div> Domain</span>
                       <span className="text-label-md">{typeCounts.domain}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#2f9e44]"></div> IP</span>
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#93c5fd]"></div> IP</span>
                       <span className="text-label-md">{typeCounts.ip}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#f59e0b]"></div> SHA256</span>
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#facc15]"></div> SHA256</span>
                       <span className="text-label-md">{typeCounts.sha256}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2 text-label-sm"><div className="w-3 h-3 rounded-sm bg-[#eab308]"></div> MD5</span>
+                      <span className="text-label-md">{typeCounts.md5}</span>
                     </div>
                   </div>
                 </div>
@@ -309,7 +313,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
                           </span>
                         </div>
                         <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-                          <div className="h-full bg-gradient-to-r from-blue-400 to-tertiary rounded-full transition-all duration-700" style={{ width: `${barWidth}%` }} />
+                          <div className="h-full bg-gradient-to-r from-blue-500 to-yellow-400 rounded-full transition-all duration-700" style={{ width: `${barWidth}%` }} />
                         </div>
                       </div>
                     );

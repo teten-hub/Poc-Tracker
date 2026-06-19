@@ -25,11 +25,11 @@ type IOCTypeFilter = 'all' | 'url' | 'domain' | 'ip' | 'sha256' | 'md5';
 
 /* ─── Constants ───────────────────────────────────────────────── */
 const IOC_TYPE_CONFIG: Record<string, { label: string; color: string; bgColor: string; icon: React.ReactNode; rawColor: string }> = {
-  url:    { label: 'URL',    color: 'text-[#3d82f6]',    bgColor: 'bg-[#3d82f6]/10 border-[#3d82f6]/20',    icon: <Link2 className="w-4 h-4" />, rawColor: '#3d82f6' },
-  domain: { label: 'Domain', color: 'text-[#8b5cf6]',    bgColor: 'bg-[#8b5cf6]/10 border-[#8b5cf6]/20',    icon: <Globe className="w-4 h-4" />, rawColor: '#8b5cf6' },
-  ip:     { label: 'IP',     color: 'text-[#2f9e44]',     bgColor: 'bg-[#2f9e44]/10 border-[#2f9e44]/20', icon: <Target className="w-4 h-4" />, rawColor: '#2f9e44' },
-  sha256: { label: 'SHA256', color: 'text-[#f59e0b]',   bgColor: 'bg-[#f59e0b]/10 border-[#f59e0b]/20',  icon: <FileText className="w-4 h-4" />, rawColor: '#f59e0b' },
-  md5:    { label: 'MD5',    color: 'text-[#d64545]',  bgColor: 'bg-[#d64545]/10 border-[#d64545]/20', icon: <Hash className="w-4 h-4" />, rawColor: '#d64545' },
+  url:    { label: 'URL',    color: 'text-[#3b82f6]',    bgColor: 'bg-[#3b82f6]/10 border-[#3b82f6]/20',    icon: <Link2 className="w-4 h-4" />, rawColor: '#3b82f6' },
+  domain: { label: 'Domain', color: 'text-[#60a5fa]',    bgColor: 'bg-[#60a5fa]/10 border-[#60a5fa]/20',    icon: <Globe className="w-4 h-4" />, rawColor: '#60a5fa' },
+  ip:     { label: 'IP',     color: 'text-[#93c5fd]',     bgColor: 'bg-[#93c5fd]/10 border-[#93c5fd]/20', icon: <Target className="w-4 h-4" />, rawColor: '#93c5fd' },
+  sha256: { label: 'SHA256', color: 'text-[#facc15]',   bgColor: 'bg-[#facc15]/10 border-[#facc15]/20',  icon: <FileText className="w-4 h-4" />, rawColor: '#facc15' },
+  md5:    { label: 'MD5',    color: 'text-[#eab308]',  bgColor: 'bg-[#eab308]/10 border-[#eab308]/20', icon: <Hash className="w-4 h-4" />, rawColor: '#eab308' },
 };
 
 const TAG_COLORS = [
@@ -316,7 +316,7 @@ export default function TweetFeedClient() {
                                 <span className="text-sm font-bold text-text-base">{count}</span>
                               </div>
                               <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                                <div className="h-full bg-gradient-to-r from-blue-400 to-tertiary rounded-full transition-all duration-700" style={{ width: `${barW}%` }} />
+                                <div className="h-full bg-gradient-to-r from-blue-500 to-yellow-400 rounded-full transition-all duration-700" style={{ width: `${barW}%` }} />
                               </div>
                             </div>
                           );
@@ -585,7 +585,7 @@ function HourlyChart({ hourCounts }: { hourCounts: Record<number, number> }) {
           const height = count > 0 ? Math.max((count / maxCount) * 100, 2) : 0;
           return (
             <div key={h} className="flex-1 flex flex-col items-center justify-end group relative h-full">
-              <div className="w-full bg-gradient-to-t from-[#3d82f6]/80 to-tertiary rounded-t-sm transition-all duration-300 hover:opacity-80" style={{ height: `${height}%` }} />
+              <div className="w-full bg-gradient-to-t from-blue-500 to-yellow-400 rounded-t-sm transition-all duration-300 hover:opacity-80" style={{ height: `${height}%` }} />
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-neutral border border-border text-text-base text-[10px] font-medium rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
                 {h}:00 — <span className="text-tertiary">{count}</span> IOCs
               </div>
@@ -614,7 +614,7 @@ function DailyChart({ dayCounts }: { dayCounts: Record<string, number> }) {
           const height = Math.max((count / maxCount) * 100, 2);
           return (
             <div key={day} className="flex-1 flex flex-col items-center justify-end group relative h-full">
-              <div className="w-full bg-gradient-to-t from-[#3d82f6]/80 to-tertiary rounded-t-sm transition-all duration-300 hover:opacity-80" style={{ height: `${height}%` }} />
+              <div className="w-full bg-gradient-to-t from-blue-500 to-yellow-400 rounded-t-sm transition-all duration-300 hover:opacity-80" style={{ height: `${height}%` }} />
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-neutral border border-border text-text-base text-[10px] font-medium rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
                 {day} — <span className="text-tertiary">{count}</span> IOCs
               </div>
