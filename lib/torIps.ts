@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache';
 
 // Helper: fetch commit SHAs (small JSON, safe to cache)
-async function getCommitShas(): Promise<{ headSha: string; baseSha: string | null; latestUpdate: string }> {
+const getCommitShas = unstable_cache(async (): Promise<{ headSha: string; baseSha: string | null; latestUpdate: string }> => {
   const commitsRes = await fetch('https://api.github.com/repos/teten-hub/ip_list/commits?path=tor_ips.txt&per_page=2', {
     next: { revalidate: 3600 }
   });
@@ -16,17 +16,17 @@ async function getCommitShas(): Promise<{ headSha: string; baseSha: string | nul
     baseSha: commits.length >= 2 ? commits[1].sha : null,
     latestUpdate: commits[0].commit.author.date
   };
-}
+}, ['tor-commit-shas'], { revalidate: 3600 });
 
-// Helper: fetch the raw IP file for a given SHA (uncached, ~7MB)
-async function fetchIpFile(sha: string): Promise<string[]> {
+// Helper: fetch the raw IP file for a given SHA (cached)
+const fetchIpFile = unstable_cache(async (sha: string): Promise<string[]> => {
   const res = await fetch(`https://raw.githubusercontent.com/teten-hub/ip_list/${sha}/tor_ips.txt`, {
-    cache: 'no-store'
+    next: { revalidate: 3600 }
   });
   if (!res.ok) throw new Error(`Failed to fetch IP file for ${sha}`);
   const text = await res.text();
   return text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-}
+}, ['tor-ip-file'], { revalidate: 3600 });
 
 /**
  * Get the latest new IPs (diff between last two commits).

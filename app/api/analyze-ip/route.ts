@@ -171,9 +171,33 @@ export async function GET(request: Request) {
     const abuseipdb = abuseResult.status === 'fulfilled' ? abuseResult.value : { success: false, configured: true, error: abuseResult.reason?.message || 'Failed to fetch' };
     const geo = geoResult.status === 'fulfilled' ? geoResult.value : null;
 
+    // Helper to get full country name
+    const getFullCountryName = (code: string | null) => {
+      if (!code || code === 'N/A') return 'N/A';
+      if (code.length === 2) {
+        try {
+          const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
+          return regionNames.of(code.toUpperCase()) || code;
+        } catch {
+          return code;
+        }
+      }
+      return code;
+    };
+
+    let rawCountry = (abuseipdb as any)?.country || (vt as any)?.country || geo?.countryCode || 'N/A';
+    
+    // Use geo.country (full name) if available and matches, else format it
+    let fullCountry = rawCountry;
+    if (geo?.country && rawCountry === geo?.countryCode) {
+      fullCountry = geo.country;
+    } else {
+      fullCountry = getFullCountryName(rawCountry);
+    }
+
     // Aggregate geographical/ISP data from multiple sources
     const location = {
-      country: (abuseipdb as any)?.country || (vt as any)?.country || geo?.countryCode || 'N/A',
+      country: fullCountry,
       city: (abuseipdb as any)?.city || geo?.city || 'N/A',
       isp: (abuseipdb as any)?.isp || (vt as any)?.as_owner || geo?.isp || 'Unknown ISP'
     };
