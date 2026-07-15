@@ -27,6 +27,14 @@ interface AbuseReportDetail {
   reporter_country_name: string | null;
 }
 
+function BrandBadge({ src, alt }: { src: string; alt: string }) {
+  return (
+    <span className="inline-flex h-10 w-14 items-center justify-center rounded-xl border border-border/60 bg-gradient-to-br from-surface via-neutral/60 to-surface shadow-[0_1px_0_rgba(255,255,255,0.04),0_8px_18px_rgba(0,0,0,0.12)]">
+      <img src={src} alt={alt} className="h-5 w-10 object-contain" />
+    </span>
+  );
+}
+
 function formatDate(dateStr: string | null) {
   if (!dateStr) return 'N/A';
   try {
@@ -213,12 +221,9 @@ export default function IpAnalyzerClient() {
               <div className="section-panel">
                 <div className="section-panel-header">
                   <h3 className="text-headline-sm flex items-center gap-3">
-                    <img
-                      src="/Virustotal_logo.png"
-                      alt="VirusTotal"
-                      className="h-7 w-auto object-contain"
-                    />
-                    <span>VirusTotal Analysis</span>
+                    <BrandBadge src="/Virustotal_logo.png" alt="VirusTotal" />
+                    <span>VirusTotal</span>
+                    <span className="text-label-sm text-text-muted font-medium hidden sm:inline">Malware reputation</span>
                   </h3>
                   {!results.vt.configured && (
                     <span className="badge badge-low text-xs flex items-center gap-1">
@@ -329,12 +334,9 @@ export default function IpAnalyzerClient() {
               <div className="section-panel">
                 <div className="section-panel-header">
                   <h3 className="text-headline-sm flex items-center gap-3">
-                    <img
-                      src="/AbuselPDB-icon.png"
-                      alt="AbuseIPDB"
-                      className="h-7 w-auto object-contain"
-                    />
-                    <span>AbuseIPDB Threat Check</span>
+                    <BrandBadge src="/AbuselPDB-icon.png" alt="AbuseIPDB" />
+                    <span>AbuseIPDB</span>
+                    <span className="text-label-sm text-text-muted font-medium hidden sm:inline">Abuse score</span>
                   </h3>
                   {!results.abuseipdb.configured && (
                     <span className="badge badge-low text-xs flex items-center gap-1">
@@ -409,12 +411,9 @@ export default function IpAnalyzerClient() {
               <div className="section-panel lg:col-span-2">
                 <div className="section-panel-header">
                   <h3 className="text-headline-sm flex items-center gap-3">
-                    <img
-                      src="/AbuselPDB-icon.png"
-                      alt="AbuseIPDB"
-                      className="h-7 w-auto object-contain"
-                    />
-                    <span>AbuseIPDB Report Details</span>
+                    <BrandBadge src="/AbuselPDB-icon.png" alt="AbuseIPDB" />
+                    <span>Abuse Reports</span>
+                    <span className="text-label-sm text-text-muted font-medium hidden sm:inline">Recent submissions</span>
                   </h3>
                   <span className="badge badge-low text-xs">
                     {results.abuseipdb.reports_details?.length || 0} reports
@@ -494,12 +493,9 @@ export default function IpAnalyzerClient() {
               <div className="section-panel lg:col-span-2">
                 <div className="section-panel-header">
                   <h3 className="text-headline-sm flex items-center gap-3">
-                    <img
-                      src="/alienvault-otx-logo.png"
-                      alt="AlienVault OTX"
-                      className="h-7 w-auto object-contain"
-                    />
+                    <BrandBadge src="/alienvault-otx-logo.png" alt="AlienVault OTX" />
                     <span>AlienVault OTX</span>
+                    <span className="text-label-sm text-text-muted font-medium hidden sm:inline">Pulses</span>
                   </h3>
                 </div>
 
