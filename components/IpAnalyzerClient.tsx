@@ -213,7 +213,12 @@ export default function IpAnalyzerClient() {
               <div className="section-panel">
                 <div className="section-panel-header">
                   <h3 className="text-headline-sm flex items-center gap-3">
-                    <Shield className="w-6 h-6 text-tertiary" /> VirusTotal Analysis
+                    <img
+                      src="/Virustotal_logo.png"
+                      alt="VirusTotal"
+                      className="h-7 w-auto object-contain"
+                    />
+                    <span>VirusTotal Analysis</span>
                   </h3>
                   {!results.vt.configured && (
                     <span className="badge badge-low text-xs flex items-center gap-1">
@@ -324,7 +329,12 @@ export default function IpAnalyzerClient() {
               <div className="section-panel">
                 <div className="section-panel-header">
                   <h3 className="text-headline-sm flex items-center gap-3">
-                    <AlertTriangle className="w-6 h-6 text-purple-500" /> AbuseIPDB Threat Check
+                    <img
+                      src="/AbuselPDB-icon.png"
+                      alt="AbuseIPDB"
+                      className="h-7 w-auto object-contain"
+                    />
+                    <span>AbuseIPDB Threat Check</span>
                   </h3>
                   {!results.abuseipdb.configured && (
                     <span className="badge badge-low text-xs flex items-center gap-1">
@@ -399,7 +409,12 @@ export default function IpAnalyzerClient() {
               <div className="section-panel lg:col-span-2">
                 <div className="section-panel-header">
                   <h3 className="text-headline-sm flex items-center gap-3">
-                    <FileText className="w-6 h-6 text-purple-500" /> AbuseIPDB Report Details
+                    <img
+                      src="/AbuselPDB-icon.png"
+                      alt="AbuseIPDB"
+                      className="h-7 w-auto object-contain"
+                    />
+                    <span>AbuseIPDB Report Details</span>
                   </h3>
                   <span className="badge badge-low text-xs">
                     {results.abuseipdb.reports_details?.length || 0} reports
@@ -479,7 +494,12 @@ export default function IpAnalyzerClient() {
               <div className="section-panel lg:col-span-2">
                 <div className="section-panel-header">
                   <h3 className="text-headline-sm flex items-center gap-3">
-                    <AlertCircle className="w-6 h-6 text-sky-500" /> AlienVault OTX
+                    <img
+                      src="/alienvault-otx-logo.png"
+                      alt="AlienVault OTX"
+                      className="h-7 w-auto object-contain"
+                    />
+                    <span>AlienVault OTX</span>
                   </h3>
                 </div>
 
