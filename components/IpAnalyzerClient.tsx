@@ -6,7 +6,7 @@ import {
   Search, Loader2, Shield, AlertTriangle, AlertCircle, CheckCircle2, 
   Lock, Network, Calendar, User, 
   FileText, ExternalLink, Globe, ShieldAlert,
-  MoreVertical, Crosshair
+  ChevronDown, ChevronUp, Crosshair
 } from 'lucide-react';
 
 interface PulseDetail {
@@ -54,6 +54,7 @@ export default function IpAnalyzerClient() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [openAbuseReportIndex, setOpenAbuseReportIndex] = useState<number | null>(null);
 
   const runAnalysis = useCallback(async (ip: string) => {
     const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
@@ -92,6 +93,10 @@ export default function IpAnalyzerClient() {
       runAnalysis(ipParam);
     }
   }, [searchParams, runAnalysis]);
+
+  useEffect(() => {
+    setOpenAbuseReportIndex(null);
+  }, [results?.ip]);
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -385,63 +390,89 @@ export default function IpAnalyzerClient() {
                         </div>
                       </div>
 
-                      <div>
-                        <h5 className="text-label-md text-text-muted mb-4 flex items-center gap-2">
-                          <FileText className="w-4 h-4" /> Recent Abuse Reports ({results.abuseipdb.reports_details?.length || 0})
-                        </h5>
-
-                        {results.abuseipdb.reports_details && results.abuseipdb.reports_details.length > 0 ? (
-                          <div className="max-h-[420px] overflow-y-auto pr-2 space-y-4">
-                            {results.abuseipdb.reports_details.map((report: AbuseReportDetail, index: number) => (
-                              <div key={`${report.reported_at || 'report'}-${index}`} className="rounded-xl border border-border/60 bg-surface/60 p-4">
-                                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-3">
-                                  <div>
-                                    <div className="flex items-center gap-2 text-text-base font-medium">
-                                      <Calendar className="w-4 h-4 text-tertiary" />
-                                      {formatDate(report.reported_at)}
-                                    </div>
-                                    <p className="text-xs text-text-muted mt-1">
-                                      Reporter: {report.reporter_country_name || report.reporter_country_code || 'Unknown'}
-                                      {report.reporter_id ? ` • ID ${report.reporter_id}` : ''}
-                                    </p>
-                                  </div>
-
-                                  <div className="flex flex-wrap gap-1">
-                                    {report.categories && report.categories.length > 0 ? (
-                                      report.categories.map((category) => (
-                                        <span key={`${report.reported_at || 'report'}-${category}`} className="badge badge-low text-[10px] px-2 py-1 rounded-full">
-                                          Category {category}
-                                        </span>
-                                      ))
-                                    ) : (
-                                      <span className="badge badge-low text-[10px] px-2 py-1 rounded-full">No categories</span>
-                                    )}
-                                  </div>
-                                </div>
-
-                                <p
-                                  className="text-sm text-text-base leading-6 break-words"
-                                  style={{
-                                    display: '-webkit-box',
-                                    WebkitLineClamp: 3,
-                                    WebkitBoxOrient: 'vertical',
-                                    overflow: 'hidden'
-                                  }}
-                                >
-                                  {report.comment}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="bg-surface rounded-lg p-8 text-center text-body-md text-text-muted italic">
-                            No detailed reports were returned for this IP.
-                          </div>
-                        )}
-                      </div>
                     </div>
                   )}
                 </div>
+              </div>
+
+              {/* AbuseIPDB Report Details — spans full width */}
+              <div className="section-panel lg:col-span-2">
+                <div className="section-panel-header">
+                  <h3 className="text-headline-sm flex items-center gap-3">
+                    <FileText className="w-6 h-6 text-purple-500" /> AbuseIPDB Report Details
+                  </h3>
+                  <span className="badge badge-low text-xs">
+                    {results.abuseipdb.reports_details?.length || 0} reports
+                  </span>
+                </div>
+
+                {results.abuseipdb.reports_details && results.abuseipdb.reports_details.length > 0 ? (
+                  <div className="space-y-3">
+                    {results.abuseipdb.reports_details.map((report: AbuseReportDetail, index: number) => {
+                      const isOpen = openAbuseReportIndex === index;
+
+                      return (
+                        <div key={`${report.reported_at || 'report'}-${index}`} className="rounded-xl border border-border/60 bg-surface/60 overflow-hidden">
+                          <button
+                            type="button"
+                            onClick={() => setOpenAbuseReportIndex(isOpen ? null : index)}
+                            className="w-full flex items-center justify-between gap-4 px-4 py-4 text-left hover:bg-surface/80 transition-colors"
+                          >
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2 text-text-base font-medium">
+                                <Calendar className="w-4 h-4 text-tertiary shrink-0" />
+                                <span className="truncate">{formatDate(report.reported_at)}</span>
+                              </div>
+                              <p className="text-xs text-text-muted mt-1 truncate">
+                                Reporter: {report.reporter_country_name || report.reporter_country_code || 'Unknown'}
+                                {report.reporter_id ? ` • ID ${report.reporter_id}` : ''}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center gap-3 shrink-0">
+                              <div className="hidden sm:flex flex-wrap gap-1 justify-end max-w-[280px]">
+                                {report.categories && report.categories.length > 0 ? (
+                                  report.categories.slice(0, 3).map((category) => (
+                                    <span key={`${report.reported_at || 'report'}-${category}`} className="badge badge-low text-[10px] px-2 py-1 rounded-full">
+                                      Category {category}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="badge badge-low text-[10px] px-2 py-1 rounded-full">No categories</span>
+                                )}
+                              </div>
+                              {isOpen ? <ChevronUp className="w-4 h-4 text-text-muted" /> : <ChevronDown className="w-4 h-4 text-text-muted" />}
+                            </div>
+                          </button>
+
+                          {isOpen && (
+                            <div className="px-4 pb-4 border-t border-border/50">
+                              <div className="pt-4 flex flex-wrap gap-2 mb-4">
+                                {report.categories && report.categories.length > 0 ? (
+                                  report.categories.map((category) => (
+                                    <span key={`${report.reported_at || 'report'}-${category}`} className="badge badge-low text-[10px] px-2 py-1 rounded-full">
+                                      Category {category}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="badge badge-low text-[10px] px-2 py-1 rounded-full">No categories</span>
+                                )}
+                              </div>
+
+                              <p className="text-sm text-text-base leading-6 break-words whitespace-pre-line">
+                                {report.comment}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="bg-surface rounded-lg p-8 text-center text-body-md text-text-muted italic">
+                    No detailed reports were returned for this IP.
+                  </div>
+                )}
               </div>
 
               {/* AlienVault OTX — spans full width */}
