@@ -18,6 +18,15 @@ interface PulseDetail {
   tags: string[];
 }
 
+interface AbuseReportDetail {
+  reported_at: string | null;
+  comment: string;
+  categories: number[];
+  reporter_id: number | null;
+  reporter_country_code: string | null;
+  reporter_country_name: string | null;
+}
+
 function formatDate(dateStr: string | null) {
   if (!dateStr) return 'N/A';
   try {
@@ -358,9 +367,14 @@ export default function IpAnalyzerClient() {
                         <h5 className="text-label-md text-text-muted mb-4">Host & Usage Metadata</h5>
                         <div className="space-y-3">
                           {[
+                            ['IP Version', results.abuseipdb.ip_version ? `IPv${results.abuseipdb.ip_version}` : 'N/A'],
+                            ['Public IP', results.abuseipdb.is_public === null ? 'N/A' : results.abuseipdb.is_public ? 'Yes' : 'No'],
+                            ['Whitelisted', results.abuseipdb.is_whitelisted === null ? 'N/A' : results.abuseipdb.is_whitelisted ? 'Yes' : 'No'],
+                            ['Tor Exit Node', results.abuseipdb.is_tor === null ? 'N/A' : results.abuseipdb.is_tor ? 'Yes' : 'No'],
                             ['Usage Classification', results.abuseipdb.usage_type || 'Unknown'],
                             ['Primary Domain', results.abuseipdb.domain || 'N/A'],
                             ['ISP Provider', results.abuseipdb.isp || 'N/A'],
+                            ['Country', results.abuseipdb.country_name || results.abuseipdb.country || 'N/A'],
                             ['Last Reported', results.abuseipdb.last_reported_at ? formatDate(results.abuseipdb.last_reported_at) : 'No incidents'],
                           ].map(([label, value]) => (
                             <div key={label} className="flex justify-between items-center py-2 border-b border-border/50">
@@ -369,6 +383,53 @@ export default function IpAnalyzerClient() {
                             </div>
                           ))}
                         </div>
+                      </div>
+
+                      <div>
+                        <h5 className="text-label-md text-text-muted mb-4 flex items-center gap-2">
+                          <FileText className="w-4 h-4" /> Recent Abuse Reports ({results.abuseipdb.reports_details?.length || 0})
+                        </h5>
+
+                        {results.abuseipdb.reports_details && results.abuseipdb.reports_details.length > 0 ? (
+                          <div className="space-y-4">
+                            {results.abuseipdb.reports_details.map((report: AbuseReportDetail, index: number) => (
+                              <div key={`${report.reported_at || 'report'}-${index}`} className="rounded-xl border border-border/60 bg-surface/60 p-4">
+                                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-3">
+                                  <div>
+                                    <div className="flex items-center gap-2 text-text-base font-medium">
+                                      <Calendar className="w-4 h-4 text-tertiary" />
+                                      {formatDate(report.reported_at)}
+                                    </div>
+                                    <p className="text-xs text-text-muted mt-1">
+                                      Reporter: {report.reporter_country_name || report.reporter_country_code || 'Unknown'}
+                                      {report.reporter_id ? ` • ID ${report.reporter_id}` : ''}
+                                    </p>
+                                  </div>
+
+                                  <div className="flex flex-wrap gap-1">
+                                    {report.categories && report.categories.length > 0 ? (
+                                      report.categories.map((category) => (
+                                        <span key={`${report.reported_at || 'report'}-${category}`} className="badge badge-low text-[10px] px-2 py-1 rounded-full">
+                                          Category {category}
+                                        </span>
+                                      ))
+                                    ) : (
+                                      <span className="badge badge-low text-[10px] px-2 py-1 rounded-full">No categories</span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <p className="text-sm text-text-base leading-6 whitespace-pre-line break-words">
+                                  {report.comment}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="bg-surface rounded-lg p-8 text-center text-body-md text-text-muted italic">
+                            No detailed reports were returned for this IP.
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}

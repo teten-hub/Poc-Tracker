@@ -126,7 +126,7 @@ export async function GET(request: Request) {
         if (!abuseApiKey || abuseApiKey === 'your_abuseipdb_api_key_here') {
           return { configured: false, error: 'API key not configured' };
         }
-        const url = `https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}&maxAgeInDays=30`;
+        const url = `https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}&maxAgeInDays=30&verbose`;
         const res = await fetch(url, {
           headers: {
             'Key': abuseApiKey,
@@ -139,6 +139,7 @@ export async function GET(request: Request) {
         }
         const data = await res.json();
         const info = data?.data || {};
+        const reports = Array.isArray(info.reports) ? info.reports : [];
 
         return {
           configured: true,
@@ -147,11 +148,25 @@ export async function GET(request: Request) {
           confidence_score: `${info.abuseConfidenceScore || 0}%`,
           isp: info.isp || null,
           country: info.countryCode || null,
+          country_name: info.countryName || null,
           city: info.city || null,
           domain: info.domain || null,
           usage_type: info.usageType || 'Unknown',
           num_distinct_users: info.numDistinctUsers || 0,
-          last_reported_at: info.lastReportedAt || null
+          ip_version: info.ipVersion || null,
+          is_public: info.isPublic ?? null,
+          is_whitelisted: info.isWhitelisted ?? null,
+          is_tor: info.isTor ?? null,
+          hostnames: info.hostnames || [],
+          last_reported_at: info.lastReportedAt || null,
+          reports_details: reports.slice(0, 5).map((report: any) => ({
+            reported_at: report.reportedAt || null,
+            comment: report.comment || 'No comment provided.',
+            categories: Array.isArray(report.categories) ? report.categories : [],
+            reporter_id: report.reporterId || null,
+            reporter_country_code: report.reporterCountryCode || null,
+            reporter_country_name: report.reporterCountryName || null
+          }))
         };
       })(),
 
