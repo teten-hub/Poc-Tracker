@@ -391,7 +391,7 @@ export default function IpAnalyzerClient() {
                         </h5>
 
                         {results.abuseipdb.reports_details && results.abuseipdb.reports_details.length > 0 ? (
-                          <div className="space-y-4">
+                          <div className="max-h-[420px] overflow-y-auto pr-2 space-y-4">
                             {results.abuseipdb.reports_details.map((report: AbuseReportDetail, index: number) => (
                               <div key={`${report.reported_at || 'report'}-${index}`} className="rounded-xl border border-border/60 bg-surface/60 p-4">
                                 <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-3">
@@ -419,7 +419,15 @@ export default function IpAnalyzerClient() {
                                   </div>
                                 </div>
 
-                                <p className="text-sm text-text-base leading-6 whitespace-pre-line break-words">
+                                <p
+                                  className="text-sm text-text-base leading-6 break-words"
+                                  style={{
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: 3,
+                                    WebkitBoxOrient: 'vertical',
+                                    overflow: 'hidden'
+                                  }}
+                                >
                                   {report.comment}
                                 </p>
                               </div>
