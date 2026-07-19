@@ -29,9 +29,7 @@ interface AbuseReportDetail {
 
 function BrandBadge({ src, alt }: { src: string; alt: string }) {
   return (
-    <span className="inline-flex h-10 w-14 items-center justify-center rounded-xl border border-border/60 bg-gradient-to-br from-surface via-neutral/60 to-surface shadow-[0_1px_0_rgba(255,255,255,0.04),0_8px_18px_rgba(0,0,0,0.12)]">
-      <img src={src} alt={alt} className="h-5 w-10 object-contain" />
-    </span>
+    <img src={src} alt={alt} className="h-7 w-auto object-contain" />
   );
 }
 
