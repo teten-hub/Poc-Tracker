@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import net from 'net';
+import { analyzeIp } from '@/lib/analyzeIp';
 
 export async function GET(request: Request) {
   try {
@@ -7,28 +8,17 @@ export async function GET(request: Request) {
     const ip = searchParams.get('ip');
 
     if (!ip) {
-      import { NextResponse } from 'next/server';
-      import net from 'net';
-      import { analyzeIp } from '@/lib/analyzeIp';
+      return NextResponse.json({ success: false, error: 'IP address parameter is required' }, { status: 400 });
+    }
 
-      export async function GET(request: Request) {
-        try {
-          const { searchParams } = new URL(request.url);
-          const ip = searchParams.get('ip');
+    if (!net.isIP(ip)) {
+      return NextResponse.json({ success: false, error: 'Invalid IP address format' }, { status: 400 });
+    }
 
-          if (!ip) {
-            return NextResponse.json({ success: false, error: 'IP address parameter is required' }, { status: 400 });
-          }
-
-          if (!net.isIP(ip)) {
-            return NextResponse.json({ success: false, error: 'Invalid IP address format' }, { status: 400 });
-          }
-
-          const result = await analyzeIp(ip);
-          return NextResponse.json(result);
-        } catch (error) {
-          console.error('IP Analyzer API Error:', error);
-          return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
-        }
-      }
-          return { configured: false, error: 'API key not configured' };
+    const result = await analyzeIp(ip);
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error('IP Analyzer API Error:', error);
+    return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
+  }
+}

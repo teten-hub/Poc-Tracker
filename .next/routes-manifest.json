@@ -60,6 +60,12 @@
       "namedRegex": "^/api/hibp(?:/)?$"
     },
     {
+      "page": "/api/ip-report",
+      "regex": "^/api/ip\\-report(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/ip\\-report(?:/)?$"
+    },
+    {
       "page": "/api/pocs",
       "regex": "^/api/pocs(?:/)?$",
       "routeKeys": {},

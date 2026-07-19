@@ -1,3 +1,3 @@
-:HL["/_next/static/chunks/0zqhfaiw.x5_r.css","style"]
+:HL["/_next/static/chunks/0r~ce~hdpucgg.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@200;300;400;500;600;700;800&display=swap","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":20,"slots":{"children":{"name":"tor-ips","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"7QBMvPb_WalYaloSVs1dK"}
+0:{"tree":{"name":"","param":null,"prefetchHints":20,"slots":{"children":{"name":"tor-ips","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"kasN_tsjtza0aJeJRz-ki"}
