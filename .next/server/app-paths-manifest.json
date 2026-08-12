@@ -7,6 +7,7 @@
   "/api/ip-report/route": "app/api/ip-report/route.js",
   "/api/pocs/route": "app/api/pocs/route.js",
   "/api/ransomware/route": "app/api/ransomware/route.js",
+  "/api/shodan/route": "app/api/shodan/route.js",
   "/api/tor-ips/route": "app/api/tor-ips/route.js",
   "/api/tweetfeed/route": "app/api/tweetfeed/route.js",
   "/hibp/page": "app/hibp/page.js",
@@ -15,6 +16,7 @@
   "/page": "app/page.js",
   "/pocs/page": "app/pocs/page.js",
   "/ransomware/page": "app/ransomware/page.js",
+  "/shodan/page": "app/shodan/page.js",
   "/tor-ips/page": "app/tor-ips/page.js",
   "/tweetfeed/page": "app/tweetfeed/page.js"
 }

@@ -23,6 +23,7 @@ export default function Sidebar({
   const navItems = [
     { href: '/pocs', label: 'PoC Tracker', icon: Radar, matchPaths: ['/pocs'] },
     { href: '/ip-analyzer', label: 'IP Analyzer', icon: Search, matchPaths: ['/ip-analyzer'] },
+    { href: '/shodan', label: 'Threat Exposure Intelligence', icon: Shield, matchPaths: ['/shodan'] },
     { href: '/hibp', label: 'Have I Been Pwned', icon: UserX, matchPaths: ['/hibp'] },
     { href: '/ransomware', label: 'Ransomware Tracker', icon: Skull, matchPaths: ['/ransomware'] },
     { href: '/tor-ips', label: 'Tor Exit Nodes', icon: null, isTor: true, matchPaths: ['/tor-ips'] },

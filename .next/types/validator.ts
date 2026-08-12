@@ -92,6 +92,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/shodan/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/shodan">> = Specific
+  const handler = {} as typeof import("../../app/shodan/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/tor-ips/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/tor-ips">> = Specific
@@ -159,6 +168,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/ransomware">> = Specific
   const handler = {} as typeof import("../../app/api/ransomware/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/shodan/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/shodan">> = Specific
+  const handler = {} as typeof import("../../app/api/shodan/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

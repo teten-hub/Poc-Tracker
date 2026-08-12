@@ -7,6 +7,7 @@
   "/api/ip-report/route": "/api/ip-report",
   "/api/pocs/route": "/api/pocs",
   "/api/ransomware/route": "/api/ransomware",
+  "/api/shodan/route": "/api/shodan",
   "/api/tor-ips/route": "/api/tor-ips",
   "/api/tweetfeed/route": "/api/tweetfeed",
   "/hibp/page": "/hibp",
@@ -15,6 +16,7 @@
   "/page": "/",
   "/pocs/page": "/pocs",
   "/ransomware/page": "/ransomware",
+  "/shodan/page": "/shodan",
   "/tor-ips/page": "/tor-ips",
   "/tweetfeed/page": "/tweetfeed"
 }

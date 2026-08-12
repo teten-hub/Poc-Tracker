@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/shodan/layout,_N_T_/shodan/page,_N_T_/shodan"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/shodan/__PAGE__",
+    "/shodan",
+    "/_index",
+    "/_head"
+  ]
+}

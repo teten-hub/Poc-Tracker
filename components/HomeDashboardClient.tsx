@@ -64,6 +64,7 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
     { title: 'PoC Tracker', href: '/pocs', icon: <Radar className="w-5 h-5" />, color: 'text-tertiary' },
     { title: 'Threat Intel', href: '/tweetfeed', icon: <Rss className="w-5 h-5" />, color: 'text-tertiary' },
     { title: 'IP Analyzer', href: '/ip-analyzer', icon: <Search className="w-5 h-5" />, color: 'text-tertiary' },
+    { title: 'Shodan Exposure', href: '/shodan', icon: <Shield className="w-5 h-5" />, color: 'text-tertiary' },
     { title: 'Data Breach', href: '/hibp', icon: <UserX className="w-5 h-5" />, color: 'text-tertiary' },
     { title: 'Ransomware', href: '/ransomware', icon: <Skull className="w-5 h-5" />, color: 'text-tertiary' },
     { title: 'Tor Nodes', href: '/tor-ips', icon: <TorIcon className="w-4 h-4 fill-current" />, color: 'text-tertiary' },
