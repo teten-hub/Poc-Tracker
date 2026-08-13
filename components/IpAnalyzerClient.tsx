@@ -157,63 +157,96 @@ export default function IpAnalyzerClient() {
   const alertLevel = getAlertLevel();
 
   return (
-    <div className="min-h-screen bg-base text-text-base font-sans pb-24">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 md:pt-16">
+    <div className="dashboard-shell min-h-screen bg-base text-text-base font-sans pb-24">
+      <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14">
         
-        {/* Page Header */}
-        <div className="mb-16">
-          <h1 className="text-headline-display text-text-base mb-4">
-            IP Threat Analyzer
-          </h1>
-          <p className="text-body-lg text-text-muted">
-            Multi-source intelligence analysis
-          </p>
-        </div>
+        <div className="premium-hero rounded-[28px] border p-6 md:p-8 lg:p-10 mb-8 md:mb-10">
+          <div className="flex flex-col xl:flex-row gap-6 xl:items-end justify-between">
+            <div>
+              <span className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+                ip intel
+              </span>
+              <h1 className="mt-4 text-headline-display text-text-base tracking-[-0.04em]">
+                IP Threat Analyzer
+              </h1>
+              <p className="mt-3 text-body-md text-text-muted">
+                Multi-source intelligence analysis across reputation, abuse, and telemetry feeds.
+              </p>
+            </div>
 
-        {/* Search */}
-        <div className="mb-16">
-          <form onSubmit={handleAnalyze} className="flex gap-4 max-w-2xl">
-            <input
-              type="text"
-              className="floating-input flex-1"
-              placeholder="Enter IPv4 or IPv6 Address..."
-              value={ipAddress}
-              onChange={(e) => setIpAddress(e.target.value)}
-            />
-            <button
-              type="submit"
-              disabled={isAnalyzing || !ipAddress}
-              className="btn-primary shrink-0 disabled:opacity-50"
-            >
-              {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Scan IP'}
-            </button>
-          </form>
-          {error && <p className="text-error text-label-sm mt-4 font-medium flex items-center gap-1.5"><AlertCircle className="w-4 h-4" />{error}</p>}
+            <div className="w-full xl:max-w-[520px]">
+              <form onSubmit={handleAnalyze} className="flex gap-2.5 w-full rounded-2xl bg-background/40 p-2.5 shadow-[0_8px_24px_rgba(31,42,111,0.05)]">
+                <input
+                  type="text"
+                  className="premium-input flex-1 rounded-xl px-4 py-3 text-body-sm placeholder:text-text-muted"
+                  placeholder="Enter IPv4 or IPv6 Address..."
+                  value={ipAddress}
+                  onChange={(e) => setIpAddress(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  disabled={isAnalyzing || !ipAddress}
+                  className="btn-primary shrink-0 rounded-xl px-5 disabled:opacity-50"
+                >
+                  {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Scan IP'}
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {error && <p className="mt-4 text-error text-label-sm font-medium flex items-center gap-1.5"><AlertCircle className="w-4 h-4" />{error}</p>}
         </div>
 
         {/* Results Area */}
         {results && (
-          <div className="space-y-10 animate-fade-in-up">
+          <div className="space-y-8 animate-fade-in-up">
             
-            {/* Overview */}
-            <div className="mb-10">
-              <div className="flex items-center gap-4 mb-2">
-                <h3 className="text-headline-display font-mono text-text-base">{results.ip}</h3>
-                {alertLevel && (
-                  <span className={`badge ${alertLevel.className} px-3 py-1 text-sm rounded-full`}>
-                    {alertLevel.icon} {alertLevel.label}
-                  </span>
-                )}
+            <div className="section-panel overflow-hidden px-5 py-5 md:px-6 md:py-6">
+              <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/8 text-primary ring-1 ring-primary/10">
+                    <Shield className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <h3 className="text-headline-md font-mono text-text-base truncate">{results.ip}</h3>
+                      {alertLevel && (
+                        <span className={`badge ${alertLevel.className} px-2.5 py-1 text-[10px] rounded-full`}>
+                          {alertLevel.icon} {alertLevel.label}
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 text-body-sm text-text-muted flex items-center gap-2">
+                      <Globe className="w-4 h-4" />
+                      {results.location.city !== 'N/A' ? results.location.city + ', ' : ''}
+                      {results.location.country} • {results.location.isp}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full md:max-w-xl">
+                  <div className="rounded-xl border border-border/80 bg-surface/60 px-3 py-2">
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted">ASN</div>
+                    <div className="mt-1 text-sm font-semibold text-text-base">{results.vt.asn ? `AS${results.vt.asn}` : results.abuseipdb.isp ? 'N/A' : '—'}</div>
+                  </div>
+                  <div className="rounded-xl border border-border/80 bg-surface/60 px-3 py-2">
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted">Country</div>
+                    <div className="mt-1 text-sm font-semibold text-text-base">{results.location.country || 'Unknown'}</div>
+                  </div>
+                  <div className="rounded-xl border border-border/80 bg-surface/60 px-3 py-2">
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted">Reports</div>
+                    <div className="mt-1 text-sm font-semibold text-text-base">{results.abuseipdb.reported_times || 0}</div>
+                  </div>
+                  <div className="rounded-xl border border-border/80 bg-surface/60 px-3 py-2">
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted">OTX</div>
+                    <div className="mt-1 text-sm font-semibold text-text-base">{results.otx.pulses || 0}</div>
+                  </div>
+                </div>
               </div>
-              <p className="text-body-md text-text-muted flex items-center gap-2">
-                <Globe className="w-5 h-5" />
-                {results.location.city !== 'N/A' ? results.location.city + ', ' : ''}
-                {results.location.country} • {results.location.isp}
-              </p>
             </div>
 
             {/* Providers */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
               {/* VirusTotal */}
               <div className="section-panel">
