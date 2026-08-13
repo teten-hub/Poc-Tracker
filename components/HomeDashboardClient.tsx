@@ -136,55 +136,60 @@ export default function HomeDashboardClient({ latestPocs = [], totalPocsCount = 
   const iocConicGradient = iocGradients.length > 0 ? `conic-gradient(${iocGradients.join(', ')})` : `conic-gradient(${donutTrackBg} 0% 100%)`;
 
   return (
-    <div className="min-h-screen bg-base text-text-base font-sans pb-24">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 md:pt-16">
+    <div className="dashboard-shell min-h-screen bg-base text-text-base font-sans pb-24">
+      <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14">
         
         {/* Page Header (Hero style) */}
-        <div className="flex flex-col md:flex-row gap-10 items-start justify-between mb-16">
-          <div className="max-w-2xl">
-            <h1 className="text-headline-display text-text-base mb-4">
-              Global Threat Overview
-            </h1>
-            <p className="text-body-lg text-text-muted">
-              Real-time monitoring of active exploits, OSINT intelligence, and network threats across global sources.
-            </p>
-          </div>
-          
-          <div className="w-full md:w-[400px]">
-            <form onSubmit={handleIpSearch} className="flex gap-2 w-full">
-              <input
-                type="text"
-                className="floating-input flex-1"
-                placeholder="Analyze IP Address..."
-                value={ipAddress}
-                onChange={(e) => setIpAddress(e.target.value)}
-              />
-              <button type="submit" className="btn-primary shrink-0">
-                Analyze
-              </button>
-            </form>
+        <div className="premium-hero rounded-[28px] border p-6 md:p-8 lg:p-10 mb-8 md:mb-10">
+          <div className="flex flex-col xl:flex-row gap-8 xl:items-center justify-between">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+                Threat intelligence platform
+              </span>
+              <h1 className="mt-4 text-headline-display text-text-base tracking-[-0.04em]">
+                Global Threat Overview
+              </h1>
+              <p className="mt-4 max-w-xl text-body-md text-text-muted leading-relaxed">
+                Real-time monitoring of active exploits, OSINT intelligence, and network threats across global sources.
+              </p>
+            </div>
+            
+            <div className="w-full xl:max-w-[440px] xl:ml-auto">
+              <form onSubmit={handleIpSearch} className="flex gap-2.5 w-full rounded-2xl bg-background/40 p-2.5 shadow-[0_8px_24px_rgba(31,42,111,0.05)]">
+                <input
+                  type="text"
+                  className="premium-input flex-1 rounded-xl px-4 py-3 text-body-sm placeholder:text-text-muted"
+                  placeholder="Analyze IP Address..."
+                  value={ipAddress}
+                  onChange={(e) => setIpAddress(e.target.value)}
+                />
+                <button type="submit" className="btn-primary shrink-0 rounded-xl px-5">
+                  Analyze
+                </button>
+              </form>
+            </div>
           </div>
         </div>
 
         {/* Main Content */}
         <div>
             {/* Metrics Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-              <div className="section-panel !p-8">
-                <span className="text-label-md text-text-muted mb-2 block">Tracked Exploits</span>
-                <span className="text-headline-display font-mono text-tertiary">{totalPocs.toLocaleString()}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 md:gap-6 mb-10 md:mb-12">
+              <div className="metric-card p-5 md:p-6">
+                <span className="text-label-md text-text-muted mb-3 block">Tracked Exploits</span>
+                <span className="text-headline-display font-mono text-primary">{totalPocs.toLocaleString()}</span>
               </div>
-              <div className="section-panel !p-8">
-                <span className="text-label-md text-text-muted mb-2 block">Critical CVSS</span>
+              <div className="metric-card p-5 md:p-6">
+                <span className="text-label-md text-text-muted mb-3 block">Critical CVSS</span>
                 <span className="text-headline-display font-mono text-error">{countCritical}</span>
               </div>
-              <div className="section-panel !p-8">
-                <span className="text-label-md text-text-muted mb-2 block">Trending (10+ ★)</span>
+              <div className="metric-card p-5 md:p-6">
+                <span className="text-label-md text-text-muted mb-3 block">Trending (10+ ★)</span>
                 <span className="text-headline-display font-mono text-success">{trendingPocsCount}</span>
               </div>
-              <div className="section-panel !p-8">
-                <span className="text-label-md text-text-muted mb-2 block">Total IOCs (7d)</span>
-                <span className="text-headline-display font-mono text-on-surface">{totalIocs.toLocaleString()}</span>
+              <div className="metric-card p-5 md:p-6">
+                <span className="text-label-md text-text-muted mb-3 block">Total IOCs (7d)</span>
+                <span className="text-headline-display font-mono text-text-base">{totalIocs.toLocaleString()}</span>
               </div>
             </div>
 
